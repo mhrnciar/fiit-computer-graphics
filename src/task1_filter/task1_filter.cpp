@@ -9,31 +9,78 @@ const unsigned int SIZE = 512;
 
 // A simple RGB struct will represent a pixel in the framebuffer
 struct Pixel {
-  // TODO: Define correct data type for r, g, b channel
+    // TODO: Define correct data type for r, g, b channel
+    uint8_t r, g, b;
 };
 
 int main()
 {
-  // Initialize a framebuffer
-  auto framebuffer = new Pixel[SIZE][SIZE];
+    // Initialize a framebuffer
+    auto framebuffer = new Pixel[SIZE][SIZE];
 
-  // TODO: Open file lena.raw (this is 512x512 RAW GRB format)
+    // TODO: Open file lena.raw (this is 512x512 RAW GRB format)
+    std::ifstream file("lena.raw", std::ios::binary);
 
-  // TODO: Read data to framebuffer and close the file
+    // TODO: Read data to framebuffer and close the file
+    file.read(reinterpret_cast<char *>(framebuffer), sizeof(Pixel) * SIZE * SIZE);
+    file.close();
 
-  // Traverse the framebuffer
-  for (unsigned int y = 0; y < SIZE; y++) {
-    for (unsigned int x = 0; x < SIZE; x++) {
-      // TODO: Apply pixel operation
+    unsigned int border = SIZE / 3;
+
+    // Traverse the framebuffer
+    for (unsigned int y = 0; y < SIZE; y++) {
+        for (unsigned int x = 0; x < SIZE; x++) {
+            if (x < border) {
+                if (y < border) {
+                    framebuffer[x][y].g = 0;
+                    framebuffer[x][y].b = 0;
+                }
+                else if (y < 2 * border) {
+                    framebuffer[x][y].r = 0;
+                    framebuffer[x][y].b = 0;
+                }
+                else {
+                    framebuffer[x][y].r = 0;
+                    framebuffer[x][y].g = 0;
+                }
+            }
+            else if (x < 2 * border) {
+                if (y < border) {
+                    framebuffer[x][y].r = 0;
+                    framebuffer[x][y].g = 0;
+                }
+                else if (y < 2 * border) {
+                    framebuffer[x][y].g = 0;
+                    framebuffer[x][y].b = 0;
+                }
+                else {
+                    framebuffer[x][y].r = 0;
+                    framebuffer[x][y].b = 0;
+                }
+            }
+            else {
+                if (y < border) {
+                    framebuffer[x][y].r = 0;
+                    framebuffer[x][y].b = 0;
+                }
+                else if (y < 2 * border) {
+                    framebuffer[x][y].r = 0;
+                    framebuffer[x][y].g = 0;
+                }
+                else {
+                    framebuffer[x][y].g = 0;
+                    framebuffer[x][y].b = 0;
+                }
+            }
+        }
     }
-  }
 
-  // TODO: Open file result.raw
-  std::cout << "Generating result.raw file ..." << std::endl;
+    std::cout << "Generating task1_filter.raw file ..." << std::endl;
+    std::ofstream output("task1_filter.raw", std::ios::binary);
+    output.write(reinterpret_cast<char *>(framebuffer), sizeof(Pixel)*SIZE*SIZE);
+    output.close();
 
-  // TODO: Write the framebuffer to the file and close it
-
-  std::cout << "Done." << std::endl;
-  delete[] framebuffer;
-  return EXIT_SUCCESS;
+    std::cout << "Done." << std::endl;
+    delete[] framebuffer;
+    return EXIT_SUCCESS;
 }
