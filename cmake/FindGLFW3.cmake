@@ -25,15 +25,11 @@ FIND_PATH(GLFW_INCLUDE_DIRS GLFW/glfw3.h DOC "Path to GLFW include directory."
         $ENV{GLFW_ROOT}
         PATH_SUFFIX include #For finding the include file under the root of the glfw expanded archive, typically on Windows.
         PATHS
-        /usr/include/
-        /usr/local/include/
-        # By default headers are under GLFW subfolder
-        /usr/include/GLFW
-        /usr/local/include/GLFW
-        ${GLFW_ROOT_DIR}/include/ # added by ptr
+        /usr/local/Cellar/glfw/3.3.4
+        /usr/local/Cellar/glfw/3.3.4/include
         )
 
-SET(GLFW_LIB_NAMES libglfw3.a glfw3 glfw GLFW3.lib)
+SET(GLFW_LIB_NAMES libglfw.dylib libglfw3.a glfw3 glfw GLFW3.lib)
 
 FIND_LIBRARY(GLFW_LIBRARIES DOC "Absolute path to GLFW library."
         NAMES ${GLFW_LIB_NAMES}
@@ -41,13 +37,12 @@ FIND_LIBRARY(GLFW_LIBRARIES DOC "Absolute path to GLFW library."
         $ENV{GLFW_ROOT}
         PATH_SUFFIXES lib/win32 #For finding the library file under the root of the glfw expanded archive, typically on Windows.
         PATHS
-        /usr/local/lib
-        /usr/lib
-        ${GLFW_ROOT_DIR}/lib-msvc100/release # added by ptr
+        /usr/local/Cellar/glfw/3.3.4
+        /usr/local/Cellar/glfw/3.3.4/lib
         )
 IF (APPLE)
   find_library(IOKIT NAMES IOKit)
-  #find_library(OpenGL NAMES OpenGL)
+  find_library(OpenGL NAMES OpenGL)
   find_library(COREVIDEO NAMES CoreVideo)
   find_library(COCOA NAMES Cocoa)
   SET(GLFW_LIBRARIES ${GLFW_LIBRARIES} ${IOKIT} ${COREVIDEO} ${COCOA})
