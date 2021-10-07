@@ -36,7 +36,7 @@ endif ()
 # Warnings for Debug mode
 option(USE_STRICT_COMPILE_WARNINGS "Use strict compilation warnings in debug mode." ON)
 # These compile flags should apply for GCC and Clang compilers
-set(STRICT_COMPILE_FLAGS "-Wpedantic -Wall -Wno-c++98-compat -Wextra -Wconversion -Wsign-compare -Wuninitialized -Wno-unused-parameter")
+set(STRICT_COMPILE_FLAGS "-Wpedantic -Wall -Wno-c++98-compat -Wextra -Wno-sign-conversion -Wno-unused-parameter")
 if (USE_STRICT_COMPILE_WARNINGS)
   set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${STRICT_COMPILE_FLAGS}")
 endif ()
@@ -86,7 +86,7 @@ add_library(ppgso STATIC
 target_compile_definitions(ppgso PUBLIC -DGLM_FORCE_RADIANS -DGLEW_STATIC)
 
 # Link to GLFW, GLEW and OpenGL
-target_link_libraries(ppgso PUBLIC ${GLFW_LIBRARIES} GLEW::GLEW ${OPENGL_LIBRARIES})
+target_link_libraries(ppgso PUBLIC ${GLFW_LIBRARIES} ${GLEW_LIBRARIES} ${OPENGL_LIBRARIES})
 # Pass on include directories
 target_include_directories(ppgso PUBLIC
         ppgso
@@ -175,49 +175,54 @@ add_executable(gl9_scene
         src/gl9_scene/space.cpp)
 target_link_libraries(gl9_scene ppgso shaders)
 install(TARGETS gl9_scene DESTINATION .)
+add_custom_command(TARGET gl9_scene POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/data/ ${CMAKE_CURRENT_BINARY_DIR})
+
+# TASKs
+
+# task1_filter
+add_executable(task1_filter src/task1_filter/task1_filter.cpp)
+install(TARGETS task1_filter DESTINATION .)
+
+# task2_bresenham
+add_executable(task2_bresenham src/task2_bresenham/task2_bresenham.cpp)
+target_link_libraries(task2_bresenham ppgso shaders)
+install(TARGETS task2_bresenham DESTINATION .)
+
+# task3_bezier
+add_executable(task3_bezier src/task3_bezier/task3_bezier.cpp)
+target_link_libraries(task3_bezier ppgso shaders)
+install(TARGETS task3_bezier DESTINATION .)
+
+# task4_2dshapes
+add_executable(task4_2dshapes src/task4_2dshapes/task4_2dshapes.cpp)
+target_link_libraries(task4_2dshapes ppgso shaders)
+install(TARGETS task4_2dshapes DESTINATION .)
+
+# task5_3d_origin
+add_executable(task5_3d_origin src/task5_3d_origin/task5_3d_origin.cpp)
+target_link_libraries(task5_3d_origin ppgso shaders)
+install(TARGETS task5_3d_origin DESTINATION .)
+add_custom_command(TARGET task5_3d_origin POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/data/ ${CMAKE_CURRENT_BINARY_DIR})
+
+# task6_bezier_surface
+add_executable(task6_bezier_surface src/task6_bezier_surface/task6_bezier_surface.cpp)
+target_link_libraries(task6_bezier_surface ppgso shaders)
+install(TARGETS task6_bezier_surface DESTINATION .)
+
+# task7_particles
+add_executable(task7_particles src/task7_particles/task7_particles.cpp)
+target_link_libraries(task7_particles ppgso shaders)
+install(TARGETS task7_particles DESTINATION .)
+add_custom_command(TARGET task7_particles POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/data/ ${CMAKE_CURRENT_BINARY_DIR})
 
 # Playground target
 add_executable(playground src/playground/playground.cpp)
 target_link_libraries(playground ppgso shaders)
 install (TARGETS playground DESTINATION .)
-
-# Task1
-add_executable(task1_filter src/task1_filter/task1_filter.cpp)
-target_link_libraries(task1_filter ppgso)
-install (TARGETS task1_filter DESTINATION .)
-
-# Task2
-add_executable(task2_convolution src/task2_convolution/task2_convolution.cpp)
-target_link_libraries(task2_convolution ppgso)
-install (TARGETS task2_convolution DESTINATION .)
-
-# Task3
-add_executable(task3_bresenham src/task3_bresenham/task3_bresenham.cpp)
-target_link_libraries(task3_bresenham ppgso)
-install (TARGETS task3_bresenham DESTINATION .)
-
-# Task4
-add_executable(task4_bezier src/task4_bezier/task4_bezier.cpp)
-target_link_libraries(task4_bezier ppgso shaders)
-install (TARGETS task4_bezier DESTINATION .)
-
-# Task5
-add_executable(task5_2dshapes src/task5_2dshapes/task5_2dshapes.cpp)
-target_link_libraries(task5_2dshapes ppgso shaders)
-install (TARGETS task5_2dshapes DESTINATION .)
-
-# Task6
-add_executable(task6_bezier_surface src/task6_bezier_surface/task6_bezier_surface.cpp)
-target_link_libraries(task6_bezier_surface ppgso shaders)
-install (TARGETS task6_bezier_surface DESTINATION .)
-
-# Task7
-add_executable(task7_particles src/task7_particles/task7_particles.cpp)
-target_link_libraries(task7_particles ppgso shaders)
-install (TARGETS task7_particles DESTINATION .)
-
+add_custom_command(TARGET playground POST_BUILD COMMAND  ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/data/ ${CMAKE_CURRENT_BINARY_DIR})
 #
 # INSTALLATION
 #
+
 file(COPY "data/" DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 install(DIRECTORY data/ DESTINATION .)
