@@ -23,16 +23,16 @@ private:
     // 2D vectors define points/vertices of the shape
     // TODO: Define your shape points
     std::vector<glm::vec3> vetrices {
-            {-0.2f, 0.2f, 0.0f},
-            {0.2f, 0.2f, 0.0f},
-            {-0.2f, -0.2f, 0.0f},
+            {-0.7f, -0.8f, 0.0f},
+            {-0.7f, -0.2f, 0.0f},
+            {-0.5f, -0.2f, 0.0f},
+            {0.2f, -0.8f, 0.0f},
             {0.2f, -0.2f, 0.0f},
-
-            {0.0f, 1.0f, 0.0f},
-            {1.0f, 0.0f, 0.0f},
-            {0.0f, -1.0f, 0.0f},
-            {-1.0f, 0.0f, 0.0f},
-
+            {0.4f, -0.2f, 0.0f},
+            {-0.8f, 0.3f, 0.0f},
+            {0.5f, 0.3f, 0.0f},
+            {0.5f, 0.6f, 0.0f},
+            {0.8f, 0.3f, 0.0f}
     };
 
     // Structure representing a triangular face, usually indexes into vertices
@@ -45,11 +45,11 @@ private:
     // TODO: Define your mesh indices
     std::vector<Face> mesh {
             {0, 1, 2},
-            {1, 2, 3},
-            {0, 1, 4},
-            {1, 3, 5},
-            {2, 3, 6},
-            {2, 0, 7},
+            {3, 4, 5},
+            {1, 5, 6},
+            {5, 6, 7},
+            {6, 7, 8},
+            {7, 8, 9},
     };
 
     // Program to associate with the object
@@ -58,6 +58,9 @@ private:
     // These will hold the data and object buffers
     GLuint vao, vbo, cbo, ibo;
     glm::mat4 modelMatrix{1.0f};
+    glm::mat4 translationMatrix{1.0f};
+    glm::mat4 rotationMatrix{1.0f};
+    glm::mat4 scaleMatrix{1.0f};
 public:
     // Public attributes that define position, color ..
     glm::vec3 position{0,0,0};
@@ -102,9 +105,11 @@ public:
     // Set the object transformation matrix
     void update() {
         // TODO: Compute transformation by scaling, rotating and then translating the shape
-        modelMatrix = glm::translate(glm::mat4{1.0f}, position);
-        modelMatrix = glm::rotate(modelMatrix, rotation.z, glm::vec3{0.0f, 0.0f, 1.0f});
-        modelMatrix = glm::scale(modelMatrix, scale);
+        translationMatrix = glm::translate(glm::mat4{1.0f}, position);
+        rotationMatrix = glm::rotate(glm::mat4{1.0f}, rotation.y, glm::vec3{0.0f, 1.0f, 0.0f});
+        scaleMatrix = glm::scale(glm::mat4{1.0f}, scale);
+
+        modelMatrix = translationMatrix * rotationMatrix * scaleMatrix;
     }
 
     // Draw polygons
@@ -122,15 +127,20 @@ public:
 class ShapeWindow : public ppgso::Window {
 private:
     Shape shape1, shape2;
+    int direction;
 public:
     ShapeWindow() : Window{"task4_2dshapes", SIZE, SIZE} {
-        shape1.color = {1,0,0};
-        shape2.color = {0,1,0};
+        shape1.color = {.5f,.5f,.5f};
+        shape2.color = {1,1,1};
+        shape1.scale = {0.4f, 0.4f, 0.4f};
+        shape2.scale = {0.5f, 0.5f, 0.5f};
+        shape2.rotation.y = ppgso::PI;
+        direction = 1;
     }
 
     void onIdle() {
         // Set gray background
-        glClearColor(.1f,.1f,.1f,1.0f);
+        glClearColor(.1f,.9f,.1f,1.0f);
         // Clear depth and color buffers
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -139,16 +149,25 @@ public:
         auto t = (float) glfwGetTime();
 
         // TODO: manipuate shape1 and shape2 position to rotate clockwise
-        shape1.position = {0, 0, 0};
-        shape2.position = -shape1.position;
+        float vel = 0.01f;
+        if (shape1.position.x > 1 || shape1.position.x < -1) {
+            direction *= -1;
+            shape1.rotation.y += ppgso::PI;
+            shape2.rotation.y += ppgso::PI;
+        }
+
+        shape1.position.x += vel * direction;
+        shape1.position.y = abs(sin(t) * 0.4);
+        shape2.position.x = -shape1.position.x;
+        shape2.position.y = shape1.position.y;
 
         // Manipulate rotation of the shape
-        shape1.rotation.z = t*5.0f;
-        shape2.rotation = -shape1.rotation;
+        //shape1.rotation.z = t * 5.0f;
+        //shape2.rotation = -shape1.rotation;
 
         // Manipulate shape size
-        shape1.scale = {sin(t), sin(t), 1};
-        shape2.scale = -shape1.scale;
+        //shape1.scale = {sin(t), sin(t), 1};
+        //shape2.scale = -shape1.scale;
 
         // Update and render each shape
         shape1.update();
