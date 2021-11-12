@@ -4,8 +4,6 @@
 //        - Create dynamic effect such as fireworks, rain etc.
 //        - Encapsulate camera in a class
 
-#include <iostream>
-#include <vector>
 #include <map>
 #include <list>
 
@@ -13,7 +11,6 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/euler_angles.hpp>
-#include <glm/gtx/transform.hpp>
 
 #include <ppgso/ppgso.h>
 
@@ -29,8 +26,8 @@ public:
     glm::vec3 position{0,5,-5};
     glm::vec3 back{0,0,-1};
 
-    glm::mat4 viewMatrix;
-    glm::mat4 projectionMatrix;
+    glm::mat4 viewMatrix{1.0f};
+    glm::mat4 projectionMatrix{1.0f};
 
     /// Representaiton of
     /// \param fov - Field of view (in degrees)
@@ -58,6 +55,11 @@ using Scene = std::list<std::unique_ptr<Renderable>>; // Type alias
 
 class Renderable {
 public:
+    glm::vec3 position{0, 0, 0};
+    glm::vec3 scale{1, 1, 1};
+    glm::vec3 speed{0, 0, 0};
+    glm::vec3 color{1, 1, 1};
+
     // Virtual destructor is needed for abstract interfaces
     virtual ~Renderable() = default;
 
@@ -84,11 +86,6 @@ class SnowParticle final : public Renderable {
 
     // TODO: add more parameters as needed
 public:
-    glm::vec3 position{0, 0, 0};
-    glm::vec3 scale{1, 1, 1};
-    glm::vec3 speed{0, 0, 0};
-    glm::vec3 color{1, 1, 1};
-
     /// Construct a new Particle
     /// \param p - Initial position
     /// \param s - Initial speed
@@ -159,11 +156,6 @@ class IceParticle final : public Renderable {
 
     // TODO: add more parameters as needed
 public:
-    glm::vec3 position{0,0,0};
-    glm::vec3 scale{1, 1, 1};
-    glm::vec3 speed{0, 0, 0};
-    glm::vec3 color{0,0,1};
-
     /// Construct a new Particle
     /// \param p - Initial position
     /// \param s - Initial speed
@@ -266,13 +258,17 @@ public:
             float r = glm::linearRand(0.0f, 1.0f);
 
             if(r > 0.2f) {
-                auto obj = std::make_unique<SnowParticle>();
-                scene.push_back(move(obj));
+                for(int i = 0; i < 15; i++) {
+                    auto obj = std::make_unique<SnowParticle>();
+                    scene.push_back(move(obj));
+                }
             }
 
             else {
-                auto obj = std::make_unique<IceParticle>();
-                scene.push_back(move(obj));
+                for(int i = 0; i < 3; i++) {
+                    auto obj = std::make_unique<IceParticle>();
+                    scene.push_back(move(obj));
+                }
             }
         }
     }
@@ -294,8 +290,10 @@ public:
 
         // Add object to scene when time reaches certain level
         if (dt > .1) {
-            auto obj = std::make_unique<SnowParticle>();
-            scene.push_back(move(obj));
+            for(int i = 0; i < 5; i++) {
+                auto obj = std::make_unique<SnowParticle>();
+                scene.push_back(move(obj));
+            }
             dt = 0;
         }
 
