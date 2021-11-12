@@ -38,13 +38,15 @@ class Scene {
     std::unique_ptr<Camera> camera;
 
     // All objects to be rendered in scene
+    // TODO: Create list of objects for every group (coral reef, boids, algae forest, ship, ...)
     std::list< std::unique_ptr<Object> > objects;
 
     // Keyboard state
     std::map< int, int > keyboard;
 
     // Lights, in this case using only simple directional diffuse lighting
-    glm::vec3 lightDirection{-1.0f, -1.0f, -1.0f};
+    // TODO: Glowing objects can have their own light source - needs new shader
+    glm::vec3 lightPosition{10.0f, 10.0f, -20.0f};
 
     // Store cursor state
     struct {
