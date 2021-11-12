@@ -47,7 +47,7 @@ class Scene {
 
     // Lights, in this case using only simple directional diffuse lighting
     // TODO: Glowing objects can have their own light source - needs new shader
-    glm::vec3 lightPosition{10.0f, 10.0f, -20.0f};
+    glm::vec3 lightPosition{0.0f, -5.0f, 0.0f};
 
     // Store cursor state
     struct {
