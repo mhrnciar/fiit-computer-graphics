@@ -15,6 +15,7 @@
 #include "camera.h"
 #include "scene.h"
 #include "rectangle.h"
+#include "cube.h"
 
 const unsigned int SIZE = 512;
 
@@ -39,13 +40,18 @@ private:
         scene.camera = move(camera);
 
         auto rectangle = std::make_unique<Rectangle>();
-        rectangle->scale = {5, 5, 5};
+        rectangle->scale = {5, 5, 1};
         for (int i = 0; i < 6; i++) {
             auto rec = new Rectangle();
             rec->position = {0, 10*i, 0};
             rectangle->addChild(rec);
         }
         scene.objects.push_back(move(rectangle));
+
+        auto cube = std::make_unique<Cube>();
+        cube->position = {0, -2, 0};
+        cube->scale = {3, 3, 3};
+        scene.objects.push_back(move(cube));
     }
 
 public:
