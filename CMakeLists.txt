@@ -177,6 +177,17 @@ target_link_libraries(gl9_scene ppgso shaders)
 install(TARGETS gl9_scene DESTINATION .)
 add_custom_command(TARGET gl9_scene POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/data/ ${CMAKE_CURRENT_BINARY_DIR})
 
+# project
+add_executable(project
+        src/project/project.cpp
+        src/project/object.cpp
+        src/project/scene.cpp
+        src/project/camera.cpp
+        src/project/rectangle.cpp)
+target_link_libraries(project ppgso shaders)
+install(TARGETS project DESTINATION .)
+add_custom_command(TARGET project POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/data/ ${CMAKE_CURRENT_BINARY_DIR})
+
 # TASKs
 
 # task1_filter
