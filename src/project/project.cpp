@@ -39,6 +39,8 @@ private:
         camera->position.z = -15.0f;
         scene.camera = move(camera);
 
+        // TODO: Create bezier surface representing the bottom of the sea
+
         auto rectangle = std::make_unique<Rectangle>();
         rectangle->scale = {5, 5, 1};
         for (int i = 0; i < 6; i++) {

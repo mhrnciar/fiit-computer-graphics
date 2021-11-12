@@ -35,6 +35,7 @@ class Scene {
     std::vector<Object*> intersect(const glm::vec3 &position, const glm::vec3 &direction);
 
     // Camera object
+    // TODO: Add utilities to verify movement and rotation of camera - so it's easier to work with
     std::unique_ptr<Camera> camera;
 
     // All objects to be rendered in scene
