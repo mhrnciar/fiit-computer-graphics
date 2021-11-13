@@ -184,7 +184,7 @@ add_executable(project
         src/project/object.cpp
         src/project/scene.cpp
         src/project/camera.cpp
-        src/project/rectangle.cpp src/project/cube.cpp src/project/cube.h)
+        src/project/rectangle.cpp src/project/cube.cpp src/project/cube.h src/project/seabed.cpp src/project/seabed.h)
 target_link_libraries(project ppgso shaders)
 install(TARGETS project DESTINATION .)
 add_custom_command(TARGET project POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/data/ ${CMAKE_CURRENT_BINARY_DIR})

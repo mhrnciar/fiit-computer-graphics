@@ -14,6 +14,7 @@
 
 #include "camera.h"
 #include "scene.h"
+#include "seabed.h"
 #include "rectangle.h"
 #include "cube.h"
 
@@ -40,6 +41,8 @@ private:
         scene.camera = move(camera);
 
         // TODO: Create bezier surface representing the bottom of the sea
+        auto seabed = std::make_unique<Seabed>();
+        scene.objects.push_back(move(seabed));
 
         auto rectangle = std::make_unique<Rectangle>();
         rectangle->scale = {5, 5, 1};
