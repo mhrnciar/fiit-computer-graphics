@@ -11,9 +11,13 @@
  */
 class Camera {
 public:
-  glm::vec3 up{0,1,0};
-  glm::vec3 position{0,0,0};
-  glm::vec3 back{0,0,-1};
+  glm::vec3 cameraUp{0,1,0};
+  glm::vec3 cameraPosition{0,0,-15};
+  glm::vec3 cameraFront{0,0,-1};
+  float cameraYaw = -90.0f;
+  float cameraPitch  = 0.0f;
+  
+  bool firstCamera = true;
 
   glm::mat4 viewMatrix;
   glm::mat4 projectionMatrix;
@@ -25,12 +29,17 @@ public:
    * @param near - Distance to the near frustum plane
    * @param far - Distance to the far frustum plane
    */
-  Camera(float fow = 45.0f, float ratio = 1.0f, float near = 0.1f, float far = 10.0f);
+  Camera(float fov = 45.0f, float ratio = 1.0f, float near = 0.1f, float far = 10.0f);
 
   /*!
    * Update Camera viewMatrix based on up, position and back vectors
    */
-  void update();
+  void update(class Scene &scene, float dt);
+  
+  /*!
+   * Updates camera direction based on cursor position
+   */
+  void updateDir(class Scene &scene);
 
   /*!
    * Get direction vector in world coordinates through camera projection plane

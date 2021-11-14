@@ -36,7 +36,7 @@ private:
 
         // Create a camera
         auto camera = std::make_unique<Camera>(60.0f, 1.0f, 0.1f, 100.0f);
-        camera->position.z = -15.0f;
+        //camera->cameraPosition.z = -15.0f;
         scene.camera = move(camera);
 
         auto rectangle = std::make_unique<Rectangle>();
@@ -71,6 +71,9 @@ public:
         glEnable(GL_CULL_FACE);
         glFrontFace(GL_CCW);
         glCullFace(GL_BACK);
+		
+        //disables cursor and binds mouse to window TODO: move this to ppgso::window (?)
+	    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
         initScene();
     }
@@ -94,6 +97,7 @@ public:
         if (key == GLFW_KEY_P && action == GLFW_PRESS) {
             animate = !animate;
         }
+        
     }
 
     /*!
@@ -102,8 +106,9 @@ public:
      * @param cursorY Mouse vertical position in window coordinates
      */
     void onCursorPos(double cursorX, double cursorY) override {
-        scene.cursor.x = cursorX;
-        scene.cursor.y = cursorY;
+    	scene.cursor.x = cursorX;
+    	scene.cursor.y = cursorY;
+    	scene.camera->updateDir(scene);
     }
 
     /*!
@@ -123,7 +128,7 @@ public:
 
                 // Get mouse pick vector in world coordinates
                 auto direction = scene.camera->cast(u, v);
-                auto position = scene.camera->position;
+                auto position = scene.camera->cameraPosition;
 
                 // Get all objects in scene intersected by ray
                 auto picked = scene.intersect(position, direction);

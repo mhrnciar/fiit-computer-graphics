@@ -19,7 +19,7 @@ class Scene {
      * Update all objects in the scene
      * @param time
      */
-    void update(float time);
+    void update(float dt);
 
     /*!
      * Render all objects in the scene
@@ -51,6 +51,7 @@ class Scene {
     // Store cursor state
     struct {
       double x, y;
+      double last_x, last_y; //records positions of x and y from the last call
       bool left, right;
     } cursor;
 };
