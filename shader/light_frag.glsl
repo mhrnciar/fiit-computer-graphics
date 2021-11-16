@@ -13,7 +13,7 @@ out vec3 FragmentColor;
 
 // Values that stay constant for the whole mesh.
 uniform sampler2D Texture;
-uniform vec3 LightPosition_worldspace;
+uniform vec3 LightPosition;
 
 void main(){
 
@@ -28,7 +28,7 @@ void main(){
 	vec3 MaterialSpecularColor = vec3(0.3, 0.3, 0.3);
 
 	// Distance to the light
-	float distance = length(LightPosition_worldspace - Position_worldspace);
+	float distance = length(LightPosition - Position_worldspace);
 
 	// Direction of the light (from the fragment to the light)
 	vec3 l = normalize(LightDirection_cameraspace);

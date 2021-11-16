@@ -14,6 +14,7 @@ Cube::Cube() {
     if (!shader) shader = std::make_unique<ppgso::Shader>(light_vert_glsl, light_frag_glsl);
     if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP("water.bmp"));
     if (!mesh) mesh = std::make_unique<ppgso::Mesh>("cube.obj");
+    lightPosition = {0.0f, -5.0f, 0.0f};
     lightEmit = {0.2, 0.2, 0.2};
 }
 
@@ -27,6 +28,10 @@ bool Cube::update(Scene &scene, float dt) {
         position.y += 10 * dt;
     } else if(scene.keyboard[GLFW_KEY_DOWN]) {
         position.y -= 10 * dt;
+    } else if(scene.keyboard[GLFW_KEY_LEFT_SHIFT]) {
+        position.z += 10 * dt;
+    } else if(scene.keyboard[GLFW_KEY_LEFT_CONTROL]) {
+        position.z -= 10 * dt;
     } else {
         rotation.x += dt*ppgso::PI;
     }
@@ -39,7 +44,7 @@ void Cube::render(Scene &scene) {
     shader->use();
 
     // Set up light
-    shader->setUniform("LightPosition", scene.lightPosition);
+    shader->setUniform("LightPosition", lightPosition);
     shader->setUniform("LightEmit", lightEmit);
 
     // use camera

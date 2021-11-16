@@ -35,6 +35,7 @@ class Scene {
     std::vector<Object*> intersect(const glm::vec3 &position, const glm::vec3 &direction);
 
     // Camera object
+    // TODO: Add utilities to verify movement and rotation of camera - so it's easier to work with
     std::unique_ptr<Camera> camera;
 
     // All objects to be rendered in scene
@@ -46,7 +47,7 @@ class Scene {
 
     // Lights, in this case using only simple directional diffuse lighting
     // TODO: Glowing objects can have their own light source - needs new shader
-    glm::vec3 lightPosition{10.0f, 10.0f, -20.0f};
+    glm::vec3 lightDirection{-1.0f, -1.0f, -1.0f};
 
     // Store cursor state
     struct {
