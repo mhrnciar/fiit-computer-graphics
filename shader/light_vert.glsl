@@ -10,7 +10,6 @@ uniform mat4 ProjectionMatrix;
 uniform mat4 ViewMatrix;
 uniform mat4 ModelMatrix;
 uniform vec3 LightPosition;
-uniform vec3 LightEmit;
 
 // Output data ; will be interpolated for each fragment.
 out vec2 texCoord;
@@ -18,7 +17,6 @@ out vec3 normal;
 out vec3 Position_worldspace;
 out vec3 EyeDirection_cameraspace;
 out vec3 LightDirection_cameraspace;
-out vec3 lightEmit;
 
 void main(){
 
@@ -42,7 +40,5 @@ void main(){
 	
 	// UV of the vertex. No special space for this one.
 	texCoord = TexCoord;
-
-	lightEmit = LightEmit;
 }
 

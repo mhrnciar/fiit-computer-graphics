@@ -6,7 +6,6 @@ in vec3 Position_worldspace;
 in vec3 normal;
 in vec3 EyeDirection_cameraspace;
 in vec3 LightDirection_cameraspace;
-in vec3 lightEmit;
 
 // Ouput data
 out vec3 FragmentColor;
@@ -14,6 +13,7 @@ out vec3 FragmentColor;
 // Values that stay constant for the whole mesh.
 uniform sampler2D Texture;
 uniform vec3 LightPosition;
+uniform vec3 LightEmit;
 
 void main(){
 
@@ -54,7 +54,7 @@ void main(){
 	
 	FragmentColor =
 		// Ambient : simulates indirect lighting
-		lightEmit + MaterialAmbientColor +
+		LightEmit + MaterialAmbientColor +
 		// Diffuse : "color" of the object
 		MaterialDiffuseColor * LightColor * LightPower * cosTheta / (distance*distance) +
 		// Specular : reflective highlight, like a mirror
