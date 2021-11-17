@@ -14,7 +14,7 @@
 
 #include "camera.h"
 #include "scene.h"
-#include "seabed.h"
+#include "static_object.h"
 #include "rectangle.h"
 #include "cube.h"
 
@@ -40,23 +40,18 @@ private:
         //camera->cameraPosition.z = -15.0f;
         scene.camera = move(camera);
 
-        // TODO: Create bezier surface representing the bottom of the sea
-        auto seabed = std::make_unique<Seabed>();
+        std::string mesh = "seabed_uv.obj";
+        std::string tex = "sand.bmp";
+
+        auto seabed = std::make_unique<StaticObject>(mesh, tex, LIGHT_SHADER);
         scene.objects.push_back(move(seabed));
 
-        auto rectangle = std::make_unique<Rectangle>();
-        rectangle->scale = {5, 5, 1};
-        for (int i = 0; i < 6; i++) {
-            auto rec = new Rectangle();
-            rec->position = {0, 10*i, 0};
-            rectangle->addChild(rec);
-        }
-        scene.objects.push_back(move(rectangle));
-
-        auto cube = std::make_unique<Cube>();
-        cube->position = {0, -2, 0};
-        cube->scale = {3, 3, 3};
-        scene.objects.push_back(move(cube));
+        mesh = "rocks.obj";
+        tex = "rock.bmp";
+        auto rock = std::make_unique<StaticObject>(mesh, tex, LIGHT_SHADER);
+        rock->position = {2.2f, 1.5f, -1.0f};
+        rock->scale = {0.01f, 0.01f, 0.01f};
+        scene.objects.push_back(move(rock));
     }
 
 public:

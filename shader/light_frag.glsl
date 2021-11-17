@@ -13,15 +13,11 @@ out vec3 FragmentColor;
 // Values that stay constant for the whole mesh.
 uniform sampler2D Texture;
 uniform vec3 LightPosition;
+uniform vec3 LightColor;
 uniform vec3 LightEmit;
+uniform float LightPower;
 
 void main(){
-
-	// Light emission properties
-	// You probably want to put them as uniforms
-	vec3 LightColor = vec3(1, 1, 1);
-	float LightPower = 10.0f;
-	
 	// Material properties
 	vec3 MaterialDiffuseColor = texture(Texture, texCoord).rgb;
 	vec3 MaterialAmbientColor = vec3(0.1, 0.1, 0.1) * MaterialDiffuseColor;
