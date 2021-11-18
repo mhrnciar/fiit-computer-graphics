@@ -50,17 +50,17 @@ public:
 
     virtual void addChild(Object *s) {};
 
-    std::list<Object *>::const_iterator getChildIteratorStart() { return children.begin(); }
-    std::list<Object *>::const_iterator getChildIteratorEnd() { return children.end(); }
-
     // Object properties
     glm::vec3 position{0,0,0};
     glm::vec3 rotation{0,0,0};
     glm::vec3 scale{1,1,1};
     glm::mat4 modelMatrix{1};
 
-    glm::vec3 lightEmit{0, 0, 0};
     glm::vec3 lightPosition{0, 0, 0};
+    glm::vec3 lightEmit{0, 0, 0};
+    glm::vec3 lightColor{1, 1, 1};
+    float lightPower = 10;
+
     Object *parent = nullptr;
 
 protected:

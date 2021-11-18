@@ -47,6 +47,8 @@ void Rectangle::render(Scene &scene) {
     // Set up light
     shader->setUniform("LightPosition", lightPosition);
     shader->setUniform("LightEmit", lightEmit);
+    shader->setUniform("LightColor", lightColor);
+    shader->setUniform("LightPower", lightPower);
 
     // use camera
     shader->setUniform("ProjectionMatrix", scene.camera->projectionMatrix);

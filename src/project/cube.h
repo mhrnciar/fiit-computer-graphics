@@ -10,6 +10,7 @@ private:
     static std::unique_ptr<ppgso::Mesh> mesh;
     static std::unique_ptr<ppgso::Shader> shader;
     static std::unique_ptr<ppgso::Texture> texture;
+    glm::vec3 color{1, 1, 1};
 
 
 public:
@@ -17,7 +18,7 @@ public:
     /*!
      * Create a new rectangle
      */
-    Cube();
+    Cube(const glm::vec3 &color);
 
     /*!
      * Update player position considering keyboard inputs

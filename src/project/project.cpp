@@ -14,7 +14,7 @@
 
 #include "camera.h"
 #include "scene.h"
-#include "seabed.h"
+#include "static_object.h"
 #include "rectangle.h"
 #include "cube.h"
 
@@ -40,23 +40,32 @@ private:
         //camera->cameraPosition.z = -15.0f;
         scene.camera = move(camera);
 
-        // TODO: Create bezier surface representing the bottom of the sea
-        auto seabed = std::make_unique<Seabed>();
+        std::string mesh = "seabed.obj";
+        std::string tex = "sand.bmp";
+
+        auto seabed = std::make_unique<StaticObject>(mesh, tex, LIGHT_SHADER);
         scene.objects.push_back(move(seabed));
 
-        auto rectangle = std::make_unique<Rectangle>();
-        rectangle->scale = {5, 5, 1};
-        for (int i = 0; i < 6; i++) {
-            auto rec = new Rectangle();
-            rec->position = {0, 10*i, 0};
-            rectangle->addChild(rec);
-        }
-        scene.objects.push_back(move(rectangle));
+        auto axisX = std::make_unique<Cube>(glm::vec3{1, 0, 0});
+        auto axisY = std::make_unique<Cube>(glm::vec3{0, 1, 0});
+        auto axisZ = std::make_unique<Cube>(glm::vec3{0, 0, 1});
 
-        auto cube = std::make_unique<Cube>();
-        cube->position = {0, -2, 0};
-        cube->scale = {3, 3, 3};
-        scene.objects.push_back(move(cube));
+        const float scaleMin = 0.1f;
+        const float scaleMax = 60.00f;
+
+        axisX->scale = {scaleMax, scaleMin, scaleMin};
+        axisY->scale = {scaleMin, scaleMax, scaleMin};
+        axisZ->scale = {scaleMin, scaleMin, scaleMax};
+        scene.objects.push_back(move(axisX));
+        scene.objects.push_back(move(axisY));
+        scene.objects.push_back(move(axisZ));
+
+        mesh = "cave.obj";
+        tex = "rock_bg.bmp";
+        auto rock = std::make_unique<StaticObject>(mesh, tex, LIGHT_SHADER);
+        rock->position = {2.2f, 3.2f, 2.0f};
+        //rock->scale = {0.1f, 0.1f, 0.1f};
+        scene.objects.push_back(move(rock));
     }
 
 public:
