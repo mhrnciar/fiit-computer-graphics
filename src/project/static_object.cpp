@@ -5,6 +5,8 @@
 #include <shaders/light_frag_glsl.h>
 #include <shaders/diffuse_vert_glsl.h>
 #include <shaders/diffuse_frag_glsl.h>
+#include <shaders/color_vert_glsl.h>
+#include <shaders/color_frag_glsl.h>
 
 StaticObject::StaticObject(const std::string &mesh_file, const std::string &tex_file, int shader_type) {
     // Initialize static resources if needed
@@ -17,6 +19,9 @@ StaticObject::StaticObject(const std::string &mesh_file, const std::string &tex_
         else if (shader_type == 1) {
             shader = std::make_unique<ppgso::Shader>(light_vert_glsl, light_frag_glsl);
             lightPosition = {0.0f, 5.0f, 0.0f};
+        }
+        else if (shader_type == 2) {
+            shader = std::make_unique<ppgso::Shader>(color_vert_glsl, color_frag_glsl);
         }
     }
 }

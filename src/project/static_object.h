@@ -15,6 +15,7 @@ private:
 public:
     #define DIFFUSE_SHADER 0
     #define LIGHT_SHADER 1
+    #define COLOR_SHADER 2
 
     /*!
      * Create a new static object

@@ -46,10 +46,24 @@ private:
         auto seabed = std::make_unique<StaticObject>(mesh, tex, LIGHT_SHADER);
         scene.objects.push_back(move(seabed));
 
+        auto axisX = std::make_unique<Cube>(glm::vec3{1, 0, 0});
+        auto axisY = std::make_unique<Cube>(glm::vec3{0, 1, 0});
+        auto axisZ = std::make_unique<Cube>(glm::vec3{0, 0, 1});
+
+        const float scaleMin = 0.1f;
+        const float scaleMax = 60.00f;
+
+        axisX->scale = {scaleMax, scaleMin, scaleMin};
+        axisY->scale = {scaleMin, scaleMax, scaleMin};
+        axisZ->scale = {scaleMin, scaleMin, scaleMax};
+        scene.objects.push_back(move(axisX));
+        scene.objects.push_back(move(axisY));
+        scene.objects.push_back(move(axisZ));
+
         mesh = "cave.obj";
         tex = "rock_bg.bmp";
         auto rock = std::make_unique<StaticObject>(mesh, tex, LIGHT_SHADER);
-        rock->position = {2.2f, 3, -1.0f};
+        rock->position = {2.2f, 3.2f, 2.0f};
         //rock->scale = {0.1f, 0.1f, 0.1f};
         scene.objects.push_back(move(rock));
     }
