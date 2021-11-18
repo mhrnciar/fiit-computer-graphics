@@ -40,17 +40,17 @@ private:
         //camera->cameraPosition.z = -15.0f;
         scene.camera = move(camera);
 
-        std::string mesh = "seabed_uv.obj";
+        std::string mesh = "seabed.obj";
         std::string tex = "sand.bmp";
 
         auto seabed = std::make_unique<StaticObject>(mesh, tex, LIGHT_SHADER);
         scene.objects.push_back(move(seabed));
 
-        mesh = "rocks.obj";
-        tex = "rock.bmp";
+        mesh = "cave.obj";
+        tex = "rock_bg.bmp";
         auto rock = std::make_unique<StaticObject>(mesh, tex, LIGHT_SHADER);
-        rock->position = {2.2f, 1.5f, -1.0f};
-        rock->scale = {0.01f, 0.01f, 0.01f};
+        rock->position = {2.2f, 3, -1.0f};
+        //rock->scale = {0.1f, 0.1f, 0.1f};
         scene.objects.push_back(move(rock));
     }
 
