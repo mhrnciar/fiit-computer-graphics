@@ -7,7 +7,7 @@ namespace ppgso {
 
         ImageAlpha loadPNG(const std::string &png) {
             std::vector<unsigned char> result;
-            unsigned int width, height;
+            unsigned int width, height, k = 0;
 
             unsigned int error = lodepng::decode(result, width, height, png);
             if (error) std::cout << "decoder error";
@@ -15,8 +15,10 @@ namespace ppgso {
             ppgso::ImageAlpha image{static_cast<int>(width), static_cast<int>(height)};
             auto &framebuffer = image.getFramebuffer();
 
-            for (unsigned long i = 0; i < png.size(); i += 4) {
-                framebuffer.push_back({result[i], result[i + 1], result[i + 2], result[i + 3]});
+            for (int i = 0; i < height; i++) {
+                for (int j = 0; j < width; j++) {
+                    image.setPixel(j, i, {result[k++], result[k++], result[k++], result[k++]});
+                }
             }
 
             return image;

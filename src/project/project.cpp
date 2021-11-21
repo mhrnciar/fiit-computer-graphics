@@ -99,6 +99,9 @@ public:
         glEnable(GL_CULL_FACE);
         glFrontFace(GL_CCW);
         glCullFace(GL_BACK);
+
+        //glEnable(GL_BLEND);
+        //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		
         //disables cursor and binds mouse to window TODO: move this to ppgso::window (?)
 	    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
