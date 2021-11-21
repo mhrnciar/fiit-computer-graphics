@@ -1,14 +1,16 @@
 #include "bezier_object.h"
 #include "scene.h"
+#include <ppgso/image_png.h>
 
 #include <shaders/texture_vert_glsl.h>
 #include <shaders/texture_frag_glsl.h>
 
-BezierObject::BezierObject(const std::string &tex_file, const glm::vec3 controlPoints[4][4]) {
+BezierObject::BezierObject(const glm::vec3 controlPoints[4][4], const std::string &tex_file) {
     // Initialize static resources if needed
     if (!shader) shader = std::make_unique<ppgso::Shader>(texture_vert_glsl, texture_frag_glsl);
-    if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP(tex_file));
     bezierPatch(controlPoints);
+
+    texture = std::make_unique<ppgso::TextureAlpha>(ppgso::image::loadPNG(tex_file));
 }
 
 BezierObject::~BezierObject() {
@@ -27,7 +29,6 @@ glm::vec3 interpolate(const glm::vec3 &p0, const glm::vec3 &p1, const float t){
 }
 
 glm::vec3 bezierPoint(const glm::vec3 controlPoints[4], float t) {
-    // TODO: Compute 3D point on bezier curve
     glm::vec3 linear_p1 = interpolate(controlPoints[0], controlPoints[1], t);
     glm::vec3 linear_p2 = interpolate(controlPoints[1], controlPoints[2], t);
     glm::vec3 linear_p3 = interpolate(controlPoints[2], controlPoints[3], t);
@@ -40,7 +41,6 @@ glm::vec3 bezierPoint(const glm::vec3 controlPoints[4], float t) {
 }
 
 void BezierObject::bezierPatch(const glm::vec3 controlPoints[4][4]) {
-    // Generate Bezier patch points and incidences
     vertices.clear();
     texCoords.clear();
     
@@ -70,9 +70,9 @@ void BezierObject::bezierPatch(const glm::vec3 controlPoints[4][4]) {
                               (i - 1) * PATCH_SIZE + j};
             mesh.push_back(triangle1);
             
-            face triangle2 = {i* PATCH_SIZE + (j - 1),
-                              (i - 1) * PATCH_SIZE + j,
-                              i * PATCH_SIZE + j};
+            face triangle2 = {i * PATCH_SIZE + (j - 1),
+                              i * PATCH_SIZE + j,
+                              (i - 1) * PATCH_SIZE + j};
             mesh.push_back(triangle2);
         }
     }
@@ -124,7 +124,7 @@ void BezierObject::render(Scene &scene) {
     glBindVertexArray(vao);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), vertices.data(), GL_STATIC_DRAW);
-    glDrawElements(GL_TRIANGLES, (GLsizei)mesh.size() * 3, GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, mesh.size() * sizeof(face), GL_UNSIGNED_INT, nullptr);
 
     for(auto & i : children) {
         i->render(scene);

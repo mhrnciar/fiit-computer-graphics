@@ -77,11 +77,14 @@ add_library(ppgso STATIC
         ppgso/tiny_obj_loader.cpp
         ppgso/shader.cpp
         ppgso/image.cpp
+        ppgso/image_alpha.cpp
         ppgso/image_bmp.cpp
         ppgso/image_raw.cpp
         ppgso/texture.cpp
+        ppgso/texture_alpha.cpp
         ppgso/window.cpp
-        )
+        ppgso/lodepng.cpp
+        ppgso/image_png.cpp ppgso/image_png.h)
 
 # Make sure GLM uses radians and GLEW is a static library
 target_compile_definitions(ppgso PUBLIC -DGLM_FORCE_RADIANS -DGLEW_STATIC)

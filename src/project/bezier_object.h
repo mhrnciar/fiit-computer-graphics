@@ -7,7 +7,7 @@
 class BezierObject final : public Object{
 private:
     std::unique_ptr<ppgso::Shader> shader;
-    std::unique_ptr<ppgso::Texture> texture;
+    std::unique_ptr<ppgso::TextureAlpha> texture;
     std::vector<glm::vec3> vertices;
     std::vector<glm::vec2> texCoords;
 
@@ -24,7 +24,7 @@ public:
     /*!
      * Create a new static object
      */
-    BezierObject(const std::string &tex_file, const glm::vec3 controlPoints[4][4]);
+    BezierObject(const glm::vec3 controlPoints[4][4], const std::string &tex_file);
 
     ~BezierObject();
 

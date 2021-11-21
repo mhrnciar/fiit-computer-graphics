@@ -6,6 +6,7 @@
 #include <glm/glm.hpp>
 
 #include "texture.h"
+#include "texture_alpha.h"
 
 namespace ppgso {
 
@@ -91,6 +92,8 @@ namespace ppgso {
      * @param id - Texture ID to use when multi-texturing (0 is default).
      */
     void setUniform(const std::string &name, const Texture &texture, const int id = 0) const;
+
+      void setUniform(const std::string &name, const TextureAlpha &texture, const int id = 0) const;
 
     /*!
      * Set matrix as an input for the shader program variable "name"

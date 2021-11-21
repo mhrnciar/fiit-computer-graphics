@@ -6,6 +6,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "texture.h"
+#include "texture_alpha.h"
 #include "shader.h"
 
 
@@ -100,6 +101,13 @@ void ppgso::Shader::setUniform(const std::string &name, const Texture &texture, 
   auto uniform = getUniformLocation(name.c_str());
   glUniform1i(uniform, id);
   texture.bind(id);
+}
+
+void ppgso::Shader::setUniform(const std::string &name, const TextureAlpha &texture, const int id) const {
+    use();
+    auto uniform = getUniformLocation(name.c_str());
+    glUniform1i(uniform, id);
+    texture.bind(id);
 }
 
 void ppgso::Shader::setUniform(const std::string &name, glm::mat4 matrix) const {

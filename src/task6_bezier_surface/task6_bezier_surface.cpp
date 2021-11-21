@@ -83,8 +83,8 @@ public:
             for (unsigned int j = 0; j < PATCH_SIZE; j++) {
                 // TODO: Compute points on the bezier patch
                 // HINT: Compute u, v coordinates
-                float u = (float)i / (float)(PATCH_SIZE - 1);
-                float v = (float)j / (float)(PATCH_SIZE - 1);
+                float u = (float) i / (float)(PATCH_SIZE - 1);
+                float v = (float) j / (float)(PATCH_SIZE - 1);
 
                 //printf("%f\n", u);
                 glm::vec3 points_u[] = {bezierPoint(controlPoints[0], u),
@@ -95,7 +95,7 @@ public:
                 glm::vec3 point_v = bezierPoint(points_u, v);
 
                 vertices.push_back(point_v);
-                texCoords.push_back({u, 1-v});
+                texCoords.emplace_back(u, 1-v);
             }
         }
         // Generate indices
