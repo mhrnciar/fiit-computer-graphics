@@ -15,10 +15,12 @@
 #include "camera.h"
 #include "scene.h"
 #include "static_object.h"
+#include "bezier_object.h"
 #include "rectangle.h"
 #include "cube.h"
 
-const unsigned int SIZE = 512;
+const unsigned int SIZEW = 1280;
+const unsigned int SIZEH = 720;
 
 /*!
  * Custom windows for our simple game
@@ -66,13 +68,22 @@ private:
         rock->position = {2.2f, 3.2f, 2.0f};
         //rock->scale = {0.1f, 0.1f, 0.1f};
         scene.objects.push_back(move(rock));
+
+        glm::vec3 controlPoints[4][4]{
+                { {-1,-4,0}, {-1,-1.5f,0}, {-1,1.5f,0}, {-1,4,0}, },
+                { {-0.67f,-4,0}, {-0.67f,-1.5f,0}, {-0.67f,1.5f,0}, {-0.67f,4,0}, },
+                { {0.67f,-4,0}, {0.67f,-1.5f,0}, {0.67f,1.5f,0}, {0.67f,4,0}, },
+                { {1,-4,0}, {1,-1.5f,0}, {1,1.5f,0}, {1,4,0} }
+        };
+        auto algae = std::make_unique<BezierObject>("green_algae.bmp", controlPoints);
+        scene.objects.push_back(move(algae));
     }
 
 public:
     /*!
      * Construct custom game window
      */
-    SceneWindow() : Window{"project", SIZE, SIZE} {
+    SceneWindow() : Window{"project", SIZEW, SIZEH} {
         //hideCursor();
         glfwSetInputMode(window, GLFW_STICKY_KEYS, 1);
 
