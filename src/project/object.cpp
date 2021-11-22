@@ -3,6 +3,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/euler_angles.hpp>
 #include <glm/gtx/transform.hpp>
+#include <iostream>
+#include <sstream>
 
 #include "object.h"
 
@@ -28,3 +30,8 @@ void Object::generateModelMatrix() {
     }
 }
 
+std::string Object::setLightUniform(const char* propertyName, size_t lightIndex) {
+    std::ostringstream ss;
+    ss << "pointLights[" << lightIndex << "]." << propertyName;
+    return ss.str();
+}
