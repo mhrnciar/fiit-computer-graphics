@@ -15,7 +15,6 @@ namespace ppgso {
 
         /*!
          * Create new empty texture and bind it to OpenGL.
-         *
          * @param width - Width in pixels.
          * @param height - Height in pixels.
          */
@@ -23,7 +22,6 @@ namespace ppgso {
 
         /*!
          * Load from image.
-         *
          * @param image - Image to use
          */
         TextureAlpha(ImageAlpha&& image);
@@ -37,14 +35,12 @@ namespace ppgso {
 
         /*!
          * Get OpenGL texture identifier number.
-         *
          * @return - OpenGL texture identifier number.
          */
         GLuint getTexture();
 
         /*!
          * Bind the OpenGL texture for use.
-         *
          * @param id - OpenGL Texture id to bind to (0 default)
          */
         void bind(int id = 0) const;

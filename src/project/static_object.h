@@ -3,7 +3,6 @@
 
 #include "object.h"
 
-
 class StaticObject final : public Object{
 private:
     // Static resources (Shared between instances)
@@ -25,7 +24,7 @@ public:
                  int shader_type);
 
     /*!
-     * Update player position considering keyboard inputs
+     * Update static object
      * @param scene Scene to update
      * @param dt Time delta
      * @return true to delete the object
@@ -33,11 +32,15 @@ public:
     bool update(Scene &scene, float dt) override;
 
     /*!
-     * Render player
+     * Render static object
      * @param scene Scene to render in
      */
     void render(Scene &scene) override;
 
+    /*!
+     * Add child object creating hierarchy
+     * @param s - child object
+     */
     void addChild(Object *s) override;
 };
 

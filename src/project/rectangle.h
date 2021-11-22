@@ -20,7 +20,7 @@ public:
     Rectangle();
 
     /*!
-     * Update player position considering keyboard inputs
+     * Update rectangle position considering keyboard inputs
      * @param scene Scene to update
      * @param dt Time delta
      * @return true to delete the object
@@ -28,11 +28,15 @@ public:
     bool update(Scene &scene, float dt) override;
 
     /*!
-     * Render player
+     * Render rectangle
      * @param scene Scene to render in
      */
     void render(Scene &scene) override;
 
+    /*!
+     * Add child object creating hierarchy
+     * @param s - child object
+     */
     void addChild(Object *s) override;
 };
 

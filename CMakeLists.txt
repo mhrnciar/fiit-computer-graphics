@@ -190,7 +190,7 @@ add_executable(project
         src/project/rectangle.cpp
         src/project/cube.cpp
         src/project/static_object.cpp
-        src/project/bezier_object.cpp)
+        src/project/bezier_object.cpp src/project/light.cpp src/project/light.h)
 target_link_libraries(project ppgso shaders)
 install(TARGETS project DESTINATION .)
 add_custom_command(TARGET project POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/data/ ${CMAKE_CURRENT_BINARY_DIR})

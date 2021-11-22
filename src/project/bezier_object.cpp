@@ -5,12 +5,13 @@
 #include <shaders/texture_vert_glsl.h>
 #include <shaders/texture_frag_glsl.h>
 
-BezierObject::BezierObject(const glm::vec3 controlPoints[4][4], const std::string &tex_file) {
+BezierObject::BezierObject(const std::string &tex_file) {
     // Initialize static resources if needed
     if (!shader) shader = std::make_unique<ppgso::Shader>(texture_vert_glsl, texture_frag_glsl);
-    bezierPatch(controlPoints);
+    if (!texture) texture = std::make_unique<ppgso::TextureAlpha>(ppgso::image::loadPNG(tex_file));
 
-    texture = std::make_unique<ppgso::TextureAlpha>(ppgso::image::loadPNG(tex_file));
+    // Generate Bezier suface
+    bezierPatch();
 }
 
 BezierObject::~BezierObject() {
@@ -28,10 +29,16 @@ glm::vec3 interpolate(const glm::vec3 &p0, const glm::vec3 &p1, const float t){
     return {x, y, z};
 }
 
-glm::vec3 bezierPoint(const glm::vec3 controlPoints[4], float t) {
-    glm::vec3 linear_p1 = interpolate(controlPoints[0], controlPoints[1], t);
-    glm::vec3 linear_p2 = interpolate(controlPoints[1], controlPoints[2], t);
-    glm::vec3 linear_p3 = interpolate(controlPoints[2], controlPoints[3], t);
+/*!
+ * Generate Bezier point using de Casteljau algorithm
+ * @param controlPoints - four control points defining Bezier curve
+ * @param t - time delta
+ * @return - point on Bezier curve
+ */
+glm::vec3 bezierPoint(const glm::vec3 controlCurvePoints[4], float t) {
+    glm::vec3 linear_p1 = interpolate(controlCurvePoints[0], controlCurvePoints[1], t);
+    glm::vec3 linear_p2 = interpolate(controlCurvePoints[1], controlCurvePoints[2], t);
+    glm::vec3 linear_p3 = interpolate(controlCurvePoints[2], controlCurvePoints[3], t);
 
     glm::vec3 quadratic_p1 = interpolate(linear_p1, linear_p2, t);
     glm::vec3 quadratic_p2 = interpolate(linear_p2, linear_p3, t);
@@ -40,9 +47,11 @@ glm::vec3 bezierPoint(const glm::vec3 controlPoints[4], float t) {
     return cubic_p1;
 }
 
-void BezierObject::bezierPatch(const glm::vec3 controlPoints[4][4]) {
+void BezierObject::bezierPatch() {
+    // Generate Bezier patch points and incidences
     vertices.clear();
     texCoords.clear();
+    mesh.clear();
     
     unsigned int PATCH_SIZE = 10;
     for(unsigned int i = 0; i < PATCH_SIZE ; i++) {
@@ -108,6 +117,18 @@ void BezierObject::bezierPatch(const glm::vec3 controlPoints[4][4]) {
 };
 
 bool BezierObject::update(Scene &scene, float dt) {
+    auto time = (float) glfwGetTime();
+
+    float multi = 1;
+    for (int i = 0; i < 3; i++){
+        multi *= -1;
+        for(int j = 0; j < 4; j++) {
+            controlPoints[i][j][2] = multi * sin(time * 2);
+        }
+    }
+
+    bezierPatch();
+
     generateModelMatrix();
     return true;
 }

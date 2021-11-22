@@ -48,6 +48,10 @@ public:
      */
     virtual void onClick(Scene &scene) {};
 
+    /*!
+     * Add child object creating hierarchy
+     * @param s - child object
+     */
     virtual void addChild(Object *s) {};
 
     // Object properties

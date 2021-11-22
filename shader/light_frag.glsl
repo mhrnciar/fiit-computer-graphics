@@ -8,7 +8,7 @@ in vec3 EyeDirection_cameraspace;
 in vec3 LightDirection_cameraspace;
 
 // Ouput data
-out vec3 FragmentColor;
+out vec4 FragmentColor;
 
 // Values that stay constant for the whole mesh.
 uniform sampler2D Texture;
@@ -48,7 +48,7 @@ void main(){
 	//  - Looking elsewhere -> < 1
 	float cosAlpha = clamp(dot(E, R), 0, 1);
 	
-	FragmentColor =
+	FragmentColor.xyz =
 		// Ambient : simulates indirect lighting
 		LightEmit + MaterialAmbientColor +
 		// Diffuse : "color" of the object

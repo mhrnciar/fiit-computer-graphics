@@ -25,7 +25,7 @@ namespace ppgso {
         /*!
          * Get raw access to the image data.
          *
-         * @return - Pointer to the raw RGB framebuffer data.
+         * @return - Pointer to the raw RGBA framebuffer data.
          */
         std::vector<Pixel>& getFramebuffer();
 
@@ -53,6 +53,7 @@ namespace ppgso {
          * @param r Red channel <0, 255>
          * @param g Green channel <0, 255>
          * @param b Blue channel <0, 255>
+         * @param a Alpha channel <0, 255>
          */
         void setPixel(int x, int y, int r, int g, int b, int a);
 
@@ -63,6 +64,7 @@ namespace ppgso {
          * @param r Red channel <0, 1>
          * @param g Green channel <0, 1>
          * @param b Blue channel <0, 1>
+         * @param a Alpha channel <0, 1>
          */
         void setPixel(int x, int y, float r, float g, float b, float a);
 

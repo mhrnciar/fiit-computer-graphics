@@ -69,14 +69,7 @@ private:
         //rock->scale = {0.1f, 0.1f, 0.1f};
         scene.objects.push_back(move(rock));
 
-        glm::vec3 controlPoints[4][4]{
-                { {-1,4,0}, {-0.5f,4,0}, {0.5f,4,0}, {1,4,0}, },
-                { {-1,1.5f,0}, {-0.5f,1.5f,0}, {0.5f,1.5f,0}, {1,1.5f,0}, },
-                { {-1,-1.5f,0}, {-0.5f,-1.5f,0}, {0.5f,-1.5f,0}, {1,-1.5f,0}, },
-                { {-1,-4,0}, {-0.5f,-4,0}, {0.5f,-4,0}, {1,-4,0} }
-        };
-
-        auto algae = std::make_unique<BezierObject>(controlPoints, "green_algae.png");
+        auto algae = std::make_unique<BezierObject>("green_algae.png");
         algae->position = {0, 3, -1};
         algae->scale = {0.1f, 0.1f, 0.1f};
         scene.objects.push_back(move(algae));
