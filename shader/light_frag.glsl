@@ -26,7 +26,7 @@ uniform PointLight pointLights[MAX_LIGHTS];
 uniform float numLights;
 
 void main(){
-	vec3 result = vec3(0.1, 0.1, 0.1);
+	vec3 result = vec3(0, 0, 0);
 
 	for (int i = 0; i < numLights; i++) {
 		// Vector that goes from the vertex to the light, in camera space. M is ommited because it's identity.
