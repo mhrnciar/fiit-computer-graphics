@@ -19,8 +19,10 @@ StaticObject::StaticObject(const std::string &mesh_file, const std::string &tex_
         }
         else if (shader_type == LIGHT_SHADER) {
             shader = std::make_unique<ppgso::Shader>(light_vert_glsl, light_frag_glsl);
-            lights.push_back({{0, 5, 0}, {1, 1, 1}, 10});
-            lights.push_back({{1, 6, 2}, {1, 0, 0}, 20});
+            lights.push_back({{0, 10, 0}, {1, 1, 1}, 20});
+            lights.push_back({{-3, 6, -3}, {1, 0, 0}, 10});
+            lights.push_back({{0, 6, 3}, {0, 1, 0}, 10});
+            lights.push_back({{3, 6,  -3}, {0, 0, 1}, 10});
         }
         else if (shader_type == COLOR_SHADER) {
             shader = std::make_unique<ppgso::Shader>(color_vert_glsl, color_frag_glsl);

@@ -25,8 +25,8 @@ FIND_PATH(GLFW_INCLUDE_DIRS GLFW/glfw3.h DOC "Path to GLFW include directory."
         $ENV{GLFW_ROOT}
         PATH_SUFFIX include #For finding the include file under the root of the glfw expanded archive, typically on Windows.
         PATHS
-        /usr/local/Cellar/glfw/3.3.4
-        /usr/local/Cellar/glfw/3.3.4/include
+        /usr/local
+        /usr/local/include
         )
 
 SET(GLFW_LIB_NAMES libglfw.dylib libglfw3.a glfw3 glfw GLFW3.lib)
@@ -37,8 +37,8 @@ FIND_LIBRARY(GLFW_LIBRARIES DOC "Absolute path to GLFW library."
         $ENV{GLFW_ROOT}
         PATH_SUFFIXES lib/win32 #For finding the library file under the root of the glfw expanded archive, typically on Windows.
         PATHS
-        /usr/local/Cellar/glfw/3.3.4
-        /usr/local/Cellar/glfw/3.3.4/lib
+        /usr/local
+        /usr/local/lib
         )
 IF (APPLE)
   find_library(IOKIT NAMES IOKit)
