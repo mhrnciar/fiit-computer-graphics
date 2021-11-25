@@ -15,10 +15,12 @@
 #include "camera.h"
 #include "scene.h"
 #include "static_object.h"
+#include "bezier_object.h"
 #include "rectangle.h"
 #include "cube.h"
 
-const unsigned int SIZE = 512;
+const unsigned int SIZEW = 1280;
+const unsigned int SIZEH = 720;
 
 /*!
  * Custom windows for our simple game
@@ -66,13 +68,18 @@ private:
         rock->position = {2.2f, 3.2f, 2.0f};
         //rock->scale = {0.1f, 0.1f, 0.1f};
         scene.objects.push_back(move(rock));
+
+        auto algae = std::make_unique<BezierObject>("green_algae.png");
+        algae->position = {0, 3, -1};
+        algae->scale = {0.1f, 0.1f, 0.1f};
+        scene.objects.push_back(move(algae));
     }
 
 public:
     /*!
      * Construct custom game window
      */
-    SceneWindow() : Window{"project", SIZE, SIZE} {
+    SceneWindow() : Window{"project", SIZEW, SIZEH} {
         //hideCursor();
         glfwSetInputMode(window, GLFW_STICKY_KEYS, 1);
 
@@ -85,6 +92,9 @@ public:
         glEnable(GL_CULL_FACE);
         glFrontFace(GL_CCW);
         glCullFace(GL_BACK);
+
+        //glEnable(GL_BLEND);
+        //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		
         //disables cursor and binds mouse to window TODO: move this to ppgso::window (?)
 	    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);

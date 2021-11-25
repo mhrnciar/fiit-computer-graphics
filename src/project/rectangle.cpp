@@ -14,7 +14,7 @@ Rectangle::Rectangle() {
     if (!shader) shader = std::make_unique<ppgso::Shader>(light_vert_glsl, light_frag_glsl);
     if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP("sand.bmp"));
     if (!mesh) mesh = std::make_unique<ppgso::Mesh>("plane.obj");
-    lightPosition = {0.0f, -5.0f, 0.0f};
+    lights.push_back({{0.0f, -5.0f, 0.0f}, {1, 1, 1}, 10});
 }
 
 bool Rectangle::update(Scene &scene, float dt) {
@@ -45,10 +45,15 @@ void Rectangle::render(Scene &scene) {
     shader->use();
 
     // Set up light
-    shader->setUniform("LightPosition", lightPosition);
-    shader->setUniform("LightEmit", lightEmit);
-    shader->setUniform("LightColor", lightColor);
-    shader->setUniform("LightPower", lightPower);
+    shader->setUniform("numLights", lights.size());
+
+    for (unsigned long i = 0; i < lights.size(); i++) {
+        shader->setUniform(setLightUniform("position", i), lights[i].position);
+        shader->setUniform(setLightUniform("color", i), lights[i].color);
+        shader->setUniform(setLightUniform("power", i), lights[i].power);
+        shader->setUniform(setLightUniform("ambient", i), lights[i].ambient);
+        shader->setUniform(setLightUniform("specular", i), lights[i].specular);
+    }
 
     // use camera
     shader->setUniform("ProjectionMatrix", scene.camera->projectionMatrix);

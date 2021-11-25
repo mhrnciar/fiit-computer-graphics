@@ -46,7 +46,6 @@ class Scene {
     std::map< int, int > keyboard;
 
     // Lights, in this case using only simple directional diffuse lighting
-    // TODO: Glowing objects can have their own light source - needs new shader
     glm::vec3 lightDirection{-1.0f, -1.0f, -1.0f};
 
     // Store cursor state

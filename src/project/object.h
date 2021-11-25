@@ -4,6 +4,7 @@
 #include <map>
 
 #include <glm/glm.hpp>
+#include "light.h"
 
 // Forward declare a scene
 class Scene;
@@ -48,19 +49,25 @@ public:
      */
     virtual void onClick(Scene &scene) {};
 
+    /*!
+     * Add child object creating hierarchy
+     * @param s - child object
+     */
     virtual void addChild(Object *s) {};
+
+    std::string setLightUniform(const char* propertyName, size_t lightIndex);
 
     // Object properties
     glm::vec3 position{0,0,0};
     glm::vec3 rotation{0,0,0};
     glm::vec3 scale{1,1,1};
-    glm::mat4 modelMatrix{1};
 
-    glm::vec3 lightPosition{0, 0, 0};
-    glm::vec3 lightEmit{0, 0, 0};
-    glm::vec3 lightColor{1, 1, 1};
-    float lightPower = 10;
+    glm::mat4 modelMatrix{1.0f};
+    glm::mat4 translationMatrix{1.0f};
+    glm::mat4 rotationMatrix{1.0f};
+    glm::mat4 scaleMatrix{1.0f};
 
+    std::vector<Light> lights;
     Object *parent = nullptr;
 
 protected:

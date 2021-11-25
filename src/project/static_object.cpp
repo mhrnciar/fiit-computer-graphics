@@ -14,13 +14,17 @@ StaticObject::StaticObject(const std::string &mesh_file, const std::string &tex_
     if (!mesh) mesh = std::make_unique<ppgso::Mesh>(mesh_file);
 
     if (!shader) {
-        if (shader_type == 0)
+        if (shader_type == DIFFUSE_SHADER) {
             shader = std::make_unique<ppgso::Shader>(diffuse_vert_glsl, diffuse_frag_glsl);
-        else if (shader_type == 1) {
-            shader = std::make_unique<ppgso::Shader>(light_vert_glsl, light_frag_glsl);
-            lightPosition = {0.0f, 5.0f, 0.0f};
         }
-        else if (shader_type == 2) {
+        else if (shader_type == LIGHT_SHADER) {
+            shader = std::make_unique<ppgso::Shader>(light_vert_glsl, light_frag_glsl);
+            lights.push_back({{0, 10, 0}, {1, 1, 1}, 20});
+            lights.push_back({{-3, 6, -3}, {1, 0, 0}, 10});
+            lights.push_back({{0, 6, 3}, {0, 1, 0}, 10});
+            lights.push_back({{3, 6,  -3}, {0, 0, 1}, 10});
+        }
+        else if (shader_type == COLOR_SHADER) {
             shader = std::make_unique<ppgso::Shader>(color_vert_glsl, color_frag_glsl);
         }
     }
@@ -35,11 +39,15 @@ void StaticObject::render(Scene &scene) {
     shader->use();
 
     // Set up light
-    shader->setUniform("LightDirection", scene.lightDirection);
-    shader->setUniform("LightPosition", lightPosition);
-    shader->setUniform("LightEmit", lightEmit);
-    shader->setUniform("LightColor", lightColor);
-    shader->setUniform("LightPower", lightPower);
+    shader->setUniform("numLights", lights.size());
+
+    for (unsigned long i = 0; i < lights.size(); i++) {
+        shader->setUniform(setLightUniform("position", i), lights[i].position);
+        shader->setUniform(setLightUniform("color", i), lights[i].color);
+        shader->setUniform(setLightUniform("power", i), lights[i].power);
+        shader->setUniform(setLightUniform("ambient", i), lights[i].ambient);
+        shader->setUniform(setLightUniform("specular", i), lights[i].specular);
+    }
 
     // use camera
     shader->setUniform("ProjectionMatrix", scene.camera->projectionMatrix);
@@ -59,5 +67,3 @@ void StaticObject::addChild(Object *s) {
     s->parent = this;
     children.push_back(s);
 }
-
-

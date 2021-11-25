@@ -77,11 +77,14 @@ add_library(ppgso STATIC
         ppgso/tiny_obj_loader.cpp
         ppgso/shader.cpp
         ppgso/image.cpp
+        ppgso/image_alpha.cpp
         ppgso/image_bmp.cpp
         ppgso/image_raw.cpp
         ppgso/texture.cpp
+        ppgso/texture_alpha.cpp
         ppgso/window.cpp
-        )
+        ppgso/lodepng.cpp
+        ppgso/image_png.cpp)
 
 # Make sure GLM uses radians and GLEW is a static library
 target_compile_definitions(ppgso PUBLIC -DGLM_FORCE_RADIANS -DGLEW_STATIC)
@@ -186,7 +189,9 @@ add_executable(project
         src/project/camera.cpp
         src/project/rectangle.cpp
         src/project/cube.cpp
-        src/project/static_object.cpp)
+        src/project/static_object.cpp
+        src/project/bezier_object.cpp
+        src/project/light.cpp)
 target_link_libraries(project ppgso shaders)
 install(TARGETS project DESTINATION .)
 add_custom_command(TARGET project POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/data/ ${CMAKE_CURRENT_BINARY_DIR})

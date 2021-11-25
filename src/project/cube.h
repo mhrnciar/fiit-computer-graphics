@@ -16,12 +16,12 @@ private:
 public:
 
     /*!
-     * Create a new rectangle
+     * Create a new cube
      */
     Cube(const glm::vec3 &color);
 
     /*!
-     * Update player position considering keyboard inputs
+     * Update cube position considering keyboard inputs
      * @param scene Scene to update
      * @param dt Time delta
      * @return true to delete the object
@@ -29,11 +29,15 @@ public:
     bool update(Scene &scene, float dt) override;
 
     /*!
-     * Render player
+     * Render cube
      * @param scene Scene to render in
      */
     void render(Scene &scene) override;
 
+    /*!
+     * Add child object creating hierarchy
+     * @param s - child object
+     */
     void addChild(Object *s) override;
 };
 

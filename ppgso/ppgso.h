@@ -7,9 +7,11 @@
 #include "mesh.h"
 #include "shader.h"
 #include "image.h"
+#include "image_alpha.h"
 #include "image_bmp.h"
 #include "image_raw.h"
 #include "texture.h"
+#include "texture_alpha.h"
 #include "window.h"
 
 namespace ppgso {
