@@ -61,7 +61,11 @@ public:
     glm::vec3 position{0,0,0};
     glm::vec3 rotation{0,0,0};
     glm::vec3 scale{1,1,1};
-    glm::mat4 modelMatrix{1};
+
+    glm::mat4 modelMatrix{1.0f};
+    glm::mat4 translationMatrix{1.0f};
+    glm::mat4 rotationMatrix{1.0f};
+    glm::mat4 scaleMatrix{1.0f};
 
     std::vector<Light> lights;
     Object *parent = nullptr;
