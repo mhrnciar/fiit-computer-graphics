@@ -18,6 +18,7 @@
 #include "bezier_object.h"
 #include "rectangle.h"
 #include "cube.h"
+#include "skydome.h"
 
 const unsigned int SIZEW = 1280;
 const unsigned int SIZEH = 720;
@@ -44,6 +45,9 @@ private:
 
         std::string mesh = "seabed.obj";
         std::string tex = "sand.bmp";
+
+        auto skydome = std::make_unique<Skydome>();
+        scene.objects.push_back(move(skydome));
 
         auto seabed = std::make_unique<StaticObject>(mesh, tex, LIGHT_SHADER);
         scene.objects.push_back(move(seabed));
