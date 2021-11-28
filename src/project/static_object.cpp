@@ -39,13 +39,17 @@ void StaticObject::render(Scene &scene) {
     shader->use();
 
     // Set up light
+    shader->setUniform("viewPos", scene.camera->cameraPosition);
     shader->setUniform("numLights", lights.size());
 
     for (unsigned long i = 0; i < lights.size(); i++) {
         shader->setUniform(setLightUniform("position", i), lights[i].position);
         shader->setUniform(setLightUniform("color", i), lights[i].color);
-        shader->setUniform(setLightUniform("power", i), lights[i].power);
+        shader->setUniform(setLightUniform("constant", i), lights[i].constant);
+        shader->setUniform(setLightUniform("linear", i), lights[i].linear);
+        shader->setUniform(setLightUniform("quadratic", i), lights[i].quadratic);
         shader->setUniform(setLightUniform("ambient", i), lights[i].ambient);
+        shader->setUniform(setLightUniform("diffuse", i), lights[i].diffuse);
         shader->setUniform(setLightUniform("specular", i), lights[i].specular);
     }
 
@@ -55,7 +59,8 @@ void StaticObject::render(Scene &scene) {
 
     // render mesh
     shader->setUniform("ModelMatrix", modelMatrix);
-    shader->setUniform("Texture", *texture);
+    shader->setUniform("material.diffuse", *texture);
+    shader->setUniform("material.shininess", shininess);
     mesh->render();
 
     for(auto & i : children) {

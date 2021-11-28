@@ -61,7 +61,7 @@ void Rectangle::render(Scene &scene) {
 
     // render mesh
     shader->setUniform("ModelMatrix", modelMatrix);
-    shader->setUniform("Texture", *texture);
+    shader->setUniform("material.diffuse", *texture);
     mesh->render();
 
     for(auto & i : children) {

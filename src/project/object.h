@@ -69,6 +69,7 @@ public:
 
     std::vector<Light> lights;
     Object *parent = nullptr;
+    float shininess = 32.0f;
 
 protected:
     /*!

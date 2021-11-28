@@ -14,8 +14,13 @@ public:
     glm::vec3 color{1, 1, 1};
     float power = 10;
 
-    glm::vec3 ambient{0.1f, 0.1f, 0.1f};
-    glm::vec3 specular{0.3f, 0.3f, 0.3f};
+    float constant = 1.0f;
+    float linear = 0.09f;
+    float quadratic = 0.032f;
+
+    glm::vec3 ambient{0.05f, 0.05f, 0.05f};
+    glm::vec3 diffuse{0.8f, 0.8f, 0.8f};
+    glm::vec3 specular{1.0f, 1.0f, 1.0f};
 
 
     /*!
