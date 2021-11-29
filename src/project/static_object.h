@@ -12,9 +12,10 @@ private:
 
 
 public:
-    #define DIFFUSE_SHADER 0
-    #define LIGHT_SHADER 1
-    #define COLOR_SHADER 2
+    #define COLOR_SHADER 0
+    #define TEXTURE_SHADER 1
+    #define DIFFUSE_SHADER 2
+    #define LIGHT_SHADER 3
 
     /*!
      * Create a new static object

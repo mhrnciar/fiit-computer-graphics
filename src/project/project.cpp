@@ -12,13 +12,13 @@
 
 #include <ppgso/ppgso.h>
 
-#include "camera.h"
 #include "scene.h"
+#include "camera.h"
+#include "background.h"
 #include "static_object.h"
 #include "bezier_object.h"
 #include "rectangle.h"
 #include "cube.h"
-#include "skydome.h"
 
 const unsigned int SIZEW = 1280;
 const unsigned int SIZEH = 720;
@@ -39,16 +39,25 @@ private:
         scene.objects.clear();
 
         // Create a camera
-        auto camera = std::make_unique<Camera>(60.0f, 1.0f, 0.1f, 100.0f);
-        //camera->cameraPosition.z = -15.0f;
+        auto camera = std::make_unique<Camera>(60.0f, 1.0f, 0.1f, 200.0f);
         scene.camera = move(camera);
 
-        std::string mesh = "seabed.obj";
-        std::string tex = "sand.bmp";
-
-        auto skydome = std::make_unique<Skydome>();
+        std::string mesh = "objects/skydome.obj";
+        std::string tex = "objects/skydome.png";
+        auto skydome = std::make_unique<Background>(mesh, tex);
+        skydome->scale = {81, 81, 81};
+        skydome->position = {0, 45, 0};
         scene.objects.push_back(move(skydome));
 
+        mesh = "objects/bg.obj";
+        tex = "objects/bg.png";
+        auto background = std::make_unique<Background>(mesh, tex);
+        background->scale = {20, 20, 20};
+        background->position = {0, 15, 0};
+        scene.objects.push_back(move(background));
+
+        mesh = "objects/seabed.obj";
+        tex = "objects/sand.bmp";
         auto seabed = std::make_unique<StaticObject>(mesh, tex, LIGHT_SHADER);
         scene.objects.push_back(move(seabed));
 
@@ -57,7 +66,7 @@ private:
         auto axisZ = std::make_unique<Cube>(glm::vec3{0, 0, 1});
 
         const float scaleMin = 0.1f;
-        const float scaleMax = 60.00f;
+        const float scaleMax = 100.00f;
 
         axisX->scale = {scaleMax, scaleMin, scaleMin};
         axisY->scale = {scaleMin, scaleMax, scaleMin};
@@ -66,15 +75,48 @@ private:
         scene.objects.push_back(move(axisY));
         scene.objects.push_back(move(axisZ));
 
-        mesh = "cave.obj";
-        tex = "rock_bg.bmp";
-        auto rock = std::make_unique<StaticObject>(mesh, tex, LIGHT_SHADER);
-        rock->position = {2.2f, 3.2f, 2.0f};
-        //rock->scale = {0.1f, 0.1f, 0.1f};
-        scene.objects.push_back(move(rock));
+        mesh = "objects/cave.obj";
+        tex = "objects/rock_bg.bmp";
+        auto cave = std::make_unique<StaticObject>(mesh, tex, LIGHT_SHADER);
+        cave->lights.push_back({{-3, 6, -3}, {1, 0, 0}, 10});
+        cave->lights.push_back({{0, 6, 3}, {0, 1, 0}, 10});
+        cave->lights.push_back({{3, 6, -3}, {0, 0, 1}, 10});
+        cave->position = {-7.0f, 6.5f, 0.0f};
+        cave->scale = {2, 2, 2};
+
+        mesh = "corals/coral.obj";
+        tex = "corals/coral_green.bmp";
+        auto coral = new StaticObject(mesh, tex, LIGHT_SHADER);
+        coral->position = {0.0f, -2.5f, -6.0f};
+        cave->addChild(coral);
+
+        coral = new StaticObject(mesh, tex, LIGHT_SHADER);
+        coral->position = {0.0f, 6.0f, -6.0f};
+        cave->addChild(coral);
+
+        coral = new StaticObject(mesh, tex, LIGHT_SHADER);
+        coral->position = {0.0f, -2.5f, -5.0f};
+        cave->addChild(coral);
+
+        mesh = "corals/coral1.obj";
+        tex = "corals/coral_orange.bmp";
+        coral = new StaticObject(mesh, tex, LIGHT_SHADER);
+        coral->position = {-1.0f, -2.5f, -7.5f};
+        cave->addChild(coral);
+
+        tex = "corals/coral_yellow.bmp";
+        coral = new StaticObject(mesh, tex, LIGHT_SHADER);
+        coral->position = {1.2f, -2.5f, -4.5f};
+        cave->addChild(coral);
+
+        coral = new StaticObject(mesh, tex, LIGHT_SHADER);
+        coral->position = {1.0f, 6.0f, -8.0f};
+        cave->addChild(coral);
+
+        scene.objects.push_back(move(cave));
 
         auto algae = std::make_unique<BezierObject>("green_algae.png");
-        algae->position = {0, 3, -1};
+        algae->position = {0, 5, -1};
         algae->scale = {0.1f, 0.1f, 0.1f};
         scene.objects.push_back(move(algae));
     }

@@ -27,8 +27,8 @@ struct PointLight {
 	vec3 diffuse;
 	vec3 specular;
 };
-#define NR_POINT_LIGHTS 10
-uniform PointLight pointLights[NR_POINT_LIGHTS];
+#define MAX_LIGHTS 10
+uniform PointLight pointLights[MAX_LIGHTS];
 uniform float numLights;
 
 uniform Material material;
@@ -47,10 +47,9 @@ void main() {
 	//properties
 	vec3 norm = normalize(normal);
 	vec3 viewDir = normalize(viewPos - FragPos);
-	vec3 result = vec3(0,0,0);
 
 	//phase 1: Directional lighting
-	//vec3 result = CalcDirLight(dirLight, norm, viewDir);
+	vec3 result = CalcDirLight(dirLight, norm, viewDir);
 
 	//phase 2: Point lights
 	for(int i = 0; i < numLights; i++)
