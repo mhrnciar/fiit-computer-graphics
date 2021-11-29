@@ -42,23 +42,23 @@ private:
         auto camera = std::make_unique<Camera>(60.0f, 1.0f, 0.1f, 200.0f);
         scene.camera = move(camera);
 
-        std::string mesh = "objects/skydome.obj";
-        std::string tex = "objects/skydome.png";
-        auto skydome = std::make_unique<Background>(mesh, tex);
+        auto skydome = std::make_unique<Background>("objects/skydome.obj", "objects/skydome.png");
         skydome->scale = {81, 81, 81};
         skydome->position = {0, 45, 0};
         scene.objects.push_back(move(skydome));
 
-        mesh = "objects/bg.obj";
-        tex = "objects/bg.png";
-        auto background = std::make_unique<Background>(mesh, tex);
+        auto background = std::make_unique<Background>("objects/bg.obj", "objects/sea1.png");
         background->scale = {20, 20, 20};
-        background->position = {0, 15, 0};
+        background->position = {0, 20, 0};
         scene.objects.push_back(move(background));
 
-        mesh = "objects/seabed.obj";
-        tex = "objects/sand.bmp";
-        auto seabed = std::make_unique<StaticObject>(mesh, tex, LIGHT_SHADER);
+        auto water = std::make_unique<StaticObject>("plane.obj", "water.bmp", TEXTURE_SHADER);
+        water->scale = {80,80,80};
+        water->position = {0, 55, 0};
+        water->rotation = {ppgso::PI/2, 0, 0};
+        scene.objects.push_back(move(water));
+
+        auto seabed = std::make_unique<StaticObject>("objects/seabed.obj", "objects/sand.bmp", LIGHT_SHADER);
         scene.objects.push_back(move(seabed));
 
         auto axisX = std::make_unique<Cube>(glm::vec3{1, 0, 0});
@@ -75,50 +75,123 @@ private:
         scene.objects.push_back(move(axisY));
         scene.objects.push_back(move(axisZ));
 
-        mesh = "objects/cave.obj";
-        tex = "objects/rock_bg.bmp";
-        auto cave = std::make_unique<StaticObject>(mesh, tex, LIGHT_SHADER);
+        auto cave = std::make_unique<StaticObject>("objects/cave.obj", "objects/rock_bg.bmp", LIGHT_SHADER);
         cave->lights.push_back({{-3, 6, -3}, {1, 0, 0}, 10});
         cave->lights.push_back({{0, 6, 3}, {0, 1, 0}, 10});
         cave->lights.push_back({{3, 6, -3}, {0, 0, 1}, 10});
-        cave->position = {-7.0f, 6.5f, 0.0f};
-        cave->scale = {2, 2, 2};
+        cave->position = {-7.0f, 7.0f, 0.0f};
+        cave->scale = {2, 2.5f, 2};
 
-        mesh = "corals/coral.obj";
-        tex = "corals/coral_green.bmp";
-        auto coral = new StaticObject(mesh, tex, LIGHT_SHADER);
-        coral->position = {0.0f, -2.5f, -6.0f};
+        auto coral = new StaticObject("corals/coral.obj", "corals/coral_green2.bmp", LIGHT_SHADER);
+        coral->scale = {1.0f, 2.0f, 1.0f};
+        coral->position = {0.0f, -2.7f, -7.8f};
         cave->addChild(coral);
 
-        coral = new StaticObject(mesh, tex, LIGHT_SHADER);
-        coral->position = {0.0f, 6.0f, -6.0f};
+        coral = new StaticObject("corals/coral.obj", "corals/coral_green2.bmp", LIGHT_SHADER);
+        coral->scale = {2.0f, 2.0f, 2.0f};
+        coral->position = {5.0f, -2.8f, -3.6f};
         cave->addChild(coral);
 
-        coral = new StaticObject(mesh, tex, LIGHT_SHADER);
-        coral->position = {0.0f, -2.5f, -5.0f};
+        coral = new StaticObject("corals/coral.obj", "corals/coral_green.bmp", LIGHT_SHADER);
+        coral->position = {-4.0f, -2.8f, -3.8f};
         cave->addChild(coral);
 
-        mesh = "corals/coral1.obj";
-        tex = "corals/coral_orange.bmp";
-        coral = new StaticObject(mesh, tex, LIGHT_SHADER);
-        coral->position = {-1.0f, -2.5f, -7.5f};
+        coral = new StaticObject("corals/coral1.obj", "corals/coral_red.bmp", LIGHT_SHADER);
+        coral->rotation = {ppgso::PI, 0.0f, 0.0f};
+        coral->position = {0.57f, 1.8f, -7.0f};
         cave->addChild(coral);
 
-        tex = "corals/coral_yellow.bmp";
-        coral = new StaticObject(mesh, tex, LIGHT_SHADER);
-        coral->position = {1.2f, -2.5f, -4.5f};
+        coral = new StaticObject("corals/coral1.obj", "corals/coral_yellow.bmp", LIGHT_SHADER);
+        coral->scale = {1.5f, 1.5f, 1.5f};
+        coral->rotation = {0.0f, 0.0f, ppgso::PI/2};
+        coral->position = {2.0f, -2.8f, -4.5f};
         cave->addChild(coral);
 
-        coral = new StaticObject(mesh, tex, LIGHT_SHADER);
-        coral->position = {1.0f, 6.0f, -8.0f};
+        coral = new StaticObject("corals/coral1.obj", "corals/coral_pink.bmp", LIGHT_SHADER);
+        coral->position = {-1.0f, -2.8f, -7.0f};
+        cave->addChild(coral);
+
+        coral = new StaticObject("corals/coral2.obj", "corals/coral_blue.bmp", LIGHT_SHADER);
+        coral->scale = {2.5f, 2.5f, 2.5f};
+        coral->position = {2.0f, -2.8f, -7.5f};
+        cave->addChild(coral);
+
+        coral = new StaticObject("corals/coral2.obj", "corals/coral_pink.bmp", LIGHT_SHADER);
+        coral->rotation = {-ppgso::PI/2 + 0.4f, 0.0f, 0.0f};
+        coral->position = {0.0f, -0.5f, -3.8f};
+        cave->addChild(coral);
+
+        coral = new StaticObject("corals/coral2.obj", "corals/coral_blue.bmp", LIGHT_SHADER);
+        coral->scale = {1.2f, 1.2f, 1.2f};
+        coral->rotation = {ppgso::PI + 0.2f, 0.0f, 0.0f};
+        coral->position = {0.0f, 2.3f, -5.5f};
+        cave->addChild(coral);
+
+        coral = new StaticObject("corals/coral3.obj", "corals/coral_purple.bmp", LIGHT_SHADER);
+        coral->scale = {1.2f, 1.2f, 1.2f};
+        coral->position = {3.5f, -2.4f, -7.2f};
+        cave->addChild(coral);
+
+        coral = new StaticObject("corals/coral4.obj", "corals/coral_orange.bmp", LIGHT_SHADER);
+        coral->scale = {1.2f, 1.2f, 1.2f};
+        coral->rotation = {ppgso::PI + 0.1f, 0.0f, 0.0f};
+        coral->position = {1.0f, 2.2f, -4.6f};
+        cave->addChild(coral);
+
+        coral = new StaticObject("corals/coral4.obj", "corals/coral_red.bmp", LIGHT_SHADER);
+        coral->scale = {1.5f, 1.5f, 1.5f};
+        coral->rotation = {0.0f, 0.0f, 3.0f};
+        coral->position = {0.7f, -2.7f, -6.5f};
+        cave->addChild(coral);
+
+        coral = new StaticObject("corals/coral5.obj", "corals/coral_green2.bmp", LIGHT_SHADER);
+        coral->position = {0.0f, -2.8f, -4.2f};
+        cave->addChild(coral);
+
+        coral = new StaticObject("corals/coral5.obj", "corals/coral_green.bmp", LIGHT_SHADER);
+        coral->scale = {2.0f, 2.0f, 2.0f};
+        coral->position = {-4.0f, -2.8f, -7.2f};
+        cave->addChild(coral);
+
+        coral = new StaticObject("corals/coral5.obj", "corals/coral_green.bmp", LIGHT_SHADER);
+        coral->scale = {0.7f, 0.7f, 0.7f};
+        coral->position = {2.5f, -2.7f, -6.7f};
+        cave->addChild(coral);
+
+        coral = new StaticObject("corals/coral6.obj", "corals/coral_blue.bmp", LIGHT_SHADER);
+        coral->scale = {1.5f, 1.5f, 1.5f};
+        coral->position = {-2.0f, -2.8f, -4.5f};
+        cave->addChild(coral);
+
+        coral = new StaticObject("corals/coral6.obj", "corals/coral_red.bmp", LIGHT_SHADER);
+        coral->scale = {1.5f, 1.5f, 1.5f};
+        coral->rotation = {0.0f, 0.0f, 1.0f};
+        coral->position = {3.5f, -2.8f, -4.0f};
+        cave->addChild(coral);
+
+        coral = new StaticObject("corals/coral6.obj", "corals/coral_pink.bmp", LIGHT_SHADER);
+        coral->rotation = {ppgso::PI, 0.4f, 0.0f};
+        coral->position = {-2.0f, 2.0f, -5.6f};
         cave->addChild(coral);
 
         scene.objects.push_back(move(cave));
 
-        auto algae = std::make_unique<BezierObject>("green_algae.png");
-        algae->position = {0, 5, -1};
-        algae->scale = {0.1f, 0.1f, 0.1f};
-        scene.objects.push_back(move(algae));
+        /* Algae
+        for (int i = 0; i < 100; i++) {
+            auto algae = std::make_unique<BezierObject>("green_algae.png");
+            algae->position = {glm::linearRand(0.0f, -12.0f), 4.5f, glm::linearRand(-8.0f, -4.0f)};
+            algae->rotation = {0, 0, -ppgso::PI/2};
+            algae->scale = {0.1f, 0.1f, 0.1f};
+            scene.objects.push_back(move(algae));
+        }
+        */
+        /* Long loading, so put in comments while modeling other things
+        mesh = "objects/shipwreck.obj";
+        tex = "objects/ship.png";
+        auto ship = std::make_unique<Background>(mesh, tex);
+        ship->position = {45.0f, -2.1f, 0.0f};
+        scene.objects.push_back(move(ship));
+         */
     }
 
 public:
