@@ -19,8 +19,8 @@ public:
     float maxTime;
     glm::vec3 startPosition{0,0,0};
     glm::vec3 endPosition{0,0,0};
-    glm::vec3 startLookAt{0, 0, 0};
-    glm::vec3 endLookAt{0, 0, 0};
+    glm::vec3 startFront{0, 0, 0};
+    glm::vec3 endFront{0, 0, 0};
 
     glm::vec3 interpolatePosition() override;
     glm::vec3 interpolateLookAt();

@@ -240,6 +240,15 @@ public:
         if (key == GLFW_KEY_P && action == GLFW_PRESS) {
             animate = !animate;
         }
+
+        if (key == GLFW_KEY_O && action == GLFW_PRESS) {
+            auto camera = std::make_unique<Camera>(60.0f, 1.0f, 0.1f, 200.0f);
+            camera->keyframes.push_back({{7.2,6.6,-6}, {7.2,20,-6}, {0, 0, -1}, {0, 0, -1}, 10});
+            camera->keyframes.push_back({{7.2,20,-6}, {7.2,10,-6}, {0, 0, -1}, {-1, 0, 0}, 10});
+            camera->keyframes.push_back({{7.2,10,-6}, {7.2,10,-6}, {-1, 0, 0}, {-1, 0, 0}, 10});
+            camera->keyframes.push_back({{7.2,10,-6}, {7.2,10,-15}, {-1, 0, 0}, {0, 0, 1}, 10});
+            scene.camera = move(camera);
+        }
         
     }
 
@@ -251,7 +260,9 @@ public:
     void onCursorPos(double cursorX, double cursorY) override {
     	scene.cursor.x = cursorX;
     	scene.cursor.y = cursorY;
-    	scene.camera->updateDir(scene);
+
+    	if (scene.camera->keyframes.empty())
+    	    scene.camera->updateDir(scene);
     }
 
     /*!

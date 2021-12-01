@@ -14,17 +14,33 @@ Camera::Camera(float fov, float ratio, float near, float far) {
 
 void Camera::update(Scene &scene, float dt) {
     //printf("%lf %lf %lf\n", cameraPosition.x, cameraPosition.y, cameraPosition.z);
-	float cameraSpeed = 5 * dt;
-	if(scene.keyboard[GLFW_KEY_W]) {
-		cameraPosition -= cameraSpeed * cameraFront;
-	} else if(scene.keyboard[GLFW_KEY_S]) {
-		cameraPosition += cameraSpeed * cameraFront;
-	} else if(scene.keyboard[GLFW_KEY_A]) {
-		cameraPosition += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
-	} else if(scene.keyboard[GLFW_KEY_D]) {
-		cameraPosition -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
-	}
-	viewMatrix = lookAt(cameraPosition, cameraPosition-cameraFront, cameraUp);
+    if (keyframes.empty()) {
+        float cameraSpeed = 5 * dt;
+        if(scene.keyboard[GLFW_KEY_W]) {
+            cameraPosition -= cameraSpeed * cameraFront;
+        } else if(scene.keyboard[GLFW_KEY_S]) {
+            cameraPosition += cameraSpeed * cameraFront;
+        } else if(scene.keyboard[GLFW_KEY_A]) {
+            cameraPosition += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+        } else if(scene.keyboard[GLFW_KEY_D]) {
+            cameraPosition -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+        }
+        viewMatrix = lookAt(cameraPosition, cameraPosition-cameraFront, cameraUp);
+    }
+    else {
+        static int count = 0;
+        cameraPosition = keyframes[count].interpolatePosition();
+        cameraFront = keyframes[count].interpolateLookAt();
+        viewMatrix = lookAt(cameraPosition, cameraPosition-cameraFront, cameraUp);
+
+        keyframes[count].currTime += dt;
+        if (keyframes[count].currTime > keyframes[count].maxTime) {
+            keyframes[count].currTime = 0;
+            count++;
+            if (count >= keyframes.size())
+                count = 0;
+        }
+    }
 }
 
 void Camera::updateDir(Scene &scene){
