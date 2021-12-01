@@ -27,6 +27,15 @@ StaticObject::StaticObject(const std::string &mesh_file, const std::string &tex_
         }
         else if (shader_type == LIGHT_SHADER) {
             shader = std::make_unique<ppgso::Shader>(light_vert_glsl, light_frag_glsl);
+            lights.push_back({{-4.78f, 6.0f, -7.5f}, {0.0f, 0.0f, 1.0f}, 0.7, 1.8});
+            lights.push_back({{-7.87f, 5.2f, -7.0f}, {0.6f, 0.0f, 1.0f}, 0.7, 1.8});
+            lights.push_back({{-6.06f, 8.5f, -4.85f}, {1.0f, 0.0f, 0.0f}, 0.7, 1.8});
+            lights.push_back({{-6.35f, 8.15f, -7.26f}, {1.0f, 0.0f, 0.0f}, 0.7, 1.8});
+            lights.push_back({{-4.85f, 5.2f, -4.47f}, {0.9f, 0.8f, 0.0f}, 0.7, 1.8});
+            lights.push_back({{-7.09f, 5.0f, -4.1f}, {0.0f, 1.0f, 0.0f}, 0.7, 1.8});
+            lights.push_back({{-1.9f, 5.2f, -3.62f}, {0.0f, 1.0f, 0.0f}, 0.7, 1.8});
+            lights.push_back({{-6.88f, 8.86f, -5.66f}, {0.0f, 0.0f, 1.0f}, 0.7, 1.8});
+            lights.push_back({{-3.5f, 5.2f, -7.14f}, {0.6f, 0.0f, 1.0f}, 0.7, 1.8});
         }
     }
 }
@@ -49,14 +58,14 @@ void StaticObject::render(Scene &scene) {
     shader->setUniform("dirLight.specular", scene.lightSpecular);
 
     for (unsigned long i = 0; i < lights.size(); i++) {
-        shader->setUniform(setLightUniform("position", i), lights[i].position);
-        shader->setUniform(setLightUniform("color", i), lights[i].color);
-        shader->setUniform(setLightUniform("constant", i), lights[i].constant);
-        shader->setUniform(setLightUniform("linear", i), lights[i].linear);
-        shader->setUniform(setLightUniform("quadratic", i), lights[i].quadratic);
-        shader->setUniform(setLightUniform("ambient", i), lights[i].ambient);
-        shader->setUniform(setLightUniform("diffuse", i), lights[i].diffuse);
-        shader->setUniform(setLightUniform("specular", i), lights[i].specular);
+        shader->setUniform(setLightProperty("position", i), lights[i].position);
+        shader->setUniform(setLightProperty("color", i), lights[i].color);
+        shader->setUniform(setLightProperty("constant", i), lights[i].constant);
+        shader->setUniform(setLightProperty("linear", i), lights[i].linear);
+        shader->setUniform(setLightProperty("quadratic", i), lights[i].quadratic);
+        shader->setUniform(setLightProperty("ambient", i), lights[i].ambient);
+        shader->setUniform(setLightProperty("diffuse", i), lights[i].diffuse);
+        shader->setUniform(setLightProperty("specular", i), lights[i].specular);
     }
 
     // use camera

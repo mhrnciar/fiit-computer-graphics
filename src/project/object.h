@@ -4,7 +4,9 @@
 #include <map>
 
 #include <glm/glm.hpp>
+#include <deque>
 #include "light.h"
+#include "keyframe.h"
 
 // Forward declare a scene
 class Scene;
@@ -55,7 +57,9 @@ public:
      */
     virtual void addChild(Object *s) {};
 
-    std::string setLightUniform(const char* propertyName, size_t lightIndex);
+    std::string setLightProperty(const char* propertyName, size_t lightIndex);
+
+    void interpolate(float k0, float k1, float pos);
 
     // Object properties
     glm::vec3 position{0,0,0};
@@ -68,8 +72,9 @@ public:
     glm::mat4 scaleMatrix{1.0f};
 
     std::vector<Light> lights;
-    Object *parent = nullptr;
     float shininess = 32.0f;
+    Object *parent = nullptr;
+    std::deque<Keyframe> keyframes;
 
 protected:
     /*!

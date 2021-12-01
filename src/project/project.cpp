@@ -17,8 +17,8 @@
 #include "background.h"
 #include "static_object.h"
 #include "bezier_object.h"
-#include "rectangle.h"
 #include "cube.h"
+#include "whale.h"
 
 const unsigned int SIZEW = 1280;
 const unsigned int SIZEH = 720;
@@ -76,9 +76,6 @@ private:
         scene.objects.push_back(move(axisZ));
 
         auto cave = std::make_unique<StaticObject>("objects/cave.obj", "objects/rock_bg.bmp", LIGHT_SHADER);
-        cave->lights.push_back({{-3, 6, -3}, {1, 0, 0}, 10});
-        cave->lights.push_back({{0, 6, 3}, {0, 1, 0}, 10});
-        cave->lights.push_back({{3, 6, -3}, {0, 0, 1}, 10});
         cave->position = {-7.0f, 7.0f, 0.0f};
         cave->scale = {2, 2.5f, 2};
 
@@ -175,6 +172,10 @@ private:
         cave->addChild(coral);
 
         scene.objects.push_back(move(cave));
+
+        auto whale = std::make_unique<Whale>();
+        whale->position = {0.0f, 10.0f, 0.0f};
+        scene.objects.push_back(move(whale));
 
         /* Algae
         for (int i = 0; i < 100; i++) {

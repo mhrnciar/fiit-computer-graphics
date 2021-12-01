@@ -14,7 +14,7 @@ Rectangle::Rectangle() {
     if (!shader) shader = std::make_unique<ppgso::Shader>(light_vert_glsl, light_frag_glsl);
     if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP("sand.bmp"));
     if (!mesh) mesh = std::make_unique<ppgso::Mesh>("plane.obj");
-    lights.push_back({{0.0f, -5.0f, 0.0f}, {1, 1, 1}, 10});
+    lights.push_back({{0.0f, -5.0f, 0.0f}, {1, 1, 1}});
 }
 
 bool Rectangle::update(Scene &scene, float dt) {
@@ -48,11 +48,14 @@ void Rectangle::render(Scene &scene) {
     shader->setUniform("numLights", lights.size());
 
     for (unsigned long i = 0; i < lights.size(); i++) {
-        shader->setUniform(setLightUniform("position", i), lights[i].position);
-        shader->setUniform(setLightUniform("color", i), lights[i].color);
-        shader->setUniform(setLightUniform("power", i), lights[i].power);
-        shader->setUniform(setLightUniform("ambient", i), lights[i].ambient);
-        shader->setUniform(setLightUniform("specular", i), lights[i].specular);
+        shader->setUniform(setLightProperty("position", i), lights[i].position);
+        shader->setUniform(setLightProperty("color", i), lights[i].color);
+        shader->setUniform(setLightProperty("constant", i), lights[i].constant);
+        shader->setUniform(setLightProperty("linear", i), lights[i].linear);
+        shader->setUniform(setLightProperty("quadratic", i), lights[i].quadratic);
+        shader->setUniform(setLightProperty("ambient", i), lights[i].ambient);
+        shader->setUniform(setLightProperty("diffuse", i), lights[i].diffuse);
+        shader->setUniform(setLightProperty("specular", i), lights[i].specular);
     }
 
     // use camera

@@ -114,7 +114,7 @@ void BezierObject::bezierPatch() {
     glGenBuffers(1, &ibo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh.size() * sizeof(face), mesh.data(), GL_STATIC_DRAW);
-};
+}
 
 bool BezierObject::update(Scene &scene, float dt) {
     auto time = (float) glfwGetTime();

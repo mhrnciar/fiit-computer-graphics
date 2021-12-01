@@ -13,7 +13,7 @@ Camera::Camera(float fov, float ratio, float near, float far) {
 }
 
 void Camera::update(Scene &scene, float dt) {
-	
+    //printf("%lf %lf %lf\n", cameraPosition.x, cameraPosition.y, cameraPosition.z);
 	float cameraSpeed = 5 * dt;
 	if(scene.keyboard[GLFW_KEY_W]) {
 		cameraPosition -= cameraSpeed * cameraFront;

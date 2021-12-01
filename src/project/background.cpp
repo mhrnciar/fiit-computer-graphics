@@ -24,11 +24,10 @@ void Background::render(Scene &scene) {
     shader->setUniform("numLights", lights.size());
 
     for (unsigned long i = 0; i < lights.size(); i++) {
-        shader->setUniform(setLightUniform("position", i), lights[i].position);
-        shader->setUniform(setLightUniform("color", i), lights[i].color);
-        shader->setUniform(setLightUniform("power", i), lights[i].power);
-        shader->setUniform(setLightUniform("ambient", i), lights[i].ambient);
-        shader->setUniform(setLightUniform("specular", i), lights[i].specular);
+        shader->setUniform(setLightProperty("position", i), lights[i].position);
+        shader->setUniform(setLightProperty("color", i), lights[i].color);
+        shader->setUniform(setLightProperty("ambient", i), lights[i].ambient);
+        shader->setUniform(setLightProperty("specular", i), lights[i].specular);
     }
 
     // use camera

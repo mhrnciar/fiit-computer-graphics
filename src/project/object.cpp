@@ -27,8 +27,12 @@ void Object::generateModelMatrix() {
     }
 }
 
-std::string Object::setLightUniform(const char* propertyName, size_t lightIndex) {
+std::string Object::setLightProperty(const char* propertyName, size_t lightIndex) {
     std::ostringstream ss;
     ss << "pointLights[" << lightIndex << "]." << propertyName;
     return ss.str();
+}
+
+void Object::interpolate(float k0, float k1, float pos) {
+    glm::smoothstep(k0, k1, pos);
 }
