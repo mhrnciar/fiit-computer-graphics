@@ -174,7 +174,6 @@ private:
         scene.objects.push_back(move(cave));
 
         auto whale = std::make_unique<Whale>();
-        whale->position = {0.0f, 10.0f, 0.0f};
         scene.objects.push_back(move(whale));
 
         /* Algae

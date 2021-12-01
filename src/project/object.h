@@ -4,9 +4,8 @@
 #include <map>
 
 #include <glm/glm.hpp>
-#include <deque>
 #include "light.h"
-#include "keyframe.h"
+#include "object_keyframe.h"
 
 // Forward declare a scene
 class Scene;
@@ -74,7 +73,7 @@ public:
     std::vector<Light> lights;
     float shininess = 32.0f;
     Object *parent = nullptr;
-    std::deque<Keyframe> keyframes;
+    std::vector<ObjectKeyframe> keyframes;
 
 protected:
     /*!
