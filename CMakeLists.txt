@@ -197,7 +197,7 @@ add_executable(project
         src/project/camera_keyframe.cpp
         src/project/object_keyframe.cpp
         src/project/whale.cpp
-        )
+        src/project/water_surface.cpp src/project/water_surface.h)
 target_link_libraries(project ppgso shaders)
 install(TARGETS project DESTINATION .)
 add_custom_command(TARGET project POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/data/ ${CMAKE_CURRENT_BINARY_DIR})

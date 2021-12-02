@@ -19,6 +19,7 @@
 #include "bezier_object.h"
 #include "cube.h"
 #include "whale.h"
+#include "water_surface.h"
 
 const unsigned int SIZEW = 1280;
 const unsigned int SIZEH = 720;
@@ -41,7 +42,12 @@ private:
         // Create a camera
         auto camera = std::make_unique<Camera>(60.0f, 1.0f, 0.1f, 200.0f);
         scene.camera = move(camera);
-
+		
+        auto water_surface = std::make_unique<WaterSurface>("water_seamless.bmp", 19, 19);
+        water_surface->position = {-80, 53, -80};
+        water_surface->scale = {3,3,3};
+	    scene.objects.push_back(move(water_surface));
+        
         auto skydome = std::make_unique<Background>("objects/skydome.obj", "objects/skydome.png");
         skydome->scale = {81, 81, 81};
         skydome->position = {0, 45, 0};
@@ -56,7 +62,7 @@ private:
         water->scale = {80,80,80};
         water->position = {0, 55, 0};
         water->rotation = {ppgso::PI/2, 0, 0};
-        scene.objects.push_back(move(water));
+        //scene.objects.push_back(move(water));
 
         auto seabed = std::make_unique<StaticObject>("objects/seabed.obj", "objects/sand.bmp", LIGHT_SHADER);
         scene.objects.push_back(move(seabed));
@@ -185,6 +191,7 @@ private:
             scene.objects.push_back(move(algae));
         }
         */
+        
         /* Long loading, so put in comments while modeling other things
         mesh = "objects/shipwreck.obj";
         tex = "objects/ship.png";

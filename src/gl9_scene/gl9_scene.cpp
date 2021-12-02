@@ -160,6 +160,7 @@ public:
     // Update and render all objects
     scene.update(dt);
     scene.render();
+    
   }
 };
 
