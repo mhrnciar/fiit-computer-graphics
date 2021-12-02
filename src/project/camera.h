@@ -3,6 +3,7 @@
 
 #include <glm/glm.hpp>
 #include <ppgso/ppgso.h>
+#include "camera_keyframe.h"
 
 /*!
  * Simple camera object that keeps track of viewMatrix and projectionMatrix
@@ -12,7 +13,7 @@
 class Camera {
 public:
   glm::vec3 cameraUp{0,1,0};
-  glm::vec3 cameraPosition{0,0,-15};
+  glm::vec3 cameraPosition{7.2,6.6,-6};
   glm::vec3 cameraFront{0,0,-1};
   float cameraYaw = -90.0f;
   float cameraPitch  = 0.0f;
@@ -21,6 +22,8 @@ public:
 
   glm::mat4 viewMatrix;
   glm::mat4 projectionMatrix;
+
+  std::vector<CameraKeyframe> keyframes;
 
   /*!
    * Create new Camera that will generate viewMatrix and projectionMatrix based on its position, up and back vectors

@@ -192,7 +192,11 @@ add_executable(project
         src/project/static_object.cpp
         src/project/bezier_object.cpp
         src/project/light.cpp
-        src/project/skydome.cpp
+        src/project/background.cpp
+        src/project/keyframe.cpp
+        src/project/camera_keyframe.cpp
+        src/project/object_keyframe.cpp
+        src/project/whale.cpp
         )
 target_link_libraries(project ppgso shaders)
 install(TARGETS project DESTINATION .)
