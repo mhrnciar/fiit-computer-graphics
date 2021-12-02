@@ -15,6 +15,10 @@ glm::vec3 ObjectKeyframe::interpolatePosition() {
     return lerp(startPosition, endPosition, currTime / maxTime);
 }
 
+glm::vec3 ObjectKeyframe::interpolatePositionSmoothstep() {
+    return smoothstep(startPosition, endPosition, currTime);
+}
+
 glm::vec3 ObjectKeyframe::interpolateRotation() {
     return lerp(startRotation, endRotation, currTime / maxTime);
 }

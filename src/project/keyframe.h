@@ -23,5 +23,6 @@ public:
     glm::vec3 smoothstep(glm::vec3 p0, glm::vec3 p1, float t);
 
     virtual glm::vec3 interpolatePosition();
+    virtual glm::vec3 interpolatePositionSmoothstep();
 };
 

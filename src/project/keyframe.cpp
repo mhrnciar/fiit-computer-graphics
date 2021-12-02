@@ -25,3 +25,7 @@ glm::vec3 Keyframe::smoothstep(glm::vec3 p0, glm::vec3 p1, float t) {
 glm::vec3 Keyframe::interpolatePosition() {
     return lerp(startPosition, endPosition, currTime / maxTime);
 }
+
+glm::vec3 Keyframe::interpolatePositionSmoothstep() {
+    return smoothstep(startPosition, endPosition, currTime);
+}

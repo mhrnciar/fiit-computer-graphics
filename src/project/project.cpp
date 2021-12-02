@@ -52,7 +52,7 @@ private:
         background->position = {0, 20, 0};
         scene.objects.push_back(move(background));
 
-        auto water = std::make_unique<StaticObject>("plane.obj", "water.bmp", TEXTURE_SHADER);
+        auto water = std::make_unique<StaticObject>("plane.obj", "water_seamless.bmp", TEXTURE_SHADER);
         water->scale = {80,80,80};
         water->position = {0, 55, 0};
         water->rotation = {ppgso::PI/2, 0, 0};
