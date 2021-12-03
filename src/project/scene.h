@@ -51,6 +51,8 @@ class Scene {
     glm::vec3 lightDiffuse{0.1f, 0.1f, 0.1f};
     glm::vec3 lightSpecular{0.2f, 0.2f, 0.2f};
 
+    std::vector<Light> lights;
+
 
     // Store cursor state
     struct {

@@ -11,7 +11,7 @@
 void Object::generateModelMatrix() {
     if(parent) { //This node has a parent...
         translationMatrix = parent->translationMatrix * glm::translate(glm::mat4(1.0f), position);
-        rotationMatrix = parent->rotationMatrix * glm::orientate4(rotation);
+        rotationMatrix = glm::orientate4(rotation);
         scaleMatrix = parent->scaleMatrix * glm::scale(glm::mat4(1.0f), scale);
         modelMatrix = translationMatrix * rotationMatrix * scaleMatrix;
     }
@@ -21,18 +21,10 @@ void Object::generateModelMatrix() {
         scaleMatrix = glm::scale(glm::mat4(1.0f), scale);
         modelMatrix = translationMatrix * rotationMatrix * scaleMatrix;
     }
-
-    for(auto & i : children) {
-        i->generateModelMatrix();
-    }
 }
 
 std::string Object::setLightProperty(const char* propertyName, size_t lightIndex) {
     std::ostringstream ss;
     ss << "pointLights[" << lightIndex << "]." << propertyName;
     return ss.str();
-}
-
-void Object::interpolate(float k0, float k1, float pos) {
-    glm::smoothstep(k0, k1, pos);
 }

@@ -3,7 +3,7 @@
 
 #include <glm/glm.hpp>
 #include <ppgso/ppgso.h>
-#include "camera_keyframe.h"
+#include "keyframes/camera_keyframe.h"
 
 /*!
  * Simple camera object that keeps track of viewMatrix and projectionMatrix

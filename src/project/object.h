@@ -5,7 +5,7 @@
 
 #include <glm/glm.hpp>
 #include "light.h"
-#include "object_keyframe.h"
+#include "keyframes/object_keyframe.h"
 
 // Forward declare a scene
 class Scene;
@@ -58,8 +58,6 @@ public:
 
     std::string setLightProperty(const char* propertyName, size_t lightIndex);
 
-    void interpolate(float k0, float k1, float pos);
-
     // Object properties
     glm::vec3 position{0,0,0};
     glm::vec3 rotation{0,0,0};
@@ -70,7 +68,6 @@ public:
     glm::mat4 rotationMatrix{1.0f};
     glm::mat4 scaleMatrix{1.0f};
 
-    std::vector<Light> lights;
     float shininess = 32.0f;
     Object *parent = nullptr;
     std::vector<ObjectKeyframe> keyframes;
