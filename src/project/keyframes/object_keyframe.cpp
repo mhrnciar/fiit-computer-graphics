@@ -20,7 +20,7 @@ glm::vec3 ObjectKeyframe::interpolatePositionSmoothstep() {
 }
 
 glm::vec3 ObjectKeyframe::interpolateRotation() {
-    return lerp(startRotation, endRotation, currTime / maxTime);
+    return glm::eulerAngles(slerp(startRotation, endRotation, currTime / maxTime));
 }
 
 glm::vec3 ObjectKeyframe::interpolateScale() {

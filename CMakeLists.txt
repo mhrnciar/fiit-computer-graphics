@@ -201,7 +201,8 @@ add_executable(project
         src/project/whale/whale_fin.cpp
         src/project/whale/whale_tail.cpp
         src/project/whale/whale_tail_fin.cpp
-        src/project/shark.cpp)
+        src/project/shark.cpp
+        src/project/fish_chased.cpp)
 target_link_libraries(project ppgso shaders)
 install(TARGETS project DESTINATION .)
 add_custom_command(TARGET project POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/data/ ${CMAKE_CURRENT_BINARY_DIR})

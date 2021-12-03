@@ -19,6 +19,8 @@
 #include "bezier_object.h"
 #include "cube.h"
 #include "whale/whale.h"
+#include "shark.h"
+#include "fish_chased.h"
 
 const unsigned int SIZEW = 1280;
 const unsigned int SIZEH = 720;
@@ -190,6 +192,12 @@ private:
         whale->position = {20, 20, -20};
         scene.objects.push_back(move(whale));
 
+        auto shark = std::make_unique<Shark>();
+        scene.objects.push_back(move(shark));
+
+        auto chased_fish = std::make_unique<ChasedFish>();
+        scene.objects.push_back(move(chased_fish));
+
         /* Algae
         for (int i = 0; i < 100; i++) {
             auto algae = std::make_unique<BezierObject>("green_algae.png");
@@ -235,6 +243,14 @@ public:
         initScene();
     }
 
+    void initAnimation() {
+        auto shark = std::make_unique<Shark>();
+        scene.objects.push_back(move(shark));
+
+        auto chased_fish = std::make_unique<ChasedFish>();
+        scene.objects.push_back(move(chased_fish));
+    }
+
     /*!
      * Handles pressed key when the window is focused
      * @param key Key code of the key being pressed/released
@@ -257,16 +273,8 @@ public:
 
         if (key == GLFW_KEY_C && action == GLFW_PRESS) {
             if (scene.camera->keyframes.empty()) {
-                scene.camera->keyframes.push_back({{-47.0f,80.0f,-40.0f}, {-47.0f,80.0f,-40.0f}, {0, 0, -1}, {0, 0, -1}, 3});
-                scene.camera->keyframes.push_back({{-47.0f,80.0f,-40.0f}, {-40.0f,49.0f,-26.0f}, {0, 0, -1}, {-0.5f, 1, -0.5f}, 10});
-                scene.camera->keyframes.push_back({{-40.0f,49.0f,-26.0f}, {-40.0f,49.0f,-26.0f}, {-0.5f, 1, -0.5f}, {-0.5f, 1, -0.5f}, 0.5});
-                scene.camera->keyframes.push_back({{-40.0f,49.0f,-26.0f}, {-40.0f,49.0f,-26.0f}, {-0.5f, 1, -0.5f}, {0, 0.75f, -1}, 4});
-                scene.camera->keyframes.push_back({{-40.0f,49.0f,-26.0f}, {-40.0f,49.0f,-26.0f}, {0, 0.75f, -1}, {-0.5f, 0.75f, -0.5f}, 3});
-                scene.camera->keyframes.push_back({{-40.0f,49.0f,-26.0f}, {-40.0f,49.0f,-26.0f}, {-0.5f, 0.75f, -0.5f}, {-0.5f, 0.75f, 0}, 3});
-                scene.camera->keyframes.push_back({{-40.0f,49.0f,-26.0f}, {-18.0f,9.0f,-5.0f}, {-0.5f, 0.75f, 0}, {-1, 0, 0}, 15});
-                scene.camera->keyframes.push_back({{-18.0f,9.0f,-5.0f}, {-17.5f,6.0f,-5.0f}, {-1, 0, 0}, {-1, 0, 0}, 7});
-                scene.camera->keyframes.push_back({{-17.5f,6.0f,-5.0f}, {-1.0f,6.0f,-8.0f}, {-1, 0, 0}, {-1, 0, 0}, 10});
-                scene.camera->keyframes.push_back({{-1.0f,6.0f,-8.0f}, {2.0f,9.0f,-10.0f}, {-1, 0, 0}, {-1, 0, 0}, 4});
+                initAnimation();
+                scene.camera->initCameraAnimation();
             }
             else {
                 scene.camera->keyframes.clear();

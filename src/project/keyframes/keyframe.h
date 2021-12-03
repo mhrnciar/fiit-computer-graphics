@@ -18,8 +18,8 @@ public:
     glm::vec3 startPosition{0,0,0};
     glm::vec3 endPosition{0,0,0};
 
-    glm::vec3 lerp(glm::vec3 p0, glm::vec3 p1, float t);
-    glm::vec3 lerp(glm::quat p0, glm::quat p1, float t);
+    glm::vec3 lerp(const glm::vec3 &p0, const glm::vec3 &p1, const float t);
+    glm::quat slerp(const glm::quat &p0, const glm::quat &p1, const float t);
     glm::vec3 smoothstep(glm::vec3 p0, glm::vec3 p1, float t);
 
     virtual glm::vec3 interpolatePosition();
