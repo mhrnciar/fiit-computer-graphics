@@ -74,6 +74,9 @@ public:
     float shininess = 32.0f;
     Object *parent = nullptr;
     std::vector<ObjectKeyframe> keyframes;
+    
+    glm::vec3 getRealPosition();
+    Object* getRootParent();
 
 protected:
     /*!

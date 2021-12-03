@@ -5,11 +5,14 @@
 #include <shaders/texture_vert_glsl.h>
 #include <shaders/texture_frag_glsl.h>
 
+//#include <shaders/diffuse_vert_glsl.h>
+//#include <shaders/diffuse_frag_glsl.h>
+
 WaterSurface::WaterSurface(const std::string &tex_file, int len_x_in, int len_z_in) {
 	// Initialize static resources if needed
 	if (!shader) shader = std::make_unique<ppgso::Shader>(texture_vert_glsl, texture_frag_glsl);
-	//if (!texture) texture = std::make_unique<ppgso::TextureAlpha>(ppgso::image::loadPNG(tex_file));
 	if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP(tex_file));
+	//if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP(tex_file));
 	
 	len_x = len_x_in;
 	len_z = len_z_in;
@@ -52,8 +55,7 @@ WaterSurface::WaterSurface(const std::string &tex_file, int len_x_in, int len_z_
 	for (int wp_idx = 0; wp_idx < water_planes.size(); wp_idx++){
 		bezierPatches(water_planes[wp_idx]);
 	}
-	
-	printf("#######################################\n");
+
 	updateBuffers();
 	
 }
@@ -113,9 +115,8 @@ void WaterSurface::bezierPatches(waterPlane plane_in) {
 	}
 	
 	
-	// Generate indices
+	// Generate indices for upward facing triangles
 	int offset = (plane_in.x *  len_z *  PATCH_SIZE  * PATCH_SIZE) + (plane_in.z * PATCH_SIZE * PATCH_SIZE);
-	//printf("offset = %d, last_vertex = %d\n", offset, vertices.size());
 	for(unsigned int i = 1; i < PATCH_SIZE; i++) {
 		for (unsigned int j = 1; j < PATCH_SIZE; j++) {
 			face triangle1 = {offset + ((i - 1) * PATCH_SIZE + (j - 1)),
@@ -130,6 +131,7 @@ void WaterSurface::bezierPatches(waterPlane plane_in) {
 		}
 	}
 	
+	// Generate indices for downward facing triangles
 	for(unsigned int i = 1; i < PATCH_SIZE; i++) {
 		for (unsigned int j = 1; j < PATCH_SIZE; j++) {
 			face triangle1 = {offset + ((i - 1) * PATCH_SIZE + j),
@@ -207,14 +209,10 @@ bool WaterSurface::update(Scene &scene, float dt) {
 									sin(time) * water_planes[u + (i * len_z)].heights[z_coord][x_coord];
 						}
 					}
-					
-					
 				}
 			}
-			
 		}
 	}
-	
 	
 	vertices.clear();
 	texCoords.clear();
@@ -222,7 +220,6 @@ bool WaterSurface::update(Scene &scene, float dt) {
 	
 	// Generate Bezier suface
 	for (int wp_idx = 0; wp_idx < water_planes.size(); wp_idx++){
-		//printf("%d %d\n", water_planes[wp_idx].x, water_planes[wp_idx].z);
 		bezierPatches(water_planes[wp_idx]);
 	}
 	updateBuffers();

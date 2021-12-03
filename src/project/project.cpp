@@ -11,6 +11,7 @@
 #include <list>
 
 #include <ppgso/ppgso.h>
+#include <random>
 
 #include "scene.h"
 #include "camera.h"
@@ -20,6 +21,7 @@
 #include "cube.h"
 #include "whale.h"
 #include "water_surface.h"
+#include "kelp.h"
 
 const unsigned int SIZEW = 1280;
 const unsigned int SIZEH = 720;
@@ -42,10 +44,36 @@ private:
         // Create a camera
         auto camera = std::make_unique<Camera>(60.0f, 1.0f, 0.1f, 200.0f);
         scene.camera = move(camera);
+	
+	    std::default_random_engine generator;
+	    std::normal_distribution<float> normal_dist;
+     
+	    float kelp_x_offset, kelp_z_offset;
+        int rand_kelp_height;
+        float kelp_forrest_x = 35.0f;
+        float kelp_forrest_z = 35.0f;
+        float kelp_forrest_height = -1.65f;
+        for (int i = 0; i < 10; i++){
+        	for (int u = 0; u < 10; u++){
+		        kelp_x_offset = normal_dist(generator) * 0.3f;
+		        kelp_z_offset = normal_dist(generator) * 0.3f;
+        		rand_kelp_height = rand() % 4  + 3;
+		        auto kelp = std::make_unique<Kelp>("seaweed_tex.png", rand_kelp_height);
+		        kelp->position = {
+		        		kelp_forrest_x + (i * 1.2f) + kelp_x_offset,
+							kelp_forrest_height,
+							kelp_forrest_z + (u * 1.2f) + kelp_z_offset
+		        };
+		        kelp->scale = {0.5f, 0.5f, 0.5f};
+		        kelp->create_children();
+		        scene.objects.push_back(move(kelp));
+        	}
+        }
+        
 		
         auto water_surface = std::make_unique<WaterSurface>("water_seamless.bmp", 19, 19);
         water_surface->position = {-80, 53, -80};
-        water_surface->scale = {3,3,3};
+        water_surface->scale = {3,2,3};
 	    scene.objects.push_back(move(water_surface));
         
         auto skydome = std::make_unique<Background>("objects/skydome.obj", "objects/skydome.png");

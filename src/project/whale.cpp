@@ -1,4 +1,4 @@
-#include <ppgso/image_png.h>
+ #include <ppgso/image_png.h>
 #include <shaders/light_vert_glsl.h>
 #include <shaders/light_frag_glsl.h>
 

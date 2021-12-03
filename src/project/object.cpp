@@ -21,10 +21,6 @@ void Object::generateModelMatrix() {
         scaleMatrix = glm::scale(glm::mat4(1.0f), scale);
         modelMatrix = translationMatrix * rotationMatrix * scaleMatrix;
     }
-
-    for(auto & i : children) {
-        i->generateModelMatrix();
-    }
 }
 
 std::string Object::setLightProperty(const char* propertyName, size_t lightIndex) {
@@ -35,4 +31,22 @@ std::string Object::setLightProperty(const char* propertyName, size_t lightIndex
 
 void Object::interpolate(float k0, float k1, float pos) {
     glm::smoothstep(k0, k1, pos);
+}
+
+glm::vec3 Object::getRealPosition() {
+	if (this->parent != NULL){
+		return (this->parent->getRealPosition() + this->position);
+	}
+	else {
+		return this->position;
+	}
+}
+
+Object* Object::getRootParent() {
+	if (this->parent != NULL){
+		return (this->parent->getRootParent());
+	}
+	else{
+		return this;
+	}
 }
