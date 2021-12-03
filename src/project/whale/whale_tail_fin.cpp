@@ -15,7 +15,7 @@ WhaleTailFin::WhaleTailFin() {
 bool WhaleTailFin::update(Scene &scene, float dt) {
     auto time = (float) glfwGetTime();
 
-    rotation.x = -0.15f * sin(time);
+    rotation.x = -0.25f * sin(time);
 
     generateModelMatrix();
 

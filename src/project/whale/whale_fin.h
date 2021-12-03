@@ -9,6 +9,7 @@ private:
     std::unique_ptr<ppgso::Mesh> mesh;
     std::unique_ptr<ppgso::Shader> shader;
     std::unique_ptr<ppgso::TextureAlpha> texture;
+    bool right;
 
 
 public:

@@ -11,7 +11,7 @@
 void Object::generateModelMatrix() {
     if(parent) { //This node has a parent...
         translationMatrix = parent->translationMatrix * glm::translate(glm::mat4(1.0f), position);
-        rotationMatrix = glm::orientate4(rotation);
+        rotationMatrix = parent->rotationMatrix * glm::orientate4(rotation);
         scaleMatrix = parent->scaleMatrix * glm::scale(glm::mat4(1.0f), scale);
         modelMatrix = translationMatrix * rotationMatrix * scaleMatrix;
     }

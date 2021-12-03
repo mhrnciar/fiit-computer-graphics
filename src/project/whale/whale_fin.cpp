@@ -16,9 +16,17 @@ WhaleFin::WhaleFin(bool right) {
 
     if (!texture) texture = std::make_unique<ppgso::TextureAlpha>(ppgso::image::loadPNG("animals/whale/whale.png"));
     if (!shader) shader = std::make_unique<ppgso::Shader>(light_vert_glsl, light_frag_glsl);
+
+    this->right = right;
 }
 
 bool WhaleFin::update(Scene &scene, float dt) {
+    auto time = (float) glfwGetTime();
+
+    if(right)
+        rotation.y = 0.1f * sin(time);
+    else
+        rotation.y = -0.1 * sin(time);
     generateModelMatrix();
 
     for (auto c : children) {

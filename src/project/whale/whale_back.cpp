@@ -21,7 +21,7 @@ WhaleBack::WhaleBack() {
 bool WhaleBack::update(Scene &scene, float dt) {
     auto time = (float) glfwGetTime();
 
-    rotation.x = -0.1f * sin(time);
+    rotation.x = -0.2f * sin(time);
     generateModelMatrix();
 
     for (auto c : children) {
