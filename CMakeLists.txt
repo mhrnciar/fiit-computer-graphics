@@ -197,7 +197,11 @@ add_executable(project
         src/project/keyframes/camera_keyframe.cpp
         src/project/keyframes/object_keyframe.cpp
         src/project/whale/whale.cpp
-        src/project/shark.cpp src/project/shark.h src/project/whale/whale_back.cpp src/project/whale/whale_back.h src/project/whale/whale_fin.cpp src/project/whale/whale_fin.h src/project/whale/whale_tail.cpp src/project/whale/whale_tail.h src/project/whale/whale_tail_fin.cpp src/project/whale/whale_tail_fin.h)
+        src/project/whale/whale_back.cpp
+        src/project/whale/whale_fin.cpp
+        src/project/whale/whale_tail.cpp
+        src/project/whale/whale_tail_fin.cpp
+        src/project/shark.cpp)
 target_link_libraries(project ppgso shaders)
 install(TARGETS project DESTINATION .)
 add_custom_command(TARGET project POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/data/ ${CMAKE_CURRENT_BINARY_DIR})
