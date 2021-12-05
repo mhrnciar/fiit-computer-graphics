@@ -21,6 +21,7 @@
 #include "whale/whale.h"
 #include "shark.h"
 #include "fish_chased.h"
+#include "boids.h"
 
 const unsigned int SIZEW = 1280;
 const unsigned int SIZEH = 720;
@@ -197,6 +198,10 @@ private:
 
         auto chased_fish = std::make_unique<ChasedFish>();
         scene.objects.push_back(move(chased_fish));
+
+        auto boids = std::make_unique<Boids>(glm::vec3{10,10,10}, glm::vec3{0,0,0});
+        scene.objects.push_back(move(boids));
+
 
         /* Algae
         for (int i = 0; i < 100; i++) {
