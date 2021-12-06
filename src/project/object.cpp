@@ -28,3 +28,21 @@ std::string Object::setLightProperty(const char* propertyName, size_t lightIndex
     ss << "pointLights[" << lightIndex << "]." << propertyName;
     return ss.str();
 }
+
+glm::vec3 Object::getRealPosition() {
+	if (this->parent != NULL){
+		return (this->parent->getRealPosition() + this->position);
+	}
+	else {
+		return this->position;
+	}
+}
+
+Object* Object::getRootParent() {
+	if (this->parent != NULL){
+		return (this->parent->getRootParent());
+	}
+	else{
+		return this;
+	}
+}

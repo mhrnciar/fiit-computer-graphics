@@ -11,17 +11,20 @@
 #include <list>
 
 #include <ppgso/ppgso.h>
+#include <random>
 
 #include "scene.h"
 #include "camera.h"
 #include "background.h"
 #include "static_object.h"
-#include "src/project/animated/foliage.h"
 #include "cube.h"
 #include "animated/whale/whale.h"
+#include "animated/foliage.h"
 #include "src/project/animated/shark.h"
 #include "src/project/animated/fish_chased.h"
 #include "src/project/animated/boids.h"
+#include "water_surface.h"
+#include "kelp.h"
 
 const unsigned int SIZEW = 1280;
 const unsigned int SIZEH = 720;
@@ -45,6 +48,56 @@ private:
         auto camera = std::make_unique<Camera>(60.0f, 1.0f, 0.1f, 400.0f);
         scene.camera = move(camera);
 
+	    std::default_random_engine generator;
+	    std::normal_distribution<float> normal_dist;
+
+        bool kelp_forrest_enabled = true;
+	    if (kelp_forrest_enabled) {
+		    float kelp_x_offset, kelp_z_offset;
+		    int rand_kelp_height;
+		    float kelp_forrest_x = 35.0f;
+		    float kelp_forrest_z = 35.0f;
+		    float kelp_forrest_height = -1.65f;
+		    for (int i = 0; i < 10; i++) {
+			    for (int u = 0; u < 10; u++) {
+				    kelp_x_offset = normal_dist(generator) * 0.3f;
+				    kelp_z_offset = normal_dist(generator) * 0.3f;
+				    rand_kelp_height = rand() % 4 + 3;
+				    auto kelp = std::make_unique<Kelp>("seaweed_tex.png", rand_kelp_height);
+				    kelp->position = {
+						    kelp_forrest_x + (i * 1.2f) + kelp_x_offset,
+						    kelp_forrest_height,
+						    kelp_forrest_z + (u * 1.2f) + kelp_z_offset
+				    };
+				    kelp->scale = {0.5f, 0.5f, 0.5f};
+				    kelp->create_children();
+				    scene.objects.push_back(move(kelp));
+			    }
+		    }
+	    }
+
+	    glm::vec3 unified_volcano_position = {50.0f, -2.3f, -30.0f};
+	    glm::vec3 unified_volcano_scale = {15, 15, 15};
+	    glm::vec3 unified_volcano_rotation = {0.0f, 0.0f, ppgso::PI};
+
+
+	    auto volcano_rock = std::make_unique<StaticObject>("objects/volcano_rock_only.obj", "objects/sand.bmp", LIGHT_SHADER);
+	    volcano_rock->scale = unified_volcano_scale;
+	    volcano_rock->position = unified_volcano_position;
+	    volcano_rock->rotation = unified_volcano_rotation;
+	    scene.objects.push_back(move(volcano_rock));
+	    auto volcano_lava = std::make_unique<StaticObject>("objects/volcano_lava_only.obj", "objects/lava_tex.bmp", LIGHT_SHADER);
+	    volcano_lava->scale = unified_volcano_scale;
+	    volcano_lava->position = unified_volcano_position;
+	    volcano_lava->rotation = unified_volcano_rotation;
+	    scene.objects.push_back(move(volcano_lava));
+
+
+        auto water_surface = std::make_unique<WaterSurface>("water_seamless.bmp", 19, 19);
+        water_surface->position = {-80, 53, -80};
+        water_surface->scale = {3,2,3};
+	    scene.objects.push_back(move(water_surface));
+
         auto skydome = std::make_unique<Background>("objects/skydome.obj", "objects/skydome.png");
         skydome->scale = {125.0f, 125.0f, 125.0f};
         skydome->position = {0, 60, 0};
@@ -56,11 +109,6 @@ private:
         background->rotation = {0, 0, ppgso::PI/4};
         scene.objects.push_back(move(background));
 
-        auto water = std::make_unique<StaticObject>("plane.obj", "water_seamless.bmp", TEXTURE_SHADER);
-        water->scale = {120.0f, 120.0f, 1.0f};
-        water->position = {0, 85, 0};
-        water->rotation = {ppgso::PI/2, 0, 0};
-        scene.objects.push_back(move(water));
 
         auto seabed = std::make_unique<StaticObject>("objects/seabed.obj", "objects/sand.bmp", LIGHT_SHADER);
         seabed->scale = {1.5f, 1.0f, 1.5f};
