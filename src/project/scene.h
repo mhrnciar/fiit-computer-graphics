@@ -26,6 +26,8 @@ class Scene {
      */
     void render();
 
+    void renderShadows();
+
     /*!
      * Pick objects using a ray
      * @param position - Position in the scene to pick object from
@@ -50,6 +52,8 @@ class Scene {
     glm::vec3 lightAmbient{0.05f, 0.05f, 0.05f};
     glm::vec3 lightDiffuse{0.1f, 0.1f, 0.1f};
     glm::vec3 lightSpecular{0.2f, 0.2f, 0.2f};
+
+    std::vector<Light> lights;
 
 
     // Store cursor state

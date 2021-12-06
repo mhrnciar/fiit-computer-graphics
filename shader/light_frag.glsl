@@ -27,7 +27,7 @@ struct PointLight {
 	vec3 diffuse;
 	vec3 specular;
 };
-#define MAX_LIGHTS 10
+#define MAX_LIGHTS 20
 uniform PointLight pointLights[MAX_LIGHTS];
 uniform float numLights;
 

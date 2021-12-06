@@ -1,0 +1,13 @@
+# Blender MTL File: 'whale.blend'
+# Material Count: 1
+
+newmtl _20435_Humpback_Whale_v120435_Humpback_Whale_v1
+Ns 30.000009
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.149800 0.149800 0.149800
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd C:\\20435_Humpback_Whale_diff.jpg

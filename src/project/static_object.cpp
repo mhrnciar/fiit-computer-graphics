@@ -10,6 +10,9 @@
 #include <shaders/light_vert_glsl.h>
 #include <shaders/light_frag_glsl.h>
 
+#include <shaders/shadowmap_vert_glsl.h>
+#include <shaders/shadowmap_frag_glsl.h>
+
 StaticObject::StaticObject(const std::string &mesh_file, const std::string &tex_file, int shader_type) {
     // Initialize static resources if needed
     if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP(tex_file));
@@ -27,45 +30,44 @@ StaticObject::StaticObject(const std::string &mesh_file, const std::string &tex_
         }
         else if (shader_type == LIGHT_SHADER) {
             shader = std::make_unique<ppgso::Shader>(light_vert_glsl, light_frag_glsl);
-            lights.push_back({{-4.78f, 6.0f, -7.5f}, {0.0f, 0.0f, 1.0f}, 0.7, 1.8});
-            lights.push_back({{-7.87f, 5.2f, -7.0f}, {0.6f, 0.0f, 1.0f}, 0.7, 1.8});
-            lights.push_back({{-6.06f, 8.5f, -4.85f}, {1.0f, 0.0f, 0.0f}, 0.7, 1.8});
-            lights.push_back({{-6.35f, 8.15f, -7.26f}, {1.0f, 0.0f, 0.0f}, 0.7, 1.8});
-            lights.push_back({{-4.85f, 5.2f, -4.47f}, {0.9f, 0.8f, 0.0f}, 0.7, 1.8});
-            lights.push_back({{-7.09f, 5.0f, -4.1f}, {0.0f, 1.0f, 0.0f}, 0.7, 1.8});
-            lights.push_back({{-1.9f, 5.2f, -3.62f}, {0.0f, 1.0f, 0.0f}, 0.7, 1.8});
-            lights.push_back({{-6.88f, 8.86f, -5.66f}, {0.0f, 0.0f, 1.0f}, 0.7, 1.8});
-            lights.push_back({{-3.5f, 5.2f, -7.14f}, {0.6f, 0.0f, 1.0f}, 0.7, 1.8});
         }
     }
+
+    if (!shadowmap_shader) shadowmap_shader = std::make_unique<ppgso::Shader>(shadowmap_vert_glsl, shadowmap_frag_glsl);
+    //if (!shadowmap) shadowmap = std::make_unique<ppgso::Shadowmap>();
 }
 
 bool StaticObject::update(Scene &scene, float dt) {
     generateModelMatrix();
+
+    for (auto c : children) {
+        c->update(scene, dt);
+    }
     return true;
 }
 
 void StaticObject::render(Scene &scene) {
+    //shadowmap->BindForReading(GL_TEXTURE1);
     shader->use();
 
     // Set up light
     shader->setUniform("viewPos", scene.camera->cameraPosition);
-    shader->setUniform("numLights", lights.size());
+    shader->setUniform("numLights", scene.lights.size());
 
     shader->setUniform("dirLight.direction", scene.lightDirection);
     shader->setUniform("dirLight.ambient", scene.lightAmbient);
     shader->setUniform("dirLight.diffuse", scene.lightDiffuse);
     shader->setUniform("dirLight.specular", scene.lightSpecular);
 
-    for (unsigned long i = 0; i < lights.size(); i++) {
-        shader->setUniform(setLightProperty("position", i), lights[i].position);
-        shader->setUniform(setLightProperty("color", i), lights[i].color);
-        shader->setUniform(setLightProperty("constant", i), lights[i].constant);
-        shader->setUniform(setLightProperty("linear", i), lights[i].linear);
-        shader->setUniform(setLightProperty("quadratic", i), lights[i].quadratic);
-        shader->setUniform(setLightProperty("ambient", i), lights[i].ambient);
-        shader->setUniform(setLightProperty("diffuse", i), lights[i].diffuse);
-        shader->setUniform(setLightProperty("specular", i), lights[i].specular);
+    for (unsigned long i = 0; i < scene.lights.size(); i++) {
+        shader->setUniform(setLightProperty("position", i), scene.lights[i].position);
+        shader->setUniform(setLightProperty("color", i), scene.lights[i].color);
+        shader->setUniform(setLightProperty("constant", i), scene.lights[i].constant);
+        shader->setUniform(setLightProperty("linear", i), scene.lights[i].linear);
+        shader->setUniform(setLightProperty("quadratic", i), scene.lights[i].quadratic);
+        shader->setUniform(setLightProperty("ambient", i), scene.lights[i].ambient);
+        shader->setUniform(setLightProperty("diffuse", i), scene.lights[i].diffuse);
+        shader->setUniform(setLightProperty("specular", i), scene.lights[i].specular);
     }
 
     // use camera
@@ -81,6 +83,20 @@ void StaticObject::render(Scene &scene) {
     for(auto & i : children) {
         i->render(scene);
     }
+}
+
+void StaticObject::renderShadowmap(Scene &scene) {
+    shadowmap->BindForWriting();
+    shadowmap_shader->use();
+
+    glm::mat4 depthProjectionMatrix = glm::ortho(-10, 10, -10, 10, -10, 200);
+    glm::mat4 depthViewMatrix = glm::lookAt(glm::vec3{1, 1, 1}, glm::vec3{0, 0, 0}, glm::vec3{0, 1, 0});
+    glm::mat4 depthModelMatrix{1.0f};
+
+    shadowmap_shader->setUniform("ProjectionMatrix", depthProjectionMatrix);
+    shadowmap_shader->setUniform("ViewMatrix", depthViewMatrix);
+    shadowmap_shader->setUniform("ModelMatrix", depthModelMatrix);
+    mesh->render();
 }
 
 void StaticObject::addChild(Object *s) {

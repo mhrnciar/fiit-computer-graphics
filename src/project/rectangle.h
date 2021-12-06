@@ -33,6 +33,8 @@ public:
      */
     void render(Scene &scene) override;
 
+    void renderShadowmap(Scene &scene) override;
+
     /*!
      * Add child object creating hierarchy
      * @param s - child object

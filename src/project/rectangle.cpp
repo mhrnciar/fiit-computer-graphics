@@ -14,7 +14,6 @@ Rectangle::Rectangle() {
     if (!shader) shader = std::make_unique<ppgso::Shader>(light_vert_glsl, light_frag_glsl);
     if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP("sand.bmp"));
     if (!mesh) mesh = std::make_unique<ppgso::Mesh>("plane.obj");
-    lights.push_back({{0.0f, -5.0f, 0.0f}, {1, 1, 1}});
 }
 
 bool Rectangle::update(Scene &scene, float dt) {
@@ -45,17 +44,17 @@ void Rectangle::render(Scene &scene) {
     shader->use();
 
     // Set up light
-    shader->setUniform("numLights", lights.size());
+    shader->setUniform("numLights", scene.lights.size());
 
-    for (unsigned long i = 0; i < lights.size(); i++) {
-        shader->setUniform(setLightProperty("position", i), lights[i].position);
-        shader->setUniform(setLightProperty("color", i), lights[i].color);
-        shader->setUniform(setLightProperty("constant", i), lights[i].constant);
-        shader->setUniform(setLightProperty("linear", i), lights[i].linear);
-        shader->setUniform(setLightProperty("quadratic", i), lights[i].quadratic);
-        shader->setUniform(setLightProperty("ambient", i), lights[i].ambient);
-        shader->setUniform(setLightProperty("diffuse", i), lights[i].diffuse);
-        shader->setUniform(setLightProperty("specular", i), lights[i].specular);
+    for (unsigned long i = 0; i < scene.lights.size(); i++) {
+        shader->setUniform(setLightProperty("position", i), scene.lights[i].position);
+        shader->setUniform(setLightProperty("color", i), scene.lights[i].color);
+        shader->setUniform(setLightProperty("constant", i), scene.lights[i].constant);
+        shader->setUniform(setLightProperty("linear", i), scene.lights[i].linear);
+        shader->setUniform(setLightProperty("quadratic", i), scene.lights[i].quadratic);
+        shader->setUniform(setLightProperty("ambient", i), scene.lights[i].ambient);
+        shader->setUniform(setLightProperty("diffuse", i), scene.lights[i].diffuse);
+        shader->setUniform(setLightProperty("specular", i), scene.lights[i].specular);
     }
 
     // use camera
@@ -70,6 +69,9 @@ void Rectangle::render(Scene &scene) {
     for(auto & i : children) {
         i->render(scene);
     }
+}
+
+void Rectangle::renderShadowmap(Scene &scene) {
 }
 
 void Rectangle::addChild(Object *s) {

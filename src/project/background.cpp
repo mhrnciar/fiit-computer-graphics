@@ -21,13 +21,13 @@ void Background::render(Scene &scene) {
     shader->use();
 
     // Set up light
-    shader->setUniform("numLights", lights.size());
+    shader->setUniform("numLights", scene.lights.size());
 
-    for (unsigned long i = 0; i < lights.size(); i++) {
-        shader->setUniform(setLightProperty("position", i), lights[i].position);
-        shader->setUniform(setLightProperty("color", i), lights[i].color);
-        shader->setUniform(setLightProperty("ambient", i), lights[i].ambient);
-        shader->setUniform(setLightProperty("specular", i), lights[i].specular);
+    for (unsigned long i = 0; i < scene.lights.size(); i++) {
+        shader->setUniform(setLightProperty("position", i), scene.lights[i].position);
+        shader->setUniform(setLightProperty("color", i), scene.lights[i].color);
+        shader->setUniform(setLightProperty("ambient", i), scene.lights[i].ambient);
+        shader->setUniform(setLightProperty("specular", i), scene.lights[i].specular);
     }
 
     // use camera
@@ -42,6 +42,9 @@ void Background::render(Scene &scene) {
     for(auto & i : children) {
         i->render(scene);
     }
+}
+
+void Background::renderShadowmap(Scene &scene) {
 }
 
 void Background::addChild(Object *s) {

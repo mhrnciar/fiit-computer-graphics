@@ -1,4 +1,5 @@
 #include "scene.h"
+#include "static_object.h"
 
 void Scene::update(float dt) {
     camera->update(*this, dt);
@@ -20,6 +21,16 @@ void Scene::render() {
     // Simply render all objects
     for ( auto& obj : objects )
         obj->render(*this);
+}
+
+void Scene::renderShadows() {
+    // Simply render all objects
+    for ( auto &obj : objects ) {
+        auto stat = dynamic_cast<StaticObject*>(obj.get());
+        if (!stat) continue;
+
+        obj->renderShadowmap(*this);
+    }
 }
 
 std::vector<Object*> Scene::intersect(const glm::vec3 &position, const glm::vec3 &direction) {
