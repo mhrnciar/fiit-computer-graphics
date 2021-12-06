@@ -1,6 +1,8 @@
 #include "static_object.h"
 #include "scene.h"
 
+#include <string>
+
 #include <shaders/color_vert_glsl.h>
 #include <shaders/color_frag_glsl.h>
 #include <shaders/texture_vert_glsl.h>
@@ -12,7 +14,15 @@
 
 StaticObject::StaticObject(const std::string &mesh_file, const std::string &tex_file, int shader_type) {
     // Initialize static resources if needed
-    if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP(tex_file));
+    if (tex_file[tex_file.size() - 1] == 'p'){
+	    if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP(tex_file));
+	    tex_type = 0;
+    }
+    else {
+	    if (!texture_alpha) texture_alpha = std::make_unique<ppgso::TextureAlpha>(ppgso::image::loadPNG(tex_file));
+	    tex_type = 1;
+    }
+    
     if (!mesh) mesh = std::make_unique<ppgso::Mesh>(mesh_file);
 
     if (!shader) {
@@ -74,7 +84,14 @@ void StaticObject::render(Scene &scene) {
 
     // render mesh
     shader->setUniform("ModelMatrix", modelMatrix);
-    shader->setUniform("material.diffuse", *texture);
+    
+    if (tex_type == 0){
+	    shader->setUniform("material.diffuse", *texture);
+    }
+    else {
+	    shader->setUniform("material.diffuse", *texture_alpha);
+    }
+    
     shader->setUniform("material.shininess", shininess);
     mesh->render();
 

@@ -1,5 +1,6 @@
 #pragma once
 #include <ppgso/ppgso.h>
+#include <ppgso/image_png.h>
 
 #include "object.h"
 
@@ -9,6 +10,9 @@ private:
     std::unique_ptr<ppgso::Mesh> mesh;
     std::unique_ptr<ppgso::Shader> shader;
     std::unique_ptr<ppgso::Texture> texture;
+	std::unique_ptr<ppgso::TextureAlpha> texture_alpha;
+	
+	int tex_type = 0;
 
 
 public:

@@ -9,12 +9,15 @@ project(ppgso CXX)
 # CONFIGURATION
 #
 
+
+
 # Basic CMake settings
 set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/_install)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/data)
+
 
 # Use add_resources function to convert .glsl to a .cpp files which will be compiled into a separate static library
 include(add_resources)
@@ -41,6 +44,8 @@ if (USE_STRICT_COMPILE_WARNINGS)
   set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${STRICT_COMPILE_FLAGS}")
 endif ()
 
+
+
 # Find required packages
 find_package(GLFW3 REQUIRED)
 find_package(GLEW REQUIRED)
@@ -48,10 +53,13 @@ find_package(GLM REQUIRED)
 find_package(OpenGL REQUIRED)
 
 # Optional packages
-find_package(OpenMP)
+
+find_package(OpenMP REQUIRED)
 if(OPENMP_FOUND)
   list(APPEND CMAKE_CXX_FLAGS ${OpenMP_CXX_FLAGS})
 endif()
+
+
 
 # Set default installation destination
 if (NOT CMAKE_INSTALL_PREFIX)
