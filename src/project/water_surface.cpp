@@ -248,6 +248,9 @@ void WaterSurface::render(Scene &scene) {
 	}
 }
 
+void WaterSurface::renderShadowmap(Scene &scene) {
+}
+
 void WaterSurface::addChild(Object *s) {
 	s->parent = this;
 	children.push_back(s);

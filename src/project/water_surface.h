@@ -70,6 +70,8 @@ public:
 	 * @param scene Scene to render in
 	 */
 	void render(Scene &scene) override;
+
+    void renderShadowmap(Scene &scene) override;
 	
 	/*!
 	 * Add child object creating hierarchy

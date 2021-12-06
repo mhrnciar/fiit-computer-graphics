@@ -39,6 +39,8 @@ public:
 	bool update(Scene &scene, float dt) override;
 	
 	void render(Scene &scene) override;
+
+    void renderShadowmap(Scene &scene) override;
 	
 	void addChild(Object *s) override;
 };

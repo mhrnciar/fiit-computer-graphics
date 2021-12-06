@@ -86,6 +86,7 @@ private:
 	    volcano_rock->position = unified_volcano_position;
 	    volcano_rock->rotation = unified_volcano_rotation;
 	    scene.objects.push_back(move(volcano_rock));
+
 	    auto volcano_lava = std::make_unique<StaticObject>("objects/volcano_lava_only.obj", "objects/lava_tex.bmp", LIGHT_SHADER);
 	    volcano_lava->scale = unified_volcano_scale;
 	    volcano_lava->position = unified_volcano_position;

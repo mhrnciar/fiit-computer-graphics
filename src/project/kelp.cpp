@@ -170,6 +170,9 @@ void Kelp::render(Scene &scene) {
 	}
 }
 
+void Kelp::renderShadowmap(Scene &scene) {
+}
+
 void Kelp::addChild(Object *s) {
 	s->parent = this;
 	children.push_back(s);
