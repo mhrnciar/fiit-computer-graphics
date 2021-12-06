@@ -10,6 +10,9 @@
 #include <shaders/light_vert_glsl.h>
 #include <shaders/light_frag_glsl.h>
 
+#include <shaders/shadowmap_vert_glsl.h>
+#include <shaders/shadowmap_frag_glsl.h>
+
 StaticObject::StaticObject(const std::string &mesh_file, const std::string &tex_file, int shader_type) {
     // Initialize static resources if needed
     if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP(tex_file));
@@ -29,6 +32,9 @@ StaticObject::StaticObject(const std::string &mesh_file, const std::string &tex_
             shader = std::make_unique<ppgso::Shader>(light_vert_glsl, light_frag_glsl);
         }
     }
+
+    if (!shadowmap_shader) shadowmap_shader = std::make_unique<ppgso::Shader>(shadowmap_vert_glsl, shadowmap_frag_glsl);
+    //if (!shadowmap) shadowmap = std::make_unique<ppgso::Shadowmap>();
 }
 
 bool StaticObject::update(Scene &scene, float dt) {
@@ -41,6 +47,7 @@ bool StaticObject::update(Scene &scene, float dt) {
 }
 
 void StaticObject::render(Scene &scene) {
+    //shadowmap->BindForReading(GL_TEXTURE1);
     shader->use();
 
     // Set up light
@@ -76,6 +83,20 @@ void StaticObject::render(Scene &scene) {
     for(auto & i : children) {
         i->render(scene);
     }
+}
+
+void StaticObject::renderShadowmap(Scene &scene) {
+    shadowmap->BindForWriting();
+    shadowmap_shader->use();
+
+    glm::mat4 depthProjectionMatrix = glm::ortho(-10, 10, -10, 10, -10, 200);
+    glm::mat4 depthViewMatrix = glm::lookAt(glm::vec3{1, 1, 1}, glm::vec3{0, 0, 0}, glm::vec3{0, 1, 0});
+    glm::mat4 depthModelMatrix{1.0f};
+
+    shadowmap_shader->setUniform("ProjectionMatrix", depthProjectionMatrix);
+    shadowmap_shader->setUniform("ViewMatrix", depthViewMatrix);
+    shadowmap_shader->setUniform("ModelMatrix", depthModelMatrix);
+    mesh->render();
 }
 
 void StaticObject::addChild(Object *s) {

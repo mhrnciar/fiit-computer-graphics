@@ -3,7 +3,7 @@
 
 #include "src/project/object.h"
 
-class Whale final : public Object{
+class WhaleTailFin final : public Object{
 private:
     // Static resources (Shared between instances)
     std::unique_ptr<ppgso::Mesh> mesh;
@@ -15,9 +15,7 @@ public:
     /*!
      * Create a new static object
      */
-    Whale();
-
-    Whale(const std::string &mesh_file, const std::string &tex_file);
+    WhaleTailFin();
 
     /*!
      * Update static object
@@ -32,6 +30,8 @@ public:
      * @param scene Scene to render in
      */
     void render(Scene &scene) override;
+
+    void renderShadowmap(Scene &scene) override;
 
     /*!
      * Add child object creating hierarchy

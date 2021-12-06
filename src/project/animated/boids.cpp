@@ -1,5 +1,5 @@
 #include "boids.h"
-#include "scene.h"
+#include "src/project/scene.h"
 
 Boids::Boids(glm::vec3 pos, glm::vec3 rot) {
     position = pos;
@@ -63,11 +63,11 @@ Boids::Boids(glm::vec3 pos, glm::vec3 rot) {
 }
 
 bool Boids::update(Scene &scene, float dt) {
-    static float time = 0;
+    static float time = 3;
 
     time += dt;
 
-    if (distance(scene.camera->cameraPosition, position) < 4.0f && !separated) {
+    if (distance(scene.camera->cameraPosition, position) < 6.0f && !separated) {
         separated = true;
         speed = 0.1f;
 
@@ -89,6 +89,10 @@ bool Boids::update(Scene &scene, float dt) {
             c->rotation.x += glm::linearRand(-ppgso::PI/4, ppgso::PI/4);
             c->rotation.z += glm::linearRand(-ppgso::PI/4, ppgso::PI/4);
 
+            if (c->position.y < 10) {
+                c->rotation.x = -ppgso::PI/4;
+            }
+
             c->movement_vector.x = sin(c->rotation.z);
             c->movement_vector.y = -sin(c->rotation.x);
             c->movement_vector.z = cos(c->rotation.z);
@@ -101,23 +105,27 @@ bool Boids::update(Scene &scene, float dt) {
         rotation.x += glm::linearRand(-ppgso::PI/4, ppgso::PI/4);
         rotation.z += glm::linearRand(-ppgso::PI/4, ppgso::PI/4);
 
-        glm::vec3 move;
+        if (position.y < 10) {
+            rotation.x = -ppgso::PI/4;
+        }
 
-        move.x = sin(rotation.z);
-        move.y = -sin(rotation.x);
-        move.z = cos(rotation.z);
+        vector.x = sin(rotation.z);
+        vector.y = -sin(rotation.x);
+        vector.z = cos(rotation.z);
 
-        position += move * speed;
+        position += vector * speed;
 
         for (auto &c : container) {
             c->rotation = rotation;
-            c->movement_vector = move;
+            c->movement_vector = vector;
             c->update(scene, dt);
         }
 
         time = 0;
     }
     else {
+        position += vector * speed;
+
         for (auto &c : container) {
             c->update(scene, dt);
         }
@@ -130,4 +138,7 @@ void Boids::render(Scene &scene) {
     for(auto &c : container) {
         c->render(scene);
     }
+}
+
+void Boids::renderShadowmap(Scene &scene) {
 }

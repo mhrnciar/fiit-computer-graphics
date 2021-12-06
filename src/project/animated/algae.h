@@ -1,9 +1,9 @@
 #pragma once
 #include <ppgso/ppgso.h>
 
-#include "object.h"
+#include "src/project/object.h"
 
-class BezierObject final : public Object{
+class Algae final : public Object{
 private:
     std::unique_ptr<ppgso::Shader> shader;
     std::unique_ptr<ppgso::TextureAlpha> texture;
@@ -11,10 +11,10 @@ private:
     std::vector<glm::vec2> texCoords;
 
     glm::vec3 controlPoints[4][4]{
-            { {-1,4,0}, {-0.5f,4,0}, {0.5f,4,0}, {1,4,0}, },
-            { {-1,1.5f,0}, {-0.5f,1.5f,0}, {0.5f,1.5f,0}, {1,1.5f,0}, },
-            { {-1,-1.5f,0}, {-0.5f,-1.5f,0}, {0.5f,-1.5f,0}, {1,-1.5f,0}, },
-            { {-1,-4,0}, {-0.5f,-4,0}, {0.5f,-4,0}, {1,-4,0} }
+            { {-2,4,0}, {-0.5f,4,0}, {0.5f,4,0}, {2,4,0}, },
+            { {-2,1.5f,0}, {-0.5f,1.5f,0}, {0.5f,1.5f,0}, {2,1.5f,0}, },
+            { {-2,-1.5f,0}, {-0.5f,-1.5f,0}, {0.5f,-1.5f,0}, {2,-1.5f,0}, },
+            { {-2,-4,0}, {-0.5f,-4,0}, {0.5f,-4,0}, {2,-4,0} }
     };
 
     struct face {
@@ -33,9 +33,9 @@ public:
     /*!
      * Create a new Bezier object
      */
-    BezierObject(const std::string &tex_file);
+    Algae(const std::string &tex_file);
 
-    ~BezierObject();
+    ~Algae();
 
     /*!
      * Update Bezier surface
@@ -50,6 +50,8 @@ public:
      * @param scene Scene to render in
      */
     void render(Scene &scene) override;
+
+    void renderShadowmap(Scene &scene) override;
 
     /*!
      * Add child object creating hierarchy

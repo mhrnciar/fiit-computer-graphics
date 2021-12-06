@@ -2,44 +2,53 @@
 #include <shaders/light_vert_glsl.h>
 #include <shaders/light_frag_glsl.h>
 
-#include "shark.h"
-#include "scene.h"
+#include "whale.h"
+#include "whale_back.h"
+#include "whale_fin.h"
+#include "src/project/scene.h"
 
-Shark::Shark() {
+Whale::Whale() {
     // Initialize static resources if needed
-    if (!texture) texture = std::make_unique<ppgso::TextureAlpha>(ppgso::image::loadPNG("animals/shark.png"));
-    if (!mesh) mesh = std::make_unique<ppgso::Mesh>("animals/shark.obj");
+    if (!texture) texture = std::make_unique<ppgso::TextureAlpha>(ppgso::image::loadPNG("animals/whale/whale.png"));
+    if (!mesh) mesh = std::make_unique<ppgso::Mesh>("animals/whale/head.obj");
     if (!shader) shader = std::make_unique<ppgso::Shader>(light_vert_glsl, light_frag_glsl);
 
-    keyframes.push_back({{0, 0, 0}, {0, 0, 0}, {0, 0, ppgso::PI/2}, {0, 0, ppgso::PI/2}, {1,1,1}, {1,1,1}, 60});
-    keyframes.push_back({{0, 0, 0}, {-13.0f, 6.5f, -6.0f}, {0, 0, ppgso::PI/2}, {0, 0, ppgso::PI/2}, {1,1,1}, {1,1,1}, 0.001f});
-    keyframes.push_back({{-13.0f, 6.5f, -6.0f}, {-13.0f, 6.5f, -6.0f}, {0, 0, ppgso::PI/2}, {0, 0, ppgso::PI/2}, {1,1,1}, {1,1,1}, 10});
-    keyframes.push_back({{30, 30, 0}, {20, 20, 0}, {ppgso::PI, ppgso::PI, ppgso::PI}, {ppgso::PI, ppgso::PI, 0}, {1, 1, 1}, {0.5f, 0.5f, 0.5f}, 5});
-    keyframes.push_back({{20, 20, 0}, {10, 10, 0}, {ppgso::PI, ppgso::PI, 0}, {0, ppgso::PI, 0}, {0.5f, 0.5f, 0.5f}, {1, 1, 1}, 5});
-    keyframes.push_back({{10, 10, 0}, {0, 0, 0}, {0, ppgso::PI, 0}, {0, 0, 0}, {1, 1, 1}, {0.5f, 0.5f, 0.5f}, 5});
+    auto back = new WhaleBack();
+    back->position = {0.1f, -0.2f, -4.6f};
+    auto left_fin = new WhaleFin(false);
+    left_fin->position = {4.5f, -2.2f, -1.5f};
+    left_fin->scale = {1.1f, 1.1f, 1.1f};
+    auto right_fin = new WhaleFin(true);
+    right_fin->position = {-4.5f, -2.2f, -1.5f};
+    right_fin->scale = {1.1f, 1.1f, 1.1f};
+
+    addChild(back);
+    addChild(left_fin);
+    addChild(right_fin);
 }
 
-bool Shark::update(Scene &scene, float dt) {
-    static int count = 0;
-    if (!keyframes.empty()) {
-        position = keyframes[count].interpolatePosition();
-        rotation = keyframes[count].interpolateRotation();
-        scale = keyframes[count].interpolateScale();
+Whale::Whale(const std::string &mesh_file, const std::string &tex_file) {
+    // Initialize static resources if needed
+    if (!texture) texture = std::make_unique<ppgso::TextureAlpha>(ppgso::image::loadPNG(tex_file));
+    if (!mesh) mesh = std::make_unique<ppgso::Mesh>(mesh_file);
+    if (!shader) shader = std::make_unique<ppgso::Shader>(light_vert_glsl, light_frag_glsl);
+}
 
-        keyframes[count].currTime += dt;
-        if (keyframes[count].currTime > keyframes[count].maxTime) {
-            keyframes[count].currTime = 0;
-            count++;
-            if (count >= keyframes.size())
-                count = 0;
-        }
-    }
+bool Whale::update(Scene &scene, float dt) {
+    auto time = (float) glfwGetTime();
+
+    position.z += 0.01f;
+    rotation.x = 0.1 * sin(time);
 
     generateModelMatrix();
+
+    for (auto c : children) {
+        c->update(scene, dt);
+    }
     return true;
 }
 
-void Shark::render(Scene &scene) {
+void Whale::render(Scene &scene) {
     shader->use();
 
     // Set up light
@@ -77,7 +86,10 @@ void Shark::render(Scene &scene) {
     }
 }
 
-void Shark::addChild(Object *s) {
+void Whale::renderShadowmap(Scene &scene) {
+}
+
+void Whale::addChild(Object *s) {
     s->parent = this;
     children.push_back(s);
 }

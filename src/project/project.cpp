@@ -16,12 +16,12 @@
 #include "camera.h"
 #include "background.h"
 #include "static_object.h"
-#include "bezier_object.h"
+#include "src/project/animated/foliage.h"
 #include "cube.h"
-#include "whale/whale.h"
-#include "shark.h"
-#include "fish_chased.h"
-#include "boids.h"
+#include "animated/whale/whale.h"
+#include "src/project/animated/shark.h"
+#include "src/project/animated/fish_chased.h"
+#include "src/project/animated/boids.h"
 
 const unsigned int SIZEW = 1280;
 const unsigned int SIZEH = 720;
@@ -199,19 +199,12 @@ private:
         auto chased_fish = std::make_unique<ChasedFish>();
         scene.objects.push_back(move(chased_fish));
 
-        auto boids = std::make_unique<Boids>(glm::vec3{10,10,10}, glm::vec3{0,0,0});
+        auto boids = std::make_unique<Boids>(glm::vec3{10,15,10}, glm::vec3{0,0,0});
         scene.objects.push_back(move(boids));
 
+        auto foliage = std::make_unique<Foliage>();
+        scene.objects.push_back(move(foliage));
 
-        /* Algae
-        for (int i = 0; i < 100; i++) {
-            auto algae = std::make_unique<BezierObject>("green_algae.png");
-            algae->position = {glm::linearRand(0.0f, -12.0f), 4.5f, glm::linearRand(-8.0f, -4.0f)};
-            algae->rotation = {0, 0, -ppgso::PI/2};
-            algae->scale = {0.1f, 0.1f, 0.1f};
-            scene.objects.push_back(move(algae));
-        }
-        */
         /* Long loading, so put in comments while modeling other things
         mesh = "objects/shipwreck.obj";
         tex = "objects/ship.png";
@@ -349,6 +342,23 @@ public:
 
         // Set gray background
         glClearColor(.5f, .5f, .5f, 0);
+/*
+        glEnable(GL_CULL_FACE);
+        glCullFace(GL_BACK);
+
+        // Clear depth and color buffers
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        glViewport(0, 0, 1024, 1024);
+        glClear(GL_DEPTH_BUFFER_BIT);
+
+        scene.renderShadows();
+*/
+        glViewport(0, 0, SIZEW, SIZEH);
+
+        glEnable(GL_CULL_FACE);
+        glCullFace(GL_BACK);
+
         // Clear depth and color buffers
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

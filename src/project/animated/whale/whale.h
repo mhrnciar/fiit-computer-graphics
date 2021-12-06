@@ -3,20 +3,21 @@
 
 #include "src/project/object.h"
 
-class WhaleFin final : public Object{
+class Whale final : public Object{
 private:
     // Static resources (Shared between instances)
     std::unique_ptr<ppgso::Mesh> mesh;
     std::unique_ptr<ppgso::Shader> shader;
     std::unique_ptr<ppgso::TextureAlpha> texture;
-    bool right;
 
 
 public:
     /*!
      * Create a new static object
      */
-    WhaleFin(bool right);
+    Whale();
+
+    Whale(const std::string &mesh_file, const std::string &tex_file);
 
     /*!
      * Update static object
@@ -31,6 +32,8 @@ public:
      * @param scene Scene to render in
      */
     void render(Scene &scene) override;
+
+    void renderShadowmap(Scene &scene) override;
 
     /*!
      * Add child object creating hierarchy

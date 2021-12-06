@@ -1,9 +1,9 @@
 #pragma once
 #include <ppgso/ppgso.h>
 
-#include "object.h"
+#include "src/project/object.h"
 
-class ChasedFish final : public Object{
+class Shark final : public Object{
 private:
     // Static resources (Shared between instances)
     std::unique_ptr<ppgso::Mesh> mesh;
@@ -15,7 +15,7 @@ public:
     /*!
      * Create a new static object
      */
-    ChasedFish();
+    Shark();
 
     /*!
      * Update static object
@@ -30,6 +30,8 @@ public:
      * @param scene Scene to render in
      */
     void render(Scene &scene) override;
+
+    void renderShadowmap(Scene &scene) override;
 
     /*!
      * Add child object creating hierarchy

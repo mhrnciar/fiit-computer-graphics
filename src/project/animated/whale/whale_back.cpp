@@ -2,31 +2,26 @@
 #include <shaders/light_vert_glsl.h>
 #include <shaders/light_frag_glsl.h>
 
-#include "whale_fin.h"
+#include "whale_back.h"
+#include "whale_tail.h"
 #include "src/project/scene.h"
 
-WhaleFin::WhaleFin(bool right) {
+WhaleBack::WhaleBack() {
     // Initialize static resources if needed
-    if (!mesh) {
-        if (right)
-            mesh = std::make_unique<ppgso::Mesh>("animals/whale/right_fin.obj");
-        else
-            mesh = std::make_unique<ppgso::Mesh>("animals/whale/left_fin.obj");
-    }
-
     if (!texture) texture = std::make_unique<ppgso::TextureAlpha>(ppgso::image::loadPNG("animals/whale/whale.png"));
+    if (!mesh) mesh = std::make_unique<ppgso::Mesh>("animals/whale/back.obj");
     if (!shader) shader = std::make_unique<ppgso::Shader>(light_vert_glsl, light_frag_glsl);
 
-    this->right = right;
+    auto tail = new WhaleTail();
+    tail->position = {0.0f, 1.1f, -3.5f};
+    tail->scale = {1.1f, 1.1f, 1.1f};
+    addChild(tail);
 }
 
-bool WhaleFin::update(Scene &scene, float dt) {
+bool WhaleBack::update(Scene &scene, float dt) {
     auto time = (float) glfwGetTime();
 
-    if(right)
-        rotation.y = 0.1f * sin(time);
-    else
-        rotation.y = -0.1 * sin(time);
+    rotation.x = -0.2f * sin(time);
     generateModelMatrix();
 
     for (auto c : children) {
@@ -35,7 +30,7 @@ bool WhaleFin::update(Scene &scene, float dt) {
     return true;
 }
 
-void WhaleFin::render(Scene &scene) {
+void WhaleBack::render(Scene &scene) {
     shader->use();
 
     // Set up light
@@ -73,7 +68,10 @@ void WhaleFin::render(Scene &scene) {
     }
 }
 
-void WhaleFin::addChild(Object *s) {
+void WhaleBack::renderShadowmap(Scene &scene) {
+}
+
+void WhaleBack::addChild(Object *s) {
     s->parent = this;
     children.push_back(s);
 }

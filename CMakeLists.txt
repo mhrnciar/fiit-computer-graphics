@@ -68,6 +68,8 @@ set(PPGSO_SHADER_SRC
         shader/diffuse_vert.glsl shader/diffuse_frag.glsl
         shader/texture_vert.glsl shader/texture_frag.glsl
         shader/light_vert.glsl shader/light_frag.glsl
+        shader/billboard_vert.glsl shader/billboard_frag.glsl
+        shader/shadowmap_vert.glsl shader/shadowmap_frag.glsl
         )
 add_resources(shaders ${PPGSO_SHADER_SRC})
 
@@ -84,7 +86,8 @@ add_library(ppgso STATIC
         ppgso/texture_alpha.cpp
         ppgso/window.cpp
         ppgso/lodepng.cpp
-        ppgso/image_png.cpp)
+        ppgso/image_png.cpp
+        ppgso/shadowmap.cpp)
 
 # Make sure GLM uses radians and GLEW is a static library
 target_compile_definitions(ppgso PUBLIC -DGLM_FORCE_RADIANS -DGLEW_STATIC)
@@ -190,21 +193,21 @@ add_executable(project
         src/project/rectangle.cpp
         src/project/cube.cpp
         src/project/static_object.cpp
-        src/project/bezier_object.cpp
+        src/project/animated/algae.cpp
         src/project/light.cpp
         src/project/background.cpp
         src/project/keyframes/keyframe.cpp
         src/project/keyframes/camera_keyframe.cpp
         src/project/keyframes/object_keyframe.cpp
-        src/project/whale/whale.cpp
-        src/project/whale/whale_back.cpp
-        src/project/whale/whale_fin.cpp
-        src/project/whale/whale_tail.cpp
-        src/project/whale/whale_tail_fin.cpp
-        src/project/shark.cpp
-        src/project/fish_chased.cpp
-        src/project/boids.cpp
-        src/project/boids_fish.cpp)
+        src/project/animated/whale/whale.cpp
+        src/project/animated/whale/whale_back.cpp
+        src/project/animated/whale/whale_fin.cpp
+        src/project/animated/whale/whale_tail.cpp
+        src/project/animated/whale/whale_tail_fin.cpp
+        src/project/animated/shark.cpp
+        src/project/animated/fish_chased.cpp
+        src/project/animated/boids.cpp
+        src/project/animated/boids_fish.cpp src/project/animated/foliage.cpp src/project/animated/foliage.h)
 target_link_libraries(project ppgso shaders)
 install(TARGETS project DESTINATION .)
 add_custom_command(TARGET project POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/data/ ${CMAKE_CURRENT_BINARY_DIR})

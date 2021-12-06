@@ -2,20 +2,21 @@
 #include <ppgso/ppgso.h>
 
 #include "src/project/object.h"
+#include "boids_fish.h"
 
-class WhaleBack final : public Object{
+class Boids final : public Object{
 private:
     // Static resources (Shared between instances)
-    std::unique_ptr<ppgso::Mesh> mesh;
-    std::unique_ptr<ppgso::Shader> shader;
-    std::unique_ptr<ppgso::TextureAlpha> texture;
+    static std::unique_ptr<ppgso::Mesh> mesh;
+    static std::unique_ptr<ppgso::Shader> shader;
+    static std::unique_ptr<ppgso::TextureAlpha> texture;
 
 
 public:
     /*!
      * Create a new static object
      */
-    WhaleBack();
+    Boids(glm::vec3 pos, glm::vec3 rot);
 
     /*!
      * Update static object
@@ -31,10 +32,13 @@ public:
      */
     void render(Scene &scene) override;
 
-    /*!
-     * Add child object creating hierarchy
-     * @param s - child object
-     */
-    void addChild(Object *s) override;
+    void renderShadowmap(Scene &scene) override;
+
+    glm::vec3 vector;
+    float speed = 0.01f;
+    bool separated = false;
+
+private:
+    std::list< std::unique_ptr<BoidsFish> > container;
 };
 

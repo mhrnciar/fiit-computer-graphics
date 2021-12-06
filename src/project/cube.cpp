@@ -40,6 +40,9 @@ void Cube::render(Scene &scene) {
     }
 }
 
+void Cube::renderShadowmap(Scene &scene) {
+}
+
 void Cube::addChild(Object *s) {
     s->parent = this;
     children.push_back(s);

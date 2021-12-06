@@ -1,7 +1,7 @@
 #pragma once
 #include <ppgso/ppgso.h>
 
-#include "object.h"
+#include "src/project/object.h"
 
 class BoidsFish final : public Object{
 private:
@@ -30,6 +30,8 @@ public:
      * @param scene Scene to render in
      */
     void render(Scene &scene) override;
+
+    void renderShadowmap(Scene &scene) override;
 
     glm::vec3 movement_vector{0, 0, 0};
     float speed = 0.01f;

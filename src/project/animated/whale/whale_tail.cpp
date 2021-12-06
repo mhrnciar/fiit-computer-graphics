@@ -67,6 +67,9 @@ void WhaleTail::render(Scene &scene) {
     }
 }
 
+void WhaleTail::renderShadowmap(Scene &scene) {
+}
+
 void WhaleTail::addChild(Object *s) {
     s->parent = this;
     children.push_back(s);

@@ -1,31 +1,45 @@
-#include "boids_fish.h"
-#include "scene.h"
-
 #include <ppgso/image_png.h>
 #include <shaders/light_vert_glsl.h>
 #include <shaders/light_frag_glsl.h>
 
-std::unique_ptr<ppgso::Mesh> BoidsFish::mesh;
-std::unique_ptr<ppgso::TextureAlpha> BoidsFish::texture;
-std::unique_ptr<ppgso::Shader> BoidsFish::shader;
+#include "fish_chased.h"
+#include "src/project/scene.h"
 
-BoidsFish::BoidsFish() {
+ChasedFish::ChasedFish() {
     // Initialize static resources if needed
-    if (!texture) texture = std::make_unique<ppgso::TextureAlpha>(ppgso::image::loadPNG("animals/red_fish.png"));
-    if (!mesh) mesh = std::make_unique<ppgso::Mesh>("animals/red_fish.obj");
+    if (!texture) texture = std::make_unique<ppgso::TextureAlpha>(ppgso::image::loadPNG("animals/crucian_carp.png"));
+    if (!mesh) mesh = std::make_unique<ppgso::Mesh>("animals/crucian_carp.obj");
     if (!shader) shader = std::make_unique<ppgso::Shader>(light_vert_glsl, light_frag_glsl);
 
-    scale = {0.3f, 0.3f, 0.3f};
+    keyframes.push_back({{0, 0, 0}, {0, 0, 0}, {0, 0, ppgso::PI/2}, {0, 0, ppgso::PI/2}, {1,1,1}, {1,1,1}, 2});
+    keyframes.push_back({{0, 0, 0}, {-9.0f, 7.0f, -6.0f}, {0, 0, ppgso::PI/2}, {0, 0, ppgso::PI/2}, {1,1,1}, {1,1,1}, 0.001f});
+    keyframes.push_back({{-9.0f, 7.0f, -6.0f}, {-9.0f, 7.0f, -6.0f}, {0, 0, ppgso::PI/2}, {0, 0, ppgso::PI/2}, {1,1,1}, {1,1,1}, 10});
+    keyframes.push_back({{30, 30, 0}, {20, 20, 0}, {ppgso::PI, ppgso::PI, ppgso::PI}, {ppgso::PI, ppgso::PI, 0}, {1, 1, 1}, {0.5f, 0.5f, 0.5f}, 5});
+    keyframes.push_back({{20, 20, 0}, {10, 10, 0}, {ppgso::PI, ppgso::PI, 0}, {0, ppgso::PI, 0}, {0.5f, 0.5f, 0.5f}, {1, 1, 1}, 5});
+    keyframes.push_back({{10, 10, 0}, {0, 0, 0}, {0, ppgso::PI, 0}, {0, 0, 0}, {1, 1, 1}, {0.5f, 0.5f, 0.5f}, 5});
 }
 
-bool BoidsFish::update(Scene &scene, float dt) {
-    position += movement_vector * speed;
+bool ChasedFish::update(Scene &scene, float dt) {
+    static int count = 0;
+    if (!keyframes.empty()) {
+        position = keyframes[count].interpolatePosition();
+        rotation = keyframes[count].interpolateRotation();
+        scale = keyframes[count].interpolateScale();
+
+        keyframes[count].currTime += dt;
+        if (keyframes[count].currTime > keyframes[count].maxTime) {
+            keyframes[count].currTime = 0;
+            count++;
+            if (count >= keyframes.size())
+                count = 0;
+        }
+    }
 
     generateModelMatrix();
     return true;
 }
 
-void BoidsFish::render(Scene &scene) {
+void ChasedFish::render(Scene &scene) {
     shader->use();
 
     // Set up light
@@ -57,4 +71,16 @@ void BoidsFish::render(Scene &scene) {
     shader->setUniform("material.diffuse", *texture);
     shader->setUniform("material.shininess", shininess);
     mesh->render();
+
+    for(auto & i : children) {
+        i->render(scene);
+    }
+}
+
+void ChasedFish::renderShadowmap(Scene &scene) {
+}
+
+void ChasedFish::addChild(Object *s) {
+    s->parent = this;
+    children.push_back(s);
 }

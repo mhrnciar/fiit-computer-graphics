@@ -8,6 +8,8 @@ private:
     // Static resources (Shared between instances)
     std::unique_ptr<ppgso::Mesh> mesh;
     std::unique_ptr<ppgso::Shader> shader;
+    std::unique_ptr<ppgso::Shader> shadowmap_shader;
+    std::unique_ptr<ppgso::Shadowmap> shadowmap;
     std::unique_ptr<ppgso::Texture> texture;
 
 
@@ -37,6 +39,8 @@ public:
      * @param scene Scene to render in
      */
     void render(Scene &scene) override;
+
+    void renderShadowmap(Scene &scene) override;
 
     /*!
      * Add child object creating hierarchy

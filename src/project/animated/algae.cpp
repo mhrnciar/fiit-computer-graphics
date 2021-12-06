@@ -1,11 +1,11 @@
-#include "bezier_object.h"
-#include "scene.h"
+#include "algae.h"
+#include "src/project/scene.h"
 #include <ppgso/image_png.h>
 
 #include <shaders/texture_vert_glsl.h>
 #include <shaders/texture_frag_glsl.h>
 
-BezierObject::BezierObject(const std::string &tex_file) {
+Algae::Algae(const std::string &tex_file) {
     // Initialize static resources if needed
     if (!shader) shader = std::make_unique<ppgso::Shader>(texture_vert_glsl, texture_frag_glsl);
     if (!texture) texture = std::make_unique<ppgso::TextureAlpha>(ppgso::image::loadPNG(tex_file));
@@ -14,7 +14,7 @@ BezierObject::BezierObject(const std::string &tex_file) {
     bezierPatch();
 }
 
-BezierObject::~BezierObject() {
+Algae::~Algae() {
     // Delete data from OpenGL
     glDeleteBuffers(1, &ibo);
     glDeleteBuffers(1, &tbo);
@@ -47,8 +47,13 @@ glm::vec3 bezierPoint(const glm::vec3 controlCurvePoints[4], float t) {
     return cubic_p1;
 }
 
-void BezierObject::bezierPatch() {
+void Algae::bezierPatch() {
     // Generate Bezier patch points and incidences
+    glDeleteBuffers(1, &ibo);
+    glDeleteBuffers(1, &tbo);
+    glDeleteBuffers(1, &vbo);
+    glDeleteVertexArrays(1, &vao);
+
     vertices.clear();
     texCoords.clear();
     mesh.clear();
@@ -83,6 +88,16 @@ void BezierObject::bezierPatch() {
                               i * PATCH_SIZE + j,
                               (i - 1) * PATCH_SIZE + j};
             mesh.push_back(triangle2);
+
+            face triangle3 = {(i - 1) * PATCH_SIZE + (j - 1),
+                              (i - 1) * PATCH_SIZE + j,
+                              i * PATCH_SIZE + (j - 1)};
+            mesh.push_back(triangle3);
+
+            face triangle4 = {i * PATCH_SIZE + (j - 1),
+                              (i - 1) * PATCH_SIZE + j,
+                              i * PATCH_SIZE + j};
+            mesh.push_back(triangle4);
         }
     }
 
@@ -116,7 +131,7 @@ void BezierObject::bezierPatch() {
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh.size() * sizeof(face), mesh.data(), GL_STATIC_DRAW);
 }
 
-bool BezierObject::update(Scene &scene, float dt) {
+bool Algae::update(Scene &scene, float dt) {
     auto time = (float) glfwGetTime();
 
     float multi = 1;
@@ -133,7 +148,7 @@ bool BezierObject::update(Scene &scene, float dt) {
     return true;
 }
 
-void BezierObject::render(Scene &scene) {
+void Algae::render(Scene &scene) {
     shader->use();
 
     shader->setUniform("ProjectionMatrix", scene.camera->projectionMatrix);
@@ -152,7 +167,10 @@ void BezierObject::render(Scene &scene) {
     }
 }
 
-void BezierObject::addChild(Object *s) {
+void Algae::renderShadowmap(Scene &scene) {
+}
+
+void Algae::addChild(Object *s) {
     s->parent = this;
     children.push_back(s);
 }

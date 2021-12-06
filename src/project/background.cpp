@@ -44,6 +44,9 @@ void Background::render(Scene &scene) {
     }
 }
 
+void Background::renderShadowmap(Scene &scene) {
+}
+
 void Background::addChild(Object *s) {
     s->parent = this;
     children.push_back(s);

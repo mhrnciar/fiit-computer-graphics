@@ -71,6 +71,9 @@ void Rectangle::render(Scene &scene) {
     }
 }
 
+void Rectangle::renderShadowmap(Scene &scene) {
+}
+
 void Rectangle::addChild(Object *s) {
     s->parent = this;
     children.push_back(s);

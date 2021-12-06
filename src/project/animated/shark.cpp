@@ -2,24 +2,24 @@
 #include <shaders/light_vert_glsl.h>
 #include <shaders/light_frag_glsl.h>
 
-#include "fish_chased.h"
-#include "scene.h"
+#include "shark.h"
+#include "src/project/scene.h"
 
-ChasedFish::ChasedFish() {
+Shark::Shark() {
     // Initialize static resources if needed
-    if (!texture) texture = std::make_unique<ppgso::TextureAlpha>(ppgso::image::loadPNG("animals/crucian_carp.png"));
-    if (!mesh) mesh = std::make_unique<ppgso::Mesh>("animals/crucian_carp.obj");
+    if (!texture) texture = std::make_unique<ppgso::TextureAlpha>(ppgso::image::loadPNG("animals/shark.png"));
+    if (!mesh) mesh = std::make_unique<ppgso::Mesh>("animals/shark.obj");
     if (!shader) shader = std::make_unique<ppgso::Shader>(light_vert_glsl, light_frag_glsl);
 
-    keyframes.push_back({{0, 0, 0}, {0, 0, 0}, {0, 0, ppgso::PI/2}, {0, 0, ppgso::PI/2}, {1,1,1}, {1,1,1}, 2});
-    keyframes.push_back({{0, 0, 0}, {-9.0f, 7.0f, -6.0f}, {0, 0, ppgso::PI/2}, {0, 0, ppgso::PI/2}, {1,1,1}, {1,1,1}, 0.001f});
-    keyframes.push_back({{-9.0f, 7.0f, -6.0f}, {-9.0f, 7.0f, -6.0f}, {0, 0, ppgso::PI/2}, {0, 0, ppgso::PI/2}, {1,1,1}, {1,1,1}, 10});
+    keyframes.push_back({{0, 0, 0}, {0, 0, 0}, {0, 0, ppgso::PI/2}, {0, 0, ppgso::PI/2}, {1,1,1}, {1,1,1}, 60});
+    keyframes.push_back({{0, 0, 0}, {-13.0f, 6.5f, -6.0f}, {0, 0, ppgso::PI/2}, {0, 0, ppgso::PI/2}, {1,1,1}, {1,1,1}, 0.001f});
+    keyframes.push_back({{-13.0f, 6.5f, -6.0f}, {-13.0f, 6.5f, -6.0f}, {0, 0, ppgso::PI/2}, {0, 0, ppgso::PI/2}, {1,1,1}, {1,1,1}, 10});
     keyframes.push_back({{30, 30, 0}, {20, 20, 0}, {ppgso::PI, ppgso::PI, ppgso::PI}, {ppgso::PI, ppgso::PI, 0}, {1, 1, 1}, {0.5f, 0.5f, 0.5f}, 5});
     keyframes.push_back({{20, 20, 0}, {10, 10, 0}, {ppgso::PI, ppgso::PI, 0}, {0, ppgso::PI, 0}, {0.5f, 0.5f, 0.5f}, {1, 1, 1}, 5});
     keyframes.push_back({{10, 10, 0}, {0, 0, 0}, {0, ppgso::PI, 0}, {0, 0, 0}, {1, 1, 1}, {0.5f, 0.5f, 0.5f}, 5});
 }
 
-bool ChasedFish::update(Scene &scene, float dt) {
+bool Shark::update(Scene &scene, float dt) {
     static int count = 0;
     if (!keyframes.empty()) {
         position = keyframes[count].interpolatePosition();
@@ -39,7 +39,7 @@ bool ChasedFish::update(Scene &scene, float dt) {
     return true;
 }
 
-void ChasedFish::render(Scene &scene) {
+void Shark::render(Scene &scene) {
     shader->use();
 
     // Set up light
@@ -77,7 +77,10 @@ void ChasedFish::render(Scene &scene) {
     }
 }
 
-void ChasedFish::addChild(Object *s) {
+void Shark::renderShadowmap(Scene &scene) {
+}
+
+void Shark::addChild(Object *s) {
     s->parent = this;
     children.push_back(s);
 }

@@ -1,36 +1,31 @@
+#include "boids_fish.h"
+#include "src/project/scene.h"
+
 #include <ppgso/image_png.h>
 #include <shaders/light_vert_glsl.h>
 #include <shaders/light_frag_glsl.h>
 
-#include "whale_back.h"
-#include "whale_tail.h"
-#include "src/project/scene.h"
+std::unique_ptr<ppgso::Mesh> BoidsFish::mesh;
+std::unique_ptr<ppgso::TextureAlpha> BoidsFish::texture;
+std::unique_ptr<ppgso::Shader> BoidsFish::shader;
 
-WhaleBack::WhaleBack() {
+BoidsFish::BoidsFish() {
     // Initialize static resources if needed
-    if (!texture) texture = std::make_unique<ppgso::TextureAlpha>(ppgso::image::loadPNG("animals/whale/whale.png"));
-    if (!mesh) mesh = std::make_unique<ppgso::Mesh>("animals/whale/back.obj");
+    if (!texture) texture = std::make_unique<ppgso::TextureAlpha>(ppgso::image::loadPNG("animals/red_fish.png"));
+    if (!mesh) mesh = std::make_unique<ppgso::Mesh>("animals/red_fish.obj");
     if (!shader) shader = std::make_unique<ppgso::Shader>(light_vert_glsl, light_frag_glsl);
 
-    auto tail = new WhaleTail();
-    tail->position = {0.0f, 1.1f, -3.5f};
-    tail->scale = {1.1f, 1.1f, 1.1f};
-    addChild(tail);
+    scale = {0.3f, 0.3f, 0.3f};
 }
 
-bool WhaleBack::update(Scene &scene, float dt) {
-    auto time = (float) glfwGetTime();
+bool BoidsFish::update(Scene &scene, float dt) {
+    position += movement_vector * speed;
 
-    rotation.x = -0.2f * sin(time);
     generateModelMatrix();
-
-    for (auto c : children) {
-        c->update(scene, dt);
-    }
     return true;
 }
 
-void WhaleBack::render(Scene &scene) {
+void BoidsFish::render(Scene &scene) {
     shader->use();
 
     // Set up light
@@ -62,13 +57,7 @@ void WhaleBack::render(Scene &scene) {
     shader->setUniform("material.diffuse", *texture);
     shader->setUniform("material.shininess", shininess);
     mesh->render();
-
-    for(auto & i : children) {
-        i->render(scene);
-    }
 }
 
-void WhaleBack::addChild(Object *s) {
-    s->parent = this;
-    children.push_back(s);
+void BoidsFish::renderShadowmap(Scene &scene) {
 }

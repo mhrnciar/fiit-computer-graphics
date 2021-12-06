@@ -2,43 +2,20 @@
 #include <shaders/light_vert_glsl.h>
 #include <shaders/light_frag_glsl.h>
 
-#include "whale.h"
-#include "whale_back.h"
-#include "whale_fin.h"
+#include "whale_tail_fin.h"
 #include "src/project/scene.h"
 
-Whale::Whale() {
+WhaleTailFin::WhaleTailFin() {
     // Initialize static resources if needed
     if (!texture) texture = std::make_unique<ppgso::TextureAlpha>(ppgso::image::loadPNG("animals/whale/whale.png"));
-    if (!mesh) mesh = std::make_unique<ppgso::Mesh>("animals/whale/head.obj");
-    if (!shader) shader = std::make_unique<ppgso::Shader>(light_vert_glsl, light_frag_glsl);
-
-    auto back = new WhaleBack();
-    back->position = {0.1f, -0.2f, -4.6f};
-    auto left_fin = new WhaleFin(false);
-    left_fin->position = {4.5f, -2.2f, -1.5f};
-    left_fin->scale = {1.1f, 1.1f, 1.1f};
-    auto right_fin = new WhaleFin(true);
-    right_fin->position = {-4.5f, -2.2f, -1.5f};
-    right_fin->scale = {1.1f, 1.1f, 1.1f};
-
-    addChild(back);
-    addChild(left_fin);
-    addChild(right_fin);
-}
-
-Whale::Whale(const std::string &mesh_file, const std::string &tex_file) {
-    // Initialize static resources if needed
-    if (!texture) texture = std::make_unique<ppgso::TextureAlpha>(ppgso::image::loadPNG(tex_file));
-    if (!mesh) mesh = std::make_unique<ppgso::Mesh>(mesh_file);
+    if (!mesh) mesh = std::make_unique<ppgso::Mesh>("animals/whale/tail_fin.obj");
     if (!shader) shader = std::make_unique<ppgso::Shader>(light_vert_glsl, light_frag_glsl);
 }
 
-bool Whale::update(Scene &scene, float dt) {
+bool WhaleTailFin::update(Scene &scene, float dt) {
     auto time = (float) glfwGetTime();
 
-    position.z += 0.01f;
-    rotation.x = 0.1 * sin(time);
+    rotation.x = -0.25f * sin(time);
 
     generateModelMatrix();
 
@@ -48,7 +25,7 @@ bool Whale::update(Scene &scene, float dt) {
     return true;
 }
 
-void Whale::render(Scene &scene) {
+void WhaleTailFin::render(Scene &scene) {
     shader->use();
 
     // Set up light
@@ -86,7 +63,10 @@ void Whale::render(Scene &scene) {
     }
 }
 
-void Whale::addChild(Object *s) {
+void WhaleTailFin::renderShadowmap(Scene &scene) {
+}
+
+void WhaleTailFin::addChild(Object *s) {
     s->parent = this;
     children.push_back(s);
 }

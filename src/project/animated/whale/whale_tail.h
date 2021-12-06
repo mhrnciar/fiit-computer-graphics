@@ -1,22 +1,21 @@
 #pragma once
 #include <ppgso/ppgso.h>
 
-#include "object.h"
-#include "boids_fish.h"
+#include "src/project/object.h"
 
-class Boids final : public Object{
+class WhaleTail final : public Object{
 private:
     // Static resources (Shared between instances)
-    static std::unique_ptr<ppgso::Mesh> mesh;
-    static std::unique_ptr<ppgso::Shader> shader;
-    static std::unique_ptr<ppgso::TextureAlpha> texture;
+    std::unique_ptr<ppgso::Mesh> mesh;
+    std::unique_ptr<ppgso::Shader> shader;
+    std::unique_ptr<ppgso::TextureAlpha> texture;
 
 
 public:
     /*!
      * Create a new static object
      */
-    Boids(glm::vec3 pos, glm::vec3 rot);
+    WhaleTail();
 
     /*!
      * Update static object
@@ -32,12 +31,12 @@ public:
      */
     void render(Scene &scene) override;
 
-    glm::vec3 position{0, 0, 0};
-    glm::vec3 rotation{0, 0, 0};
-    float speed = 0.01f;
-    bool separated = false;
+    void renderShadowmap(Scene &scene) override;
 
-private:
-    std::list< std::unique_ptr<BoidsFish> > container;
+    /*!
+     * Add child object creating hierarchy
+     * @param s - child object
+     */
+    void addChild(Object *s) override;
 };
 
