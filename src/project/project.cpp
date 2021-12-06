@@ -202,7 +202,7 @@ private:
         auto boids = std::make_unique<Boids>(glm::vec3{10,15,10}, glm::vec3{0,0,0});
         scene.objects.push_back(move(boids));
 
-        auto foliage = std::make_unique<Foliage>();
+        auto foliage = std::make_unique<Foliage>(-25.0f, 20.0f, -25.0f, 20.0f);
         scene.objects.push_back(move(foliage));
 
         /* Long loading, so put in comments while modeling other things
@@ -235,7 +235,7 @@ public:
         //glEnable(GL_BLEND);
         //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		
-        //disables cursor and binds mouse to window TODO: move this to ppgso::window (?)
+        //disables cursor and binds mouse to window
 	    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
         initScene();
@@ -342,15 +342,13 @@ public:
 
         // Set gray background
         glClearColor(.5f, .5f, .5f, 0);
-/*
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
 
         // Clear depth and color buffers
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        glViewport(0, 0, 1024, 1024);
         glClear(GL_DEPTH_BUFFER_BIT);
+        glViewport(0, 0, 1024, 1024);
+/*
 
         scene.renderShadows();
 */

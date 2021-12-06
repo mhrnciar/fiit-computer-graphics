@@ -15,7 +15,7 @@ public:
     /*!
      * Create a new static object
      */
-    Foliage();
+    Foliage(float xMin, float xMax, float zMin, float zMax);
 
     /*!
      * Update static object

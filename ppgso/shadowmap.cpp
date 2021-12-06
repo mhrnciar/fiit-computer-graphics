@@ -34,6 +34,15 @@ void ppgso::Shadowmap::initGL() {
 
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
         printf("NOT COMPLETE\n");
+
+    update();
+}
+
+void ppgso::Shadowmap::update() {
+    BindForWriting();
+
+    // Re-generate mipmaps
+    glGenerateMipmap(GL_TEXTURE_2D);
 }
 
 void ppgso::Shadowmap::BindForWriting() {

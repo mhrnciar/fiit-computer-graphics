@@ -2,14 +2,14 @@
 #include "algae.h"
 #include "src/project/scene.h"
 
-Foliage::Foliage() {
+Foliage::Foliage(float xMin, float xMax, float zMin, float zMax) {
     float posx, posz;
     int size = textures.size() - 1;
 
-    for (int i = 0; i < 200; i++) {
+    for (int i = 0; i < 400; i++) {
         do {
-            posx = glm::linearRand(-30.0f, 25.0f);
-            posz = glm::linearRand(-30.0f, 25.0f);
+            posx = glm::linearRand(xMin, xMax);
+            posz = glm::linearRand(zMin, zMax);
         } while(posx > -13 && posx < 0 && posz > -15 && posz < 10);
 
         int choice = glm::linearRand(0, size);

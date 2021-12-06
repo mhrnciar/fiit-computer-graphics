@@ -21,6 +21,8 @@ namespace ppgso {
 
         ~Shadowmap();
 
+        void update();
+
         void BindForWriting();
 
         void BindForReading(GLenum TextureUnit);
