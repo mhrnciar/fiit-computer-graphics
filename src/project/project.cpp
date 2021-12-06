@@ -75,6 +75,9 @@ private:
 			    }
 		    }
 	    }
+	    else {
+	    	printf("Kelp forrest disabled!\n");
+	    }
 
 	    glm::vec3 unified_volcano_position = {50.0f, -2.3f, -30.0f};
 	    glm::vec3 unified_volcano_scale = {15, 15, 15};
@@ -94,9 +97,9 @@ private:
 	    scene.objects.push_back(move(volcano_lava));
 
 
-        auto water_surface = std::make_unique<WaterSurface>("water_seamless.bmp", 19, 19);
-        water_surface->position = {-80, 53, -80};
-        water_surface->scale = {3,2,3};
+        auto water_surface = std::make_unique<WaterSurface>("water_seamless.bmp", 21, 21);
+        water_surface->position = {-125, 88, -125};
+        water_surface->scale = {4,3,4};
 	    scene.objects.push_back(move(water_surface));
 
         auto skydome = std::make_unique<Background>("objects/skydome.obj", "objects/skydome.png");
