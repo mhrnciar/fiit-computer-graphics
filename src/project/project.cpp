@@ -96,6 +96,15 @@ private:
 	    volcano_lava->rotation = unified_volcano_rotation;
 	    scene.objects.push_back(move(volcano_lava));
 
+        scene.lights.push_back({{50.0f, 8.0f, -30.0f}, {1.0f, 0.0f, 0.0f}, 0.045, 0.0075});
+        scene.lights.push_back({{45.0f, 0.7f, -20.5f}, {1.0f, 0.0f, 0.0f}, 0.22, 0.20});
+        scene.lights.push_back({{48.0f, 2.2f, -22.5f}, {1.0f, 0.0f, 0.0f}, 0.22, 0.20});
+        scene.lights.push_back({{49.0f, 5.0f, -24.0f}, {1.0f, 0.0f, 0.0f}, 0.22, 0.20});
+        scene.lights.push_back({{53.5f, -1.0f, -17.0f}, {1.0f, 0.0f, 0.0f}, 0.22, 0.20});
+        scene.lights.push_back({{56.0f, 0.5f, -21.5f}, {1.0f, 0.0f, 0.0f}, 0.22, 0.20});
+        scene.lights.push_back({{56.0f, 2.5f, -24.0f}, {1.0f, 0.0f, 0.0f}, 0.22, 0.20});
+        scene.lights.push_back({{54.0f, 4.5f, -26.0f}, {1.0f, 0.0f, 0.0f}, 0.22, 0.20});
+
 
         auto water_surface = std::make_unique<WaterSurface>("water_seamless.bmp", 21, 21);
         water_surface->position = {-125, 88, -125};
@@ -267,6 +276,7 @@ private:
     }
 
 public:
+    GLuint framebuffer, textureColorbuffer, rbo;
     /*!
      * Construct custom game window
      */
@@ -289,6 +299,27 @@ public:
 		
         //disables cursor and binds mouse to window
 	    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+	    glGenFramebuffers(1, &framebuffer);
+	    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+
+        glGenTextures(1, &textureColorbuffer);
+        glBindTexture(GL_TEXTURE_2D, textureColorbuffer);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, SIZEW, SIZEH, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer, 0);
+
+        // create a renderbuffer object for depth and stencil attachment (we won't be sampling these)
+        glGenRenderbuffers(1, &rbo);
+        glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, SIZEW, SIZEH); // use a single renderbuffer object for both a depth AND stencil buffer.
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo); // now actually attach it
+
+        // now that we actually created the framebuffer and added all attachments we want to check if it is actually complete now
+        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+            std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
         initScene();
     }
@@ -392,23 +423,24 @@ public:
 
         time = (float) glfwGetTime();
 
+        //glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+        glEnable(GL_DEPTH_TEST);
+
         // Set gray background
         glClearColor(.5f, .5f, .5f, 0);
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
-
+/*
         // Clear depth and color buffers
         glClear(GL_DEPTH_BUFFER_BIT);
         glViewport(0, 0, 1024, 1024);
-/*
 
         scene.renderShadows();
-*/
         glViewport(0, 0, SIZEW, SIZEH);
 
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
-
+*/
         // Clear depth and color buffers
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

@@ -66,7 +66,7 @@ void Camera::updateDir(Scene &scene){
 	
 	cameraYaw += xoffset;
 	cameraPitch += yoffset;
-	if (cameraPitch >89.0f){
+	if (cameraPitch > 89.0f){
 		cameraPitch = 89.0f;
 	}
 	if (cameraPitch < -89.0f){
