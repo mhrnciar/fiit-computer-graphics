@@ -25,6 +25,7 @@
 #include "src/project/animated/boids.h"
 #include "water_surface.h"
 #include "kelp.h"
+#include "particle.h"
 
 const unsigned int SIZEW = 1280;
 const unsigned int SIZEH = 720;
@@ -47,11 +48,16 @@ private:
         // Create a camera
         auto camera = std::make_unique<Camera>(60.0f, 1.0f, 0.1f, 400.0f);
         scene.camera = move(camera);
+        
+        glm::vec3 p_vel = {1,3,0};
+        auto particle_test = std::make_unique<Particle>("water_seamless.bmp", 10.0f, 0.3f, p_vel);
+        particle_test->position = {0,15,0};
+        scene.objects.push_back(move(particle_test));
 
 	    std::default_random_engine generator;
 	    std::normal_distribution<float> normal_dist;
-
-        bool kelp_forrest_enabled = true;
+	    
+        bool kelp_forrest_enabled = false;
 	    if (kelp_forrest_enabled) {
 		    float kelp_x_offset, kelp_z_offset;
 		    int rand_kelp_height;
@@ -82,8 +88,7 @@ private:
 	    glm::vec3 unified_volcano_position = {50.0f, -2.3f, -30.0f};
 	    glm::vec3 unified_volcano_scale = {15, 15, 15};
 	    glm::vec3 unified_volcano_rotation = {0.0f, 0.0f, ppgso::PI};
-
-
+	    
 	    auto volcano_rock = std::make_unique<StaticObject>("objects/volcano_rock_only.obj", "objects/sand.bmp", LIGHT_SHADER);
 	    volcano_rock->scale = unified_volcano_scale;
 	    volcano_rock->position = unified_volcano_position;
