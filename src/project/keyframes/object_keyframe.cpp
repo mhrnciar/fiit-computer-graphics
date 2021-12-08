@@ -11,6 +11,14 @@ ObjectKeyframe::ObjectKeyframe(glm::vec3 s_pos, glm::vec3 e_pos, glm::vec3 s_rot
     maxTime = dt;
 }
 
+ObjectKeyframe::ObjectKeyframe(glm::vec3 s_pos, glm::vec3 e_pos, glm::vec3 s_rot, glm::vec3 e_rot, float dt) {
+    startPosition = s_pos;
+    endPosition = e_pos;
+    startRotation = glm::quat(s_rot);
+    endRotation = glm::quat(e_rot);
+    maxTime = dt;
+}
+
 glm::vec3 ObjectKeyframe::interpolatePosition() {
     return lerp(startPosition, endPosition, currTime / maxTime);
 }

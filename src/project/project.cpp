@@ -48,6 +48,7 @@ private:
         auto camera = std::make_unique<Camera>(60.0f, 1.0f, 0.1f, 400.0f);
         scene.camera = move(camera);
 
+        printf("\nGenerating kelp forest...\n");
 	    std::default_random_engine generator;
 	    std::normal_distribution<float> normal_dist;
 
@@ -83,7 +84,7 @@ private:
 	    glm::vec3 unified_volcano_scale = {15, 15, 15};
 	    glm::vec3 unified_volcano_rotation = {0.0f, 0.0f, ppgso::PI};
 
-
+        printf("Generating volcano...\n");
 	    auto volcano_rock = std::make_unique<StaticObject>("objects/volcano_rock_only.obj", "objects/sand.bmp", LIGHT_SHADER);
 	    volcano_rock->scale = unified_volcano_scale;
 	    volcano_rock->position = unified_volcano_position;
@@ -96,6 +97,7 @@ private:
 	    volcano_lava->rotation = unified_volcano_rotation;
 	    scene.objects.push_back(move(volcano_lava));
 
+	    // Volcano lights
         scene.lights.push_back({{50.0f, 8.0f, -30.0f}, {1.0f, 0.0f, 0.0f}, 0.045, 0.0075});
         scene.lights.push_back({{45.0f, 0.7f, -20.5f}, {1.0f, 0.0f, 0.0f}, 0.22, 0.20});
         scene.lights.push_back({{48.0f, 2.2f, -22.5f}, {1.0f, 0.0f, 0.0f}, 0.22, 0.20});
@@ -105,7 +107,7 @@ private:
         scene.lights.push_back({{56.0f, 2.5f, -24.0f}, {1.0f, 0.0f, 0.0f}, 0.22, 0.20});
         scene.lights.push_back({{54.0f, 4.5f, -26.0f}, {1.0f, 0.0f, 0.0f}, 0.22, 0.20});
 
-
+        printf("Generating environment...\n");
         auto water_surface = std::make_unique<WaterSurface>("water_seamless.bmp", 21, 21);
         water_surface->position = {-125, 88, -125};
         water_surface->scale = {4,3,4};
@@ -121,7 +123,6 @@ private:
         background->position = {0, 30, 0};
         background->rotation = {0, 0, ppgso::PI/4};
         scene.objects.push_back(move(background));
-
 
         auto seabed = std::make_unique<StaticObject>("objects/seabed.obj", "objects/sand.bmp", LIGHT_SHADER);
         seabed->scale = {1.5f, 1.0f, 1.5f};
@@ -141,6 +142,7 @@ private:
         scene.objects.push_back(move(axisY));
         scene.objects.push_back(move(axisZ));
 
+        printf("Generating coral cave...\n");
         auto cave = std::make_unique<StaticObject>("objects/cave.obj", "objects/rock_bg.bmp", LIGHT_SHADER);
         cave->position = {-7.0f, 7.7f, 0.0f};
         cave->scale = {2.0f, 3.0f, 2.0f};
@@ -239,6 +241,7 @@ private:
 
         scene.objects.push_back(move(cave));
 
+        // Coral lights
         scene.lights.push_back({{-4.78f, 6.0f, -7.5f}, {0.0f, 0.0f, 1.0f}, 0.7, 1.8});
         scene.lights.push_back({{-7.87f, 5.2f, -7.0f}, {0.6f, 0.0f, 1.0f}, 0.7, 1.8});
         scene.lights.push_back({{-6.06f, 8.5f, -4.85f}, {1.0f, 0.0f, 0.0f}, 0.7, 1.8});
@@ -250,29 +253,26 @@ private:
         scene.lights.push_back({{-3.5f, 5.2f, -7.14f}, {0.6f, 0.0f, 1.0f}, 0.7, 1.8});
         scene.lights.push_back({{0, 25, 0}, {1.0f, 1.0f, 1.0f}, 0.07, 0.017});
 
+        printf("Generating whale, boids and foliage...\n");
         auto whale = std::make_unique<Whale>();
-        whale->position = {20, 20, -20};
+        whale->position = {20, 35, -20};
         scene.objects.push_back(move(whale));
 
-        auto shark = std::make_unique<Shark>();
-        scene.objects.push_back(move(shark));
-
-        auto chased_fish = std::make_unique<ChasedFish>();
-        scene.objects.push_back(move(chased_fish));
-
-        auto boids = std::make_unique<Boids>(glm::vec3{10,15,10}, glm::vec3{0,0,0});
+        auto boids = std::make_unique<Boids>(glm::vec3{20,25,20}, glm::vec3{0,0,0});
         scene.objects.push_back(move(boids));
+
+        auto upper_boids = std::make_unique<Boids>(glm::vec3{-53,70,-25}, glm::vec3{0,0,ppgso::PI/2});
+        scene.objects.push_back(move(upper_boids));
 
         auto foliage = std::make_unique<Foliage>(-25.0f, 20.0f, -25.0f, 20.0f);
         scene.objects.push_back(move(foliage));
 
-        /* Long loading, so put in comments while modeling other things
-        mesh = "objects/shipwreck.obj";
-        tex = "objects/ship.png";
-        auto ship = std::make_unique<Background>(mesh, tex);
-        ship->position = {45.0f, -2.1f, 0.0f};
+        printf("Generating shipwreck...\n");
+        auto ship = std::make_unique<StaticObject>("objects/shipwreck.obj", "objects/ship.png", LIGHT_SHADER);
+        ship->position = {58.0f, -1.5f, 63.0f};
+        ship->rotation = {0, 0, -ppgso::PI/4};
+        ship->scale = {3.0f, 3.0f, 3.0f};
         scene.objects.push_back(move(ship));
-         */
     }
 
 public:
@@ -299,7 +299,7 @@ public:
 		
         //disables cursor and binds mouse to window
 	    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
+/*
 	    glGenFramebuffers(1, &framebuffer);
 	    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 
@@ -320,7 +320,7 @@ public:
         if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
             std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
+*/
         initScene();
     }
 
@@ -354,6 +354,7 @@ public:
 
         if (key == GLFW_KEY_C && action == GLFW_PRESS) {
             if (scene.camera->keyframes.empty()) {
+                printf("Starting animation...\n");
                 initAnimation();
                 scene.camera->initCameraAnimation();
             }

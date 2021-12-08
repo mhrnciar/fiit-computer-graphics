@@ -92,6 +92,10 @@ bool Boids::update(Scene &scene, float dt) {
             if (c->position.y < 10) {
                 c->rotation.x = -ppgso::PI/4;
             }
+            if (c->position.y > 80) {
+                c->rotation.x = ppgso::PI/4;
+            }
+
             if(c->position.x > -13 && c->position.x < 0 && c->position.z > -15 && c->position.z < 10) {
                 c->rotation.z += ppgso::PI/2;
             }
@@ -115,7 +119,7 @@ bool Boids::update(Scene &scene, float dt) {
             c->movement_vector.y = -sin(c->rotation.x);
             c->movement_vector.z = cos(c->rotation.z);
 
-            c->position += c->movement_vector * c->speed;
+            c->update(scene, dt);
         }
         time = 0;
     }
@@ -125,6 +129,9 @@ bool Boids::update(Scene &scene, float dt) {
 
         if (position.y < 10) {
             rotation.x = -ppgso::PI/4;
+        }
+        if (position.y > 80) {
+            rotation.x = ppgso::PI/4;
         }
 
         if (rotation.x > ppgso::PI/2) {
