@@ -5,6 +5,8 @@
 #include "particle.h"
 #include "scene.h"
 #include <ppgso/image_png.h>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/euler_angles.hpp>
 
 #include <shaders/texture_vert_glsl.h>
 #include <shaders/texture_frag_glsl.h>
@@ -15,7 +17,8 @@
 Particle::Particle(const std::string &tex_file, float time_to_live, float gravity_effectiveness, glm::vec3 velocity) {
 	// Initialize static resources if needed
 	if (!shader) shader = std::make_unique<ppgso::Shader>(texture_vert_glsl, texture_frag_glsl);
-	if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP(tex_file));
+	//if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP(tex_file));
+	if (!texture) texture = std::make_unique<ppgso::TextureAlpha>(ppgso::image::loadPNG(tex_file));
 	
 	this->time_to_live = time_to_live;
 	this->velocity = velocity;
@@ -34,10 +37,8 @@ Particle::Particle(const std::string &tex_file, float time_to_live, float gravit
 	face triangle1_inv = {2,1,0};
 	face triangle2_inv = {3,2,0};
 	mesh = {
-		triangle1,
-		triangle2,
 		triangle1_inv,
-		triangle2_inv
+		triangle2_inv,
 	};
 	texCoords = {
 			{0,1},
@@ -92,7 +93,6 @@ void Particle::updateBuffers() {
 
 bool Particle::update(Scene &scene, float dt) {
 	
-	
 	time_elapsed += dt;
 	if (time_elapsed >= time_to_live){
 		return false;
@@ -105,7 +105,7 @@ bool Particle::update(Scene &scene, float dt) {
 	
 	
 	
-	generateModelMatrix();
+	generateModelMatrixBilboard(scene);
 	return true;
 }
 
@@ -137,5 +137,24 @@ void Particle::addChild(Object *s) {
 	children.push_back(s);
 }
 
+void Particle::generateModelMatrixBilboard(Scene &scene) {
+	
+	translationMatrix = glm::translate(glm::mat4(1.0f), position);
+	translationMatrix[0][0] = scene.camera->viewMatrix[0][0];
+	translationMatrix[0][1] = scene.camera->viewMatrix[1][0];
+	translationMatrix[0][2] = scene.camera->viewMatrix[2][0];
+	translationMatrix[1][0] = scene.camera->viewMatrix[0][1];
+	translationMatrix[1][1] = scene.camera->viewMatrix[1][1];
+	translationMatrix[1][2] = scene.camera->viewMatrix[2][1];
+	translationMatrix[2][0] = scene.camera->viewMatrix[0][2];
+	translationMatrix[2][1] = scene.camera->viewMatrix[1][2];
+	translationMatrix[2][2] = scene.camera->viewMatrix[2][2];
+	rotation.x = 0.0f;
+	rotation.z = 0.0f;
+	rotationMatrix = glm::orientate4(rotation);
+	scaleMatrix = glm::scale(glm::mat4(1.0f), scale);
+	modelMatrix = translationMatrix * rotationMatrix * scaleMatrix;
+	
+}
 
 

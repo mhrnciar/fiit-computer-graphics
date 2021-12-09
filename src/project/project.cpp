@@ -26,6 +26,7 @@
 #include "water_surface.h"
 #include "kelp.h"
 #include "particle.h"
+#include "particle_emitter.h"
 
 const unsigned int SIZEW = 1280;
 const unsigned int SIZEH = 720;
@@ -48,11 +49,7 @@ private:
         // Create a camera
         auto camera = std::make_unique<Camera>(60.0f, 1.0f, 0.1f, 400.0f);
         scene.camera = move(camera);
-        
-        glm::vec3 p_vel = {1,3,0};
-        auto particle_test = std::make_unique<Particle>("water_seamless.bmp", 10.0f, 0.3f, p_vel);
-        particle_test->position = {0,15,0};
-        scene.objects.push_back(move(particle_test));
+       
 
 	    std::default_random_engine generator;
 	    std::normal_distribution<float> normal_dist;
@@ -100,6 +97,14 @@ private:
 	    volcano_lava->position = unified_volcano_position;
 	    volcano_lava->rotation = unified_volcano_rotation;
 	    scene.objects.push_back(move(volcano_lava));
+	    
+	    
+	    
+	    glm::vec3 p_vel = {0.5f,5.5f,0.5f};
+	    glm::vec3 p_scale = {7.0f,5.0f ,7.0f};
+	    auto p_emitter = std::make_unique<ParticleEmitter>(unified_volcano_position, "smoke_tex.png", 1.5f, 1, p_vel, p_scale, 0.3f, 9.0f);
+	    scene.objects.push_back(move(p_emitter));
+	    
 
 
         auto water_surface = std::make_unique<WaterSurface>("water_seamless.bmp", 21, 21);

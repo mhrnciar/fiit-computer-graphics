@@ -7,8 +7,8 @@
 class Particle final : public Object{
 private:
 	std::unique_ptr<ppgso::Shader> shader;
-	std::unique_ptr<ppgso::Texture> texture;
-	//std::unique_ptr<ppgso::TextureAlpha> texture;
+	//std::unique_ptr<ppgso::Texture> texture;
+	std::unique_ptr<ppgso::TextureAlpha> texture;
 	std::vector<glm::vec3> vertices;
 	std::vector<glm::vec2> texCoords;
 	
@@ -40,5 +40,7 @@ public:
 	void renderShadowmap(Scene &scene) override;
 
 	void addChild(Object *s) override;
+	
+	void generateModelMatrixBilboard(Scene &scene);
 };
 
