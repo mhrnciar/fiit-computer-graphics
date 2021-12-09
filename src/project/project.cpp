@@ -100,9 +100,9 @@ private:
 	    
 	    
 	    
-	    glm::vec3 p_vel = {0.5f,5.5f,0.5f};
+	    glm::vec3 p_vel = {0.5f,5.5f,-0.5f};
 	    glm::vec3 p_scale = {7.0f,5.0f ,7.0f};
-	    auto p_emitter = std::make_unique<ParticleEmitter>(unified_volcano_position, "smoke_tex.png", 1.5f, 1, p_vel, p_scale, 0.3f, 9.0f);
+	    auto p_emitter = std::make_unique<ParticleEmitter>(unified_volcano_position, "smoke_tex.png", 3.0f, 1, p_vel, p_scale, 0.4f, 10.0f);
 	    scene.objects.push_back(move(p_emitter));
 	    
 

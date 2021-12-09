@@ -41,10 +41,10 @@ Particle::Particle(const std::string &tex_file, float time_to_live, float gravit
 		triangle2_inv,
 	};
 	texCoords = {
-			{0,1},
-			{0,0},
-			{1,1},
-			{1,0},
+			{1, 0},
+			{1, 1},
+			{0, 1},
+			{0, 0},
 	};
 	updateBuffers();
 	
