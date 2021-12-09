@@ -27,8 +27,6 @@ public:
 	
 	void render(Scene &scene) override;
 	
-	void renderShadowmap(Scene &scene) override;
-	
 	void addChild(Object *s) override;
 	
 	std::list< std::unique_ptr<Object> > particles;
