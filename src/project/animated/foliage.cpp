@@ -36,6 +36,3 @@ void Foliage::render(Scene &scene) {
         c->render(scene);
     }
 }
-
-void Foliage::renderShadowmap(Scene &scene) {
-}

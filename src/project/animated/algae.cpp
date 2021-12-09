@@ -167,9 +167,6 @@ void Algae::render(Scene &scene) {
     }
 }
 
-void Algae::renderShadowmap(Scene &scene) {
-}
-
 void Algae::addChild(Object *s) {
     s->parent = this;
     children.push_back(s);

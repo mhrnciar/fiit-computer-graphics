@@ -76,7 +76,6 @@ set(PPGSO_SHADER_SRC
         shader/diffuse_vert.glsl shader/diffuse_frag.glsl
         shader/texture_vert.glsl shader/texture_frag.glsl
         shader/light_vert.glsl shader/light_frag.glsl
-        shader/billboard_vert.glsl shader/billboard_frag.glsl
         shader/shadowmap_vert.glsl shader/shadowmap_frag.glsl
         )
 add_resources(shaders ${PPGSO_SHADER_SRC})
@@ -95,7 +94,7 @@ add_library(ppgso STATIC
         ppgso/window.cpp
         ppgso/lodepng.cpp
         ppgso/image_png.cpp
-        ppgso/shadowmap.cpp)
+        )
 
 # Make sure GLM uses radians and GLEW is a static library
 target_compile_definitions(ppgso PUBLIC -DGLM_FORCE_RADIANS -DGLEW_STATIC)
@@ -198,7 +197,6 @@ add_executable(project
         src/project/object.cpp
         src/project/scene.cpp
         src/project/camera.cpp
-        src/project/rectangle.cpp
         src/project/cube.cpp
         src/project/static_object.cpp
         src/project/animated/algae.cpp

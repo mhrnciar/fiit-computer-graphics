@@ -31,8 +31,6 @@ public:
      */
     void render(Scene &scene) override;
 
-    void renderShadowmap(Scene &scene) override;
-
 private:
     std::list< std::unique_ptr<Algae> > container;
     std::vector< std::string > textures = {"foliage/green_algae1.png", "foliage/green_algae2.png", "foliage/green_algae3.png",

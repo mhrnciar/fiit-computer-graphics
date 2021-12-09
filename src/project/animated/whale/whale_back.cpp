@@ -68,9 +68,6 @@ void WhaleBack::render(Scene &scene) {
     }
 }
 
-void WhaleBack::renderShadowmap(Scene &scene) {
-}
-
 void WhaleBack::addChild(Object *s) {
     s->parent = this;
     children.push_back(s);

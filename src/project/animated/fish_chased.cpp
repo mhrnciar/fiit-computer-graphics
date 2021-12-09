@@ -11,12 +11,12 @@ ChasedFish::ChasedFish() {
     if (!mesh) mesh = std::make_unique<ppgso::Mesh>("animals/crucian_carp.obj");
     if (!shader) shader = std::make_unique<ppgso::Shader>(light_vert_glsl, light_frag_glsl);
 
-    keyframes.push_back({{0, 0, 0}, {0, 0, 0}, {0, 0, ppgso::PI/2}, {0, 0, ppgso::PI/2}, {1,1,1}, {1,1,1}, 2});
-    keyframes.push_back({{0, 0, 0}, {-9.0f, 7.0f, -6.0f}, {0, 0, ppgso::PI/2}, {0, 0, ppgso::PI/2}, {1,1,1}, {1,1,1}, 0.001f});
-    keyframes.push_back({{-9.0f, 7.0f, -6.0f}, {-9.0f, 7.0f, -6.0f}, {0, 0, ppgso::PI/2}, {0, 0, ppgso::PI/2}, {1,1,1}, {1,1,1}, 10});
-    keyframes.push_back({{30, 30, 0}, {20, 20, 0}, {ppgso::PI, ppgso::PI, ppgso::PI}, {ppgso::PI, ppgso::PI, 0}, {1, 1, 1}, {0.5f, 0.5f, 0.5f}, 5});
-    keyframes.push_back({{20, 20, 0}, {10, 10, 0}, {ppgso::PI, ppgso::PI, 0}, {0, ppgso::PI, 0}, {0.5f, 0.5f, 0.5f}, {1, 1, 1}, 5});
-    keyframes.push_back({{10, 10, 0}, {0, 0, 0}, {0, ppgso::PI, 0}, {0, 0, 0}, {1, 1, 1}, {0.5f, 0.5f, 0.5f}, 5});
+    keyframes.push_back({{0, 0, 0}, {0, 0, 0}, {0, 0, ppgso::PI/2}, {0, 0, ppgso::PI/2}, 59});
+    keyframes.push_back({{0, 0, 0}, {-9.0f, 7.0f, -6.0f}, {0, 0, ppgso::PI/2}, {0, 0, ppgso::PI/2}, 0.001f});
+    keyframes.push_back({{-9.0f, 7.0f, -6.0f}, {7.0f, 7.0f, -6.0f}, {0, 0, ppgso::PI/2}, {0, 0, ppgso::PI/2}, 5});
+    keyframes.push_back({{7.0f, 7.0f, -6.0f}, {7.0f, 7.0f, -6.0f}, {0, 0, ppgso::PI/2}, {0, 0, ppgso::PI/2}, 5});
+    keyframes.push_back({{7.0f, 7.0f, -6.0f}, {7.0f, 7.0f, -6.0f}, {ppgso::PI, ppgso::PI, 0}, {0, ppgso::PI, 0}, 5});
+    keyframes.push_back({{7.0f, 7.0f, -6.0f}, {7.0f, 7.0f, -6.0f}, {0, ppgso::PI, 0}, {0, 0, 0}, 5});
 }
 
 bool ChasedFish::update(Scene &scene, float dt) {
@@ -24,7 +24,6 @@ bool ChasedFish::update(Scene &scene, float dt) {
     if (!keyframes.empty()) {
         position = keyframes[count].interpolatePosition();
         rotation = keyframes[count].interpolateRotation();
-        scale = keyframes[count].interpolateScale();
 
         keyframes[count].currTime += dt;
         if (keyframes[count].currTime > keyframes[count].maxTime) {
@@ -75,9 +74,6 @@ void ChasedFish::render(Scene &scene) {
     for(auto & i : children) {
         i->render(scene);
     }
-}
-
-void ChasedFish::renderShadowmap(Scene &scene) {
 }
 
 void ChasedFish::addChild(Object *s) {

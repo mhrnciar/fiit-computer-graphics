@@ -43,9 +43,6 @@ public:
      */
     virtual void render(Scene &scene) = 0;
 
-    virtual void renderShadowmap(Scene &scene) = 0;
-
-
     /*!
      * Event to be called when the object is clicked
      * @param scene

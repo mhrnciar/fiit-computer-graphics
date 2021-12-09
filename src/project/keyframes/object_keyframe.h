@@ -14,11 +14,13 @@ public:
     // Define default constructors as this is an abstract class
     ObjectKeyframe(glm::vec3 s_pos, glm::vec3 e_pos, glm::vec3 s_rot, glm::vec3 e_rot, glm::vec3 s_scl, glm::vec3 e_scl, float dt);
 
+    ObjectKeyframe(glm::vec3 s_pos, glm::vec3 e_pos, glm::vec3 s_rot, glm::vec3 e_rot, float dt);
+
     // Keyframe properties
     glm::quat startRotation;
     glm::quat endRotation;
-    glm::vec3 startScale{1,1,1};
-    glm::vec3 endScale{1,1,1};
+    glm::vec3 startScale;
+    glm::vec3 endScale;
 
     glm::vec3 interpolatePosition() override;
     glm::vec3 interpolatePositionSmoothstep() override;

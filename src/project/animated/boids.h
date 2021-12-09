@@ -32,9 +32,7 @@ public:
      */
     void render(Scene &scene) override;
 
-    void renderShadowmap(Scene &scene) override;
-
-    glm::vec3 vector;
+    glm::vec3 vector{0,0,0};
     float speed = 0.01f;
     bool separated = false;
 

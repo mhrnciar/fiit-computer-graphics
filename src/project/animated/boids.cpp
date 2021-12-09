@@ -67,15 +67,14 @@ bool Boids::update(Scene &scene, float dt) {
 
     time += dt;
 
-    if (distance(scene.camera->cameraPosition, position) < 6.0f && !separated) {
+    if (distance(scene.camera->cameraPosition, position) < 10.0f && !separated) {
         separated = true;
-        speed = 0.1f;
 
         for (auto &c : container) {
-            c->speed = speed;
+            c->speed = glm::linearRand(0.1f, 0.2f);
 
-            c->rotation.x += glm::linearRand(-ppgso::PI/4, ppgso::PI/4);
-            c->rotation.z += glm::linearRand(-ppgso::PI/4, ppgso::PI/4);
+            c->rotation.x = glm::radians(scene.camera->cameraPitch) + glm::linearRand(-ppgso::PI/4, ppgso::PI/4);
+            c->rotation.z = glm::radians(scene.camera->cameraYaw) + glm::linearRand(-ppgso::PI/4, ppgso::PI/4);
 
             c->movement_vector.x = sin(c->rotation.z);
             c->movement_vector.y = -sin(c->rotation.x);
@@ -83,14 +82,37 @@ bool Boids::update(Scene &scene, float dt) {
 
             c->update(scene, dt);
         }
+        time = 0;
     }
-    else if (separated && time > 1) {
+    else if (time > 1 && separated) {
         for (auto &c : container) {
             c->rotation.x += glm::linearRand(-ppgso::PI/4, ppgso::PI/4);
             c->rotation.z += glm::linearRand(-ppgso::PI/4, ppgso::PI/4);
 
             if (c->position.y < 10) {
                 c->rotation.x = -ppgso::PI/4;
+            }
+            if (c->position.y > 80) {
+                c->rotation.x = ppgso::PI/4;
+            }
+
+            if(c->position.x > -13 && c->position.x < 0 && c->position.z > -15 && c->position.z < 10) {
+                c->rotation.z += ppgso::PI/2;
+            }
+
+            if (c->rotation.x > ppgso::PI/2) {
+                c->rotation.x -= ppgso::PI/4;
+            }
+            else if (c->rotation.x < -ppgso::PI/2) {
+                c->rotation.x += ppgso::PI/4;
+            }
+
+            for (auto &d : container) {
+                if (c == d)
+                    continue;
+                if (glm::distance(c->position, d->position) < 2.0f) {
+                    c->rotation.z += d->rotation.z;
+                }
             }
 
             c->movement_vector.x = sin(c->rotation.z);
@@ -101,12 +123,22 @@ bool Boids::update(Scene &scene, float dt) {
         }
         time = 0;
     }
-    else if (time > 3) {
+    else if (time > 3 && !separated) {
         rotation.x += glm::linearRand(-ppgso::PI/4, ppgso::PI/4);
         rotation.z += glm::linearRand(-ppgso::PI/4, ppgso::PI/4);
 
         if (position.y < 10) {
             rotation.x = -ppgso::PI/4;
+        }
+        if (position.y > 80) {
+            rotation.x = ppgso::PI/4;
+        }
+
+        if (rotation.x > ppgso::PI/2) {
+            rotation.x -= ppgso::PI/4;
+        }
+        else if (rotation.x < -ppgso::PI/2) {
+            rotation.x += ppgso::PI/4;
         }
 
         vector.x = sin(rotation.z);
@@ -138,7 +170,4 @@ void Boids::render(Scene &scene) {
     for(auto &c : container) {
         c->render(scene);
     }
-}
-
-void Boids::renderShadowmap(Scene &scene) {
 }

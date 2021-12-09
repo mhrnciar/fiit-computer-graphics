@@ -13,7 +13,6 @@
 #include "texture.h"
 #include "texture_alpha.h"
 #include "window.h"
-#include "shadowmap.h"
 
 namespace ppgso {
   /*!

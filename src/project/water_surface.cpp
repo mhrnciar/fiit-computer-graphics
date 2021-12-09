@@ -12,14 +12,12 @@ WaterSurface::WaterSurface(const std::string &tex_file, int len_x_in, int len_z_
 	// Initialize static resources if needed
 	if (!shader) shader = std::make_unique<ppgso::Shader>(texture_vert_glsl, texture_frag_glsl);
 	if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP(tex_file));
-	//if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP(tex_file));
 	
 	len_x = len_x_in;
 	len_z = len_z_in;
 	
 	generator.seed(time(NULL));
-	
-	
+
 	//Create water_planes field based on len_x and len_z
 	water_planes.clear();
 	for(int i = 0; i < len_x; i++){
@@ -213,6 +211,11 @@ bool WaterSurface::update(Scene &scene, float dt) {
 			}
 		}
 	}
+
+    glDeleteBuffers(1, &ibo);
+    glDeleteBuffers(1, &tbo);
+    glDeleteBuffers(1, &vbo);
+    glDeleteVertexArrays(1, &vao);
 	
 	vertices.clear();
 	texCoords.clear();
@@ -246,9 +249,6 @@ void WaterSurface::render(Scene &scene) {
 	for(auto & i : children) {
 		i->render(scene);
 	}
-}
-
-void WaterSurface::renderShadowmap(Scene &scene) {
 }
 
 void WaterSurface::addChild(Object *s) {
