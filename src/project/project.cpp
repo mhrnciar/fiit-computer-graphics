@@ -28,7 +28,7 @@
 #include "water_surface.h"
 #include "kelp.h"
 
-#define FILTER false
+#define FILTER true
 
 const unsigned int SIZEW = 1280;
 const unsigned int SIZEH = 720;
