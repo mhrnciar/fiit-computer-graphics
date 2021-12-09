@@ -73,9 +73,6 @@ void WhaleFin::render(Scene &scene) {
     }
 }
 
-void WhaleFin::renderShadowmap(Scene &scene) {
-}
-
 void WhaleFin::addChild(Object *s) {
     s->parent = this;
     children.push_back(s);

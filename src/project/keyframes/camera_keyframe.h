@@ -17,8 +17,6 @@ public:
     // Keyframe properties
     float currTime = 0;
     float maxTime;
-    glm::vec3 startPosition{0,0,0};
-    glm::vec3 endPosition{0,0,0};
     glm::vec3 startFront{0, 0, 0};
     glm::vec3 endFront{0, 0, 0};
 

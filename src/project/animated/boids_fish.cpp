@@ -58,6 +58,3 @@ void BoidsFish::render(Scene &scene) {
     shader->setUniform("material.shininess", shininess);
     mesh->render();
 }
-
-void BoidsFish::renderShadowmap(Scene &scene) {
-}

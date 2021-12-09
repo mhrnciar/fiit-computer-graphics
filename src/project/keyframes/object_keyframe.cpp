@@ -16,6 +16,8 @@ ObjectKeyframe::ObjectKeyframe(glm::vec3 s_pos, glm::vec3 e_pos, glm::vec3 s_rot
     endPosition = e_pos;
     startRotation = glm::quat(s_rot);
     endRotation = glm::quat(e_rot);
+    startScale = {1, 1, 1};
+    endScale = {1, 1, 1};
     maxTime = dt;
 }
 

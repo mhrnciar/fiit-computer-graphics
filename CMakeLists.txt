@@ -94,7 +94,7 @@ add_library(ppgso STATIC
         ppgso/window.cpp
         ppgso/lodepng.cpp
         ppgso/image_png.cpp
-        ppgso/shadowmap.cpp)
+        )
 
 # Make sure GLM uses radians and GLEW is a static library
 target_compile_definitions(ppgso PUBLIC -DGLM_FORCE_RADIANS -DGLEW_STATIC)
@@ -197,7 +197,6 @@ add_executable(project
         src/project/object.cpp
         src/project/scene.cpp
         src/project/camera.cpp
-        src/project/rectangle.cpp
         src/project/cube.cpp
         src/project/static_object.cpp
         src/project/animated/algae.cpp

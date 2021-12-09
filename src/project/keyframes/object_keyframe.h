@@ -19,8 +19,8 @@ public:
     // Keyframe properties
     glm::quat startRotation;
     glm::quat endRotation;
-    glm::vec3 startScale{1,1,1};
-    glm::vec3 endScale{1,1,1};
+    glm::vec3 startScale;
+    glm::vec3 endScale;
 
     glm::vec3 interpolatePosition() override;
     glm::vec3 interpolatePositionSmoothstep() override;

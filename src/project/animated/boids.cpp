@@ -171,6 +171,3 @@ void Boids::render(Scene &scene) {
         c->render(scene);
     }
 }
-
-void Boids::renderShadowmap(Scene &scene) {
-}

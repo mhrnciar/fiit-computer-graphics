@@ -26,8 +26,6 @@ class Scene {
      */
     void render();
 
-    void renderShadows();
-
     /*!
      * Pick objects using a ray
      * @param position - Position in the scene to pick object from

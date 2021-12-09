@@ -23,16 +23,6 @@ void Scene::render() {
         obj->render(*this);
 }
 
-void Scene::renderShadows() {
-    // Simply render all objects
-    for ( auto &obj : objects ) {
-        auto stat = dynamic_cast<StaticObject*>(obj.get());
-        if (!stat) continue;
-
-        obj->renderShadowmap(*this);
-    }
-}
-
 std::vector<Object*> Scene::intersect(const glm::vec3 &position, const glm::vec3 &direction) {
     std::vector<Object*> intersected = {};
     for(auto& object : objects) {

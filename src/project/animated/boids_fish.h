@@ -31,8 +31,6 @@ public:
      */
     void render(Scene &scene) override;
 
-    void renderShadowmap(Scene &scene) override;
-
     glm::vec3 movement_vector{0, 0, 0};
     float speed = 0.01f;
 };

@@ -76,9 +76,6 @@ void ChasedFish::render(Scene &scene) {
     }
 }
 
-void ChasedFish::renderShadowmap(Scene &scene) {
-}
-
 void ChasedFish::addChild(Object *s) {
     s->parent = this;
     children.push_back(s);

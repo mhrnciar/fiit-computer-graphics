@@ -77,9 +77,6 @@ void Shark::render(Scene &scene) {
     }
 }
 
-void Shark::renderShadowmap(Scene &scene) {
-}
-
 void Shark::addChild(Object *s) {
     s->parent = this;
     children.push_back(s);

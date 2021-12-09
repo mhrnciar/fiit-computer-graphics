@@ -11,6 +11,8 @@
 #include <list>
 
 #include <ppgso/ppgso.h>
+#include <shaders/convolution_vert_glsl.h>
+#include <shaders/convolution_frag_glsl.h>
 #include <random>
 
 #include "scene.h"
@@ -25,6 +27,8 @@
 #include "src/project/animated/boids.h"
 #include "water_surface.h"
 #include "kelp.h"
+
+#define FILTER false
 
 const unsigned int SIZEW = 1280;
 const unsigned int SIZEH = 720;
@@ -276,7 +280,13 @@ private:
     }
 
 public:
-    GLuint framebuffer, textureColorbuffer, rbo;
+    ppgso::Shader quadShader = {convolution_vert_glsl, convolution_frag_glsl};
+    ppgso::Mesh quadMesh = {"quad.obj"};
+    ppgso::Texture quadTexture = {SIZEW, SIZEH};
+
+    // OpenGL object ids for framebuffer and render buffer
+    GLuint fbo = 0;
+    GLuint rbo = 0;
     /*!
      * Construct custom game window
      */
@@ -299,28 +309,31 @@ public:
 		
         //disables cursor and binds mouse to window
 	    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-/*
-	    glGenFramebuffers(1, &framebuffer);
-	    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 
-        glGenTextures(1, &textureColorbuffer);
-        glBindTexture(GL_TEXTURE_2D, textureColorbuffer);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, SIZEW, SIZEH, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer, 0);
+	    if (FILTER) {
+            // Disable mipmapping on the quadTexture
+            quadTexture.bind();
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
-        // create a renderbuffer object for depth and stencil attachment (we won't be sampling these)
-        glGenRenderbuffers(1, &rbo);
-        glBindRenderbuffer(GL_RENDERBUFFER, rbo);
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, SIZEW, SIZEH); // use a single renderbuffer object for both a depth AND stencil buffer.
-        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo); // now actually attach it
+            // Initialize framebuffer, its color texture (the sphere will be rendered to it) and its render buffer for depth info storage
+            glGenFramebuffers(1, &fbo);
+            glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 
-        // now that we actually created the framebuffer and added all attachments we want to check if it is actually complete now
-        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-            std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-*/
+            // Set up render buffer that has a depth buffer and stencil buffer
+            glGenRenderbuffers(1, &rbo);
+            glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+            glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
+
+            // Associate the quadTexture with it
+            glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, quadTexture.image.width, quadTexture.image.height);
+            glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, quadTexture.getTexture(), 0);
+
+            if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+                throw std::runtime_error("Cannot create framebuffer!");
+            }
+	    }
+
         initScene();
     }
 
@@ -424,30 +437,44 @@ public:
 
         time = (float) glfwGetTime();
 
-        //glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-        glEnable(GL_DEPTH_TEST);
+        if (FILTER) {
+            glViewport(0, 0, SIZEW, SIZEH);
+            glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+        }
 
-        // Set gray background
+        // Clear the framebuffer
         glClearColor(.5f, .5f, .5f, 0);
-        glEnable(GL_CULL_FACE);
-        glCullFace(GL_BACK);
-/*
-        // Clear depth and color buffers
-        glClear(GL_DEPTH_BUFFER_BIT);
-        glViewport(0, 0, 1024, 1024);
-
-        scene.renderShadows();
-        glViewport(0, 0, SIZEW, SIZEH);
-
-        glEnable(GL_CULL_FACE);
-        glCullFace(GL_BACK);
-*/
-        // Clear depth and color buffers
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // Update and render all objects
         scene.update(dt);
         scene.render();
+
+        if (FILTER) {
+            resetViewport();
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+            // Clear the framebuffer
+            glClearColor(.5f, .5f, .5f, 0);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+            // Create projection matrix (field of view (radians), aspect ratio, near plane distance, far plane distance)
+            auto quadProjectionMatrix = glm::perspective((ppgso::PI / 180.f) * 60.0f, 1.0f, 0.1f, 10.0f);
+
+            // Create view matrix (translate camera backwards a bit, so we can see the geometry)
+            auto quadViewMatrix = glm::translate(glm::mat4{1.0f}, {0.0f, 0.0f, -3.0f});
+
+            // Animate rotation of the quad
+            auto quadModelMatrix = glm::mat4{1.0f};
+
+            // Set shader inputs
+            quadShader.use();
+            quadShader.setUniform("ProjectionMatrix", quadProjectionMatrix);
+            quadShader.setUniform("ViewMatrix", quadViewMatrix);
+            quadShader.setUniform("ModelMatrix", quadModelMatrix);
+            quadShader.setUniform("Texture", quadTexture);
+            quadMesh.render();
+        }
     }
 };
 
