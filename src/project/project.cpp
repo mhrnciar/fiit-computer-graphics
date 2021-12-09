@@ -27,6 +27,8 @@
 #include "src/project/animated/boids.h"
 #include "water_surface.h"
 #include "kelp.h"
+#include "particle.h"
+#include "particle_emitter.h"
 
 #define FILTER true
 
@@ -100,6 +102,14 @@ private:
 	    volcano_lava->position = unified_volcano_position;
 	    volcano_lava->rotation = unified_volcano_rotation;
 	    scene.objects.push_back(move(volcano_lava));
+
+
+
+	    glm::vec3 p_vel = {0.5f,5.5f,-0.5f};
+	    glm::vec3 p_scale = {7.0f,5.0f ,7.0f};
+	    auto p_emitter = std::make_unique<ParticleEmitter>(unified_volcano_position, "smoke_tex.png", 3.0f, 1, p_vel, p_scale, 0.4f, 10.0f);
+	    scene.objects.push_back(move(p_emitter));
+
 
 	    // Volcano lights
         scene.lights.push_back({{50.0f, 8.0f, -30.0f}, {1.0f, 0.0f, 0.0f}, 0.045, 0.0075});
