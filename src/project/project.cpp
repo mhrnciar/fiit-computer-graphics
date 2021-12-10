@@ -13,6 +13,8 @@
 #include <ppgso/ppgso.h>
 #include <shaders/convolution_vert_glsl.h>
 #include <shaders/convolution_frag_glsl.h>
+#include <shaders/grayscale_vert_glsl.h>
+#include <shaders/grayscale_frag_glsl.h>
 #include <random>
 
 #include "scene.h"
@@ -290,7 +292,8 @@ private:
     }
 
 public:
-    ppgso::Shader quadShader = {convolution_vert_glsl, convolution_frag_glsl};
+    ppgso::Shader convQuadShader = {convolution_vert_glsl, convolution_frag_glsl};
+    ppgso::Shader grayQuadShader = {grayscale_vert_glsl, grayscale_frag_glsl};
     ppgso::Mesh quadMesh = {"quad.obj"};
     ppgso::Texture quadTexture = {SIZEW, SIZEH};
 
@@ -477,12 +480,23 @@ public:
             // Animate rotation of the quad
             auto quadModelMatrix = glm::mat4{1.0f};
 
-            // Set shader inputs
-            quadShader.use();
-            quadShader.setUniform("ProjectionMatrix", quadProjectionMatrix);
-            quadShader.setUniform("ViewMatrix", quadViewMatrix);
-            quadShader.setUniform("ModelMatrix", quadModelMatrix);
-            quadShader.setUniform("Texture", quadTexture);
+            if (scene.camera->cameraPosition.y > 87) {
+                // Set shader inputs
+                grayQuadShader.use();
+                grayQuadShader.setUniform("ProjectionMatrix", quadProjectionMatrix);
+                grayQuadShader.setUniform("ViewMatrix", quadViewMatrix);
+                grayQuadShader.setUniform("ModelMatrix", quadModelMatrix);
+                grayQuadShader.setUniform("Texture", quadTexture);
+            }
+            else {
+                // Set shader inputs
+                convQuadShader.use();
+                convQuadShader.setUniform("ProjectionMatrix", quadProjectionMatrix);
+                convQuadShader.setUniform("ViewMatrix", quadViewMatrix);
+                convQuadShader.setUniform("ModelMatrix", quadModelMatrix);
+                convQuadShader.setUniform("Texture", quadTexture);
+            }
+
             quadMesh.render();
         }
     }

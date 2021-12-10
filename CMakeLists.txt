@@ -77,6 +77,7 @@ set(PPGSO_SHADER_SRC
         shader/texture_vert.glsl shader/texture_frag.glsl
         shader/light_vert.glsl shader/light_frag.glsl
         shader/shadowmap_vert.glsl shader/shadowmap_frag.glsl
+        shader/grayscale_vert.glsl shader/grayscale_frag.glsl
         )
 add_resources(shaders ${PPGSO_SHADER_SRC})
 
