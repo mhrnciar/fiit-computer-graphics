@@ -13,7 +13,7 @@ Camera::Camera(float fov, float ratio, float near, float far) {
 }
 
 void Camera::update(Scene &scene, float dt) {
-    //printf("%lf %lf %lf\n", cameraPosition.x, cameraPosition.y, cameraPosition.z);
+    printf("%lf %lf %lf\n", cameraPosition.x, cameraPosition.y, cameraPosition.z);
     if (keyframes.empty()) {
         float cameraSpeed = 10 * dt;
         if(scene.keyboard[GLFW_KEY_W]) {
@@ -115,41 +115,44 @@ void Camera::initCameraAnimation() {
     keyframes.push_back({{-2.0f, 7.5f, -8.0f}, {-1.0f, 7.5f, -10.0f}, {0.8f, 0.0f, -0.2f}, {-0.5f, 0.0f, -0.5f}, 2});
     // Watch chase
     keyframes.push_back({{-1.0f, 7.5f, -10.0f}, {-1.0f, 7.5f, -10.0f}, {-0.5f, 0.0f, -0.5f}, {-0.7f, -0.2f, -0.3f}, 2});
-    keyframes.push_back({{-1.0f, 7.5f, -10.0f}, {-1.0f, 7.5f, -10.0f}, {-0.7f, -0.2f, -0.3f}, {-0.7f, -0.2f, -0.3f}, 2});
-    keyframes.push_back({{-1.0f, 7.5f, -10.0f}, {-1.0f, 7.5f, -10.0f}, {-0.7f, -0.2f, -0.3f}, {-1.0f, -0.2f, 0.0f}, 3.5});
-    keyframes.push_back({{-1.0f, 7.5f, -10.0f}, {-1.0f, 7.5f, -10.0f}, {-1.0f, -0.2f, 0.0f}, {0.0f, -1.0f, 1.0f}, 3.5});
-    keyframes.push_back({{-1.0f, 7.5f, -10.0f}, {-1.0f, 7.5f, -10.0f}, {0.0f, -1.0f, 1.0f}, {0.8f, -0.8f, -0.2f}, 2});
+    keyframes.push_back({{-1.0f, 7.5f, -10.0f}, {-1.0f, 7.5f, -10.0f}, {-0.7f, -0.2f, -0.3f}, {-0.8f, -0.2f, -0.2f}, 2});
+    keyframes.push_back({{-1.0f, 7.5f, -10.0f}, {-1.0f, 7.5f, -10.0f}, {-0.8f, -0.2f, -0.2f}, {-1.0f, -0.2f, 0.0f}, 3.5});
+    keyframes.push_back({{-1.0f, 7.5f, -10.0f}, {-1.0f, 7.5f, -10.0f}, {-1.0f, -0.2f, 0.0f}, {0.0f, -1.0f, 0.6f}, 3.5});
+    keyframes.push_back({{-1.0f, 7.5f, -10.0f}, {-1.0f, 7.5f, -10.0f}, {0.0f, -1.0f, 0.6f}, {0.9f, -0.8f, -0.1f}, 2});
+    keyframes.push_back({{-1.0f, 7.5f, -10.0f}, {-1.0f, 7.5f, -10.0f}, {0.9f, -0.8f, -0.1f}, {0.9f, -0.8f, -0.1f}, 2});
     // Continue towards volcano
-    keyframes.push_back({{-1.0f, 7.5f, -10.0f}, {-1.0f, 7.5f, -10.0f}, {0.8f, -0.8f, -0.2f}, {-0.8f, 0.0f, -0.2f}, 2});
+    keyframes.push_back({{-1.0f, 7.5f, -10.0f}, {-1.0f, 7.5f, -10.0f}, {0.9f, -0.8f, -0.1f}, {-0.8f, 0.0f, -0.2f}, 2});
     keyframes.push_back({{-1.0f, 7.5f, -10.0f}, {32.0f, 14.0f, -15.0f}, {-0.8f, 0.0f, -0.2f}, {-0.5f, 0.2f, 0.5f}, 15});
     // Watch volcano effects
-    keyframes.push_back({{32.0f, 14.0f, -15.0f}, {32.0f, 14.0f, -15.0f}, {-0.5f, 0.2f, 0.5f}, {-0.5f, 0.2f, 0.5f}, 8});
+    keyframes.push_back({{32.0f, 14.0f, -15.0f}, {32.0f, 14.0f, -15.0f}, {-0.5f, 0.2f, 0.5f}, {-0.6f, 0.2f, 0.4f}, 8});
     // Look towards ship
     keyframes.push_back({{32.0f, 14.0f, -15.0f}, {32.0f, 14.0f, -15.0f}, {-0.5f, 0.2f, 0.5f}, {-0.9f, 0.1f, -0.1f}, 3});
     keyframes.push_back({{32.0f, 14.0f, -15.0f}, {32.0f, 14.0f, -15.0f}, {-0.9f, 0.1f, -0.1f}, {-0.2f, 0.0f, -0.8f}, 3});
     // Swim towards ship
-    keyframes.push_back({{32.0f, 14.0f, -15.0f}, {42.0f, 8.5f, 19.0f}, {-0.2f, 0.0f, -0.8f}, {-0.2f, 0.0f, -0.8f}, 10});
+    keyframes.push_back({{32.0f, 14.0f, -15.0f}, {42.0f, 8.0f, 27.0f}, {-0.2f, 0.0f, -0.8f}, {-0.2f, 0.0f, -0.8f}, 10});
     // Swim through kelp forest
-    keyframes.push_back({{42.0f, 8.5f, 19.0f}, {60.0f, 7.2f, 49.5f}, {-0.2f, 0.0f, -0.8f}, {-0.2f, 0.0f, -0.8f}, 10});
+    keyframes.push_back({{42.0f, 8.0f, 27.0f}, {52.0f, 6.5f, 52.0f}, {-0.2f, 0.0f, -0.8f}, {-0.2f, 0.0f, -0.8f}, 8});
     // Look back at the kelp forest
-    keyframes.push_back({{60.0f, 7.2f, 49.5f}, {60.0f, 7.2f, 49.5f}, {-0.2f, 0.0f, -0.8f}, {0.5f, 0.0f, -0.5f}, 1});
-    keyframes.push_back({{60.0f, 7.2f, 49.5f}, {60.0f, 7.2f, 49.5f}, {0.5f, 0.0f, -0.5f}, {0.5f, 0.0f, 0.5f}, 1});
-    keyframes.push_back({{60.0f, 7.2f, 49.5f}, {60.0f, 7.2f, 49.5f}, {0.5f, 0.0f, 0.5f}, {0.5f, 0.0f, 0.5f}, 5});
+    keyframes.push_back({{52.0f, 6.5f, 52.0f}, {52.0f, 6.5f, 52.0f}, {-0.2f, 0.0f, -0.8f}, {0.5f, 0.0f, -0.5f}, 1});
+    keyframes.push_back({{52.0f, 6.5f, 52.0f}, {52.0f, 6.5f, 52.0f}, {0.5f, 0.0f, -0.5f}, {0.4f, 0.0f, 0.6f}, 1});
+    keyframes.push_back({{52.0f, 6.5f, 52.0f}, {52.0f, 6.5f, 52.0f}, {0.4f, 0.0f, 0.6f}, {0.4f, 0.0f, 0.6f}, 5});
     // Look towards ship
-    keyframes.push_back({{60.0f, 7.2f, 49.5f}, {60.0f, 7.2f, 49.5f}, {0.5f, 0.0f, 0.5f}, {-0.1f, 0.0f, 0.9f}, 2});
-    keyframes.push_back({{60.0f, 7.2f, 49.5f}, {60.0f, 7.2f, 49.5f}, {-0.1f, 0.0f, 0.9f}, {-0.7f, 0.0f, -0.3f}, 2});
+    keyframes.push_back({{52.0f, 6.5f, 52.0f}, {52.0f, 6.5f, 52.0f}, {0.4f, 0.0f, 0.6f}, {0.0f, 0.0f, 1.0f}, 2});
+    keyframes.push_back({{52.0f, 6.5f, 52.0f}, {52.0f, 6.5f, 52.0f}, {0.0f, 0.0f, 1.0f}, {-0.7f, 0.0f, -0.3f}, 2});
     // View ship
-    keyframes.push_back({{60.0f, 7.2f, 49.5f}, {60.0f, 13.0f, 52.5f}, {-0.7f, 0.0f, -0.3f}, {-0.8f, 0.3f, -0.2f}, 10});
+    keyframes.push_back({{52.0f, 6.5f, 52.0f}, {60.0f, 13.0f, 52.5f}, {-0.7f, 0.0f, -0.3f}, {-0.8f, 0.3f, -0.2f}, 10});
     keyframes.push_back({{60.0f, 13.0f, 52.5f}, {60.0f, 13.0f, 52.5f}, {-0.8f, 0.3f, -0.2f}, {-0.2f, 0.3f, -0.8f}, 7});
     // Return to kelp forest
-    keyframes.push_back({{60.0f, 13.0f, 52.5f}, {60.0f, 13.0f, 52.5f}, {-0.2f, 0.3f, -0.8f}, {0.5f, 0.0f, 0.5f}, 3});
+    keyframes.push_back({{60.0f, 13.0f, 52.5f}, {60.0f, 6.0f, 52.5f}, {-0.2f, 0.3f, -0.8f}, {0.4f, 0.0f, 0.6f}, 3});
     // Start returning to surface
-    keyframes.push_back({{60.0f, 13.0f, 52.5f}, {45.5f, 6.0f, 57.0f}, {0.5f, 0.0f, 0.5f}, {0.5f, 0.0f, 0.5f}, 10});
-    keyframes.push_back({{45.5f, 6.0f, 57.0f}, {25.0f, 7.5f, 27.5f}, {0.5f, 0.0f, 0.5f}, {0.6f, -0.2f, 0.4f}, 10});
+    keyframes.push_back({{60.0f, 6.0f, 52.5f}, {45.5f, 6.0f, 50.0f}, {0.4f, 0.0f, 0.6f}, {0.5f, 0.0f, 0.5f}, 8});
+    keyframes.push_back({{45.5f, 6.0f, 50.0f}, {25.0f, 7.5f, 27.5f}, {0.5f, 0.0f, 0.5f}, {0.6f, -0.2f, 0.4f}, 10});
     // Return to surface
     keyframes.push_back({{25.0f, 7.5f, 27.5f}, {-14.0f, 40.5f, 7.0f}, {0.6f, -0.2f, 0.4f}, {0.5f, -0.8f, 0.5f}, 10});
     keyframes.push_back({{-14.0f, 40.5f, 7.0f}, {-38.0f, 96.0f, -3.0f}, {0.5f, -0.8f, 0.5f}, {0.5f, -0.8f, 0.5f}, 10});
-    keyframes.push_back({{-38.0f, 96.0f, -3.0f}, {-38.0f, 96.0f, -3.0f}, {0.5f, -0.8f, 0.5f}, {-0.5f, 0.0f, -0.5f}, 4});
+    keyframes.push_back({{-38.0f, 96.0f, -3.0f}, {-38.0f, 96.0f, -3.0f}, {0.5f, -0.8f, 0.5f}, {0.0f, -0.4f, 1.0f}, 3});
+    keyframes.push_back({{-38.0f, 96.0f, -3.0f}, {-38.0f, 96.0f, -3.0f}, {0.5f, -0.4f, 0.5f}, {-0.5f, 0.0f, -0.5f}, 3});
+    keyframes.push_back({{-38.0f, 96.0f, -3.0f}, {-38.0f, 96.0f, -3.0f}, {-0.5f, 0.0f, -0.5f}, {-0.5f, 0.0f, -0.5f}, 3});
 }
 
 glm::vec3 Camera::cast(double u, double v) {

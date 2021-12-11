@@ -21,7 +21,6 @@
 #include "camera.h"
 #include "background.h"
 #include "static_object.h"
-#include "cube.h"
 #include "animated/whale/whale.h"
 #include "animated/foliage.h"
 #include "src/project/animated/shark.h"
@@ -67,8 +66,8 @@ private:
 		    float kelp_forrest_x = 35.0f;
 		    float kelp_forrest_z = 35.0f;
 		    float kelp_forrest_height = -1.65f;
-		    for (int i = 0; i < 10; i++) {
-			    for (int u = 0; u < 10; u++) {
+		    for (int i = 0; i < 15; i++) {
+			    for (int u = 0; u < 7; u++) {
 				    kelp_x_offset = normal_dist(generator) * 0.3f;
 				    kelp_z_offset = normal_dist(generator) * 0.3f;
 				    rand_kelp_height = rand() % 4 + 3;
@@ -140,20 +139,6 @@ private:
         auto seabed = std::make_unique<StaticObject>("objects/seabed.obj", "objects/sand.bmp", LIGHT_SHADER);
         seabed->scale = {1.5f, 1.0f, 1.5f};
         scene.objects.push_back(move(seabed));
-
-        auto axisX = std::make_unique<Cube>(glm::vec3{1, 0, 0});
-        auto axisY = std::make_unique<Cube>(glm::vec3{0, 1, 0});
-        auto axisZ = std::make_unique<Cube>(glm::vec3{0, 0, 1});
-
-        const float scaleMin = 0.1f;
-        const float scaleMax = 100.00f;
-
-        axisX->scale = {scaleMax, scaleMin, scaleMin};
-        axisY->scale = {scaleMin, scaleMax, scaleMin};
-        axisZ->scale = {scaleMin, scaleMin, scaleMax};
-        scene.objects.push_back(move(axisX));
-        scene.objects.push_back(move(axisY));
-        scene.objects.push_back(move(axisZ));
 
         printf("Generating coral cave...\n");
         auto cave = std::make_unique<StaticObject>("objects/cave.obj", "objects/rock_bg.bmp", LIGHT_SHADER);
@@ -264,7 +249,6 @@ private:
         scene.lights.push_back({{-1.9f, 5.2f, -3.62f}, {0.0f, 1.0f, 0.0f}, 0.7, 1.8});
         scene.lights.push_back({{-6.88f, 8.86f, -5.66f}, {0.0f, 0.0f, 1.0f}, 0.7, 1.8});
         scene.lights.push_back({{-3.5f, 5.2f, -7.14f}, {0.6f, 0.0f, 1.0f}, 0.7, 1.8});
-        scene.lights.push_back({{0, 25, 0}, {1.0f, 1.0f, 1.0f}, 0.07, 0.017});
 
         printf("Generating whale, boids and foliage...\n");
         auto whale = std::make_unique<Whale>();
