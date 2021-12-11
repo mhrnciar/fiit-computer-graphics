@@ -105,13 +105,10 @@ private:
 	    volcano_lava->rotation = unified_volcano_rotation;
 	    scene.objects.push_back(move(volcano_lava));
 
-
-
 	    glm::vec3 p_vel = {0.5f,5.5f,-0.5f};
 	    glm::vec3 p_scale = {7.0f,5.0f ,7.0f};
 	    auto p_emitter = std::make_unique<ParticleEmitter>(unified_volcano_position, "smoke_tex.png", 3.0f, 1, p_vel, p_scale, 0.4f, 10.0f);
 	    scene.objects.push_back(move(p_emitter));
-
 
 	    // Volcano lights
         scene.lights.push_back({{50.0f, 8.0f, -30.0f}, {1.0f, 0.0f, 0.0f}, 0.045, 0.0075});
@@ -475,12 +472,12 @@ public:
             auto quadProjectionMatrix = glm::perspective((ppgso::PI / 180.f) * 60.0f, 1.0f, 0.1f, 10.0f);
 
             // Create view matrix (translate camera backwards a bit, so we can see the geometry)
-            auto quadViewMatrix = glm::translate(glm::mat4{1.0f}, {0.0f, 0.0f, -3.0f});
+            auto quadViewMatrix = glm::translate(glm::mat4{1.0f}, {0.0f, 0.0f, -1.7f});
 
             // Animate rotation of the quad
             auto quadModelMatrix = glm::mat4{1.0f};
 
-            if (scene.camera->cameraPosition.y > 87) {
+            if (scene.camera->cameraPosition.y > 88) {
                 // Set shader inputs
                 grayQuadShader.use();
                 grayQuadShader.setUniform("ProjectionMatrix", quadProjectionMatrix);

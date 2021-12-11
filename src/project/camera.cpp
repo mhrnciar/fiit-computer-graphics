@@ -94,32 +94,36 @@ void Camera::initCameraAnimation() {
     // Look left
     keyframes.push_back({{-46.0f, 60.0f, -20.0f}, {-46.0f, 60.0f, -20.0f}, {-0.5f, 0.5f, -0.5f}, {-0.75f, 0.5f, -0.25f}, 3});
     // Keep moving down
-    keyframes.push_back({{-46.0f, 60.0f, -20.0f}, {-33.0f, 33.0f, -4.0f}, {-0.75f, 0.5f, -0.25f}, {-0.9f, 0.2f, -0.1f}, 10});
+    keyframes.push_back({{-46.0f, 60.0f, -20.0f}, {-33.0f, 33.0f, -5.0f}, {-0.75f, 0.5f, -0.25f}, {-0.9f, 0.5f, -0.1f}, 10});
     // Get closer to cave
-    keyframes.push_back({{-33.0f, 33.0f, -4.0f}, {-25.0f, 10.0f, -5.0f}, {-0.9f, 0.2f, -0.1f}, {-0.9f, 0, 0.1f}, 6});
+    keyframes.push_back({{-33.0f, 33.0f, -5.0f}, {-25.0f, 10.0f, -5.0f}, {-0.9f, 0.5f, -0.1f}, {-0.9f, 0.0f, 0.1f}, 6});
     // Swim through cave
-    keyframes.push_back({{-25.0f, 10.0f, -5.0f}, {-16.0f, 7.0f, -6.0f}, {-0.9f, 0, 0.1f}, {-1.0f, 0.0f, 0.0f}, 6});
+    keyframes.push_back({{-25.0f, 10.0f, -5.0f}, {-16.0f, 7.0f, -6.0f}, {-0.9f, 0.0f, 0.1f}, {-1.0f, 0.0f, 0.0f}, 6});
     // Look at corals on left
     keyframes.push_back({{-16.0f, 7.0f, -6.0f}, {-12.0f, 7.0f, -5.0f}, {-1.0f, 0.0f, 0.0f}, {-0.8f, 0.0f, 0.2f}, 3});
     // Look at corals on right
     keyframes.push_back({{-12.0f, 7.0f, -5.0f}, {-10.0f, 7.0f, -6.0f}, {-0.8f, 0.0f, 0.2f}, {-0.8f, 0.0f, -0.2f}, 3});
     // Come out of cave
-    keyframes.push_back({{-10.0f, 7.0f, -6.0f}, {-3.0f, 7.0f, -6.5f}, {-0.8f, 0.0f, -0.2f}, {-1.0f, 0.0f, 0.0f}, 3});
+    keyframes.push_back({{-10.0f, 7.0f, -6.0f}, {-2.0f, 7.0f, -7.0f}, {-0.8f, 0.0f, -0.2f}, {-0.8f, 0.0f, -0.2f}, 3});
     // Notice fish
-    keyframes.push_back({{-3.0f, 7.0f, -6.5f}, {-3.0f, 7.0f, -6.5f}, {-1.0f, 0.0f, 0.0f}, {-0.5f, 0.0f, -0.5f}, 3});
+    keyframes.push_back({{-2.0f, 7.0f, -7.0f}, {-2.0f, 7.5f, -7.0f}, {-0.8f, 0.0f, -0.2f}, {-0.8f, 0.0f, -0.2f}, 1});
+    keyframes.push_back({{-2.0f, 7.5f, -7.0f}, {-2.0f, 7.5f, -7.0f}, {-0.8f, 0.0f, -0.2f}, {-0.5f, 0.0f, -0.5f}, 1});
+    keyframes.push_back({{-2.0f, 7.5f, -7.0f}, {-2.0f, 7.5f, -7.0f}, {-0.5f, 0.0f, -0.5f}, {-0.8f, 0.0f, -0.2f}, 1});
     // Look towards the cave
-    keyframes.push_back({{-3.0f, 7.0f, -6.5f}, {-3.0f, 7.0f, -6.5f}, {-0.5f, 0.0f, -0.5f}, {-0.2f, 0.0f, -0.8f}, 3});
+    keyframes.push_back({{-2.0f, 7.5f, -7.0f}, {-2.0f, 7.5f, -8.0f}, {-0.8f, 0.0f, -0.2f}, {0.8f, 0.0f, -0.2f}, 3});
     // Move out of sharks way
-    keyframes.push_back({{-3.0f, 7.0f, -6.5f}, {-2.5f, 7.0f, -8.0f}, {-0.2f, 0.0f, -0.8f}, {-0.2f, 0.0f, -0.8f}, 3});
+    keyframes.push_back({{-2.0f, 7.5f, -8.0f}, {-1.0f, 7.5f, -10.0f}, {0.8f, 0.0f, -0.2f}, {-0.5f, 0.0f, -0.5f}, 2});
     // Watch chase
-    keyframes.push_back({{-2.5f, 7.0f, -8.0f}, {1.5f, 7.5f, -10.0f}, {-0.2f, 0.0f, -0.8f}, {0.4f, 0.0f, -0.6f}, 3});
-    keyframes.push_back({{1.5f, 7.5f, -10.0f}, {1.5f, 7.5f, -10.0f}, {0.4f, 0.0f, -0.6f}, {-0.3f, 0.0f, -0.7f}, 3});
-    keyframes.push_back({{1.5f, 7.5f, -10.0f}, {1.5f, 7.5f, -10.0f}, {-0.3f, 0.0f, -0.7f}, {-0.5, 0.0f, -0.5f}, 3});
-    keyframes.push_back({{1.5f, 7.5f, -10.0f}, {1.5f, 7.5f, -10.0f}, {-0.5f, 0.0f, -0.5f}, {-0.8f, 0.0f, -0.2f}, 3});
+    keyframes.push_back({{-1.0f, 7.5f, -10.0f}, {-1.0f, 7.5f, -10.0f}, {-0.5f, 0.0f, -0.5f}, {-0.7f, -0.2f, -0.3f}, 2});
+    keyframes.push_back({{-1.0f, 7.5f, -10.0f}, {-1.0f, 7.5f, -10.0f}, {-0.7f, -0.2f, -0.3f}, {-0.7f, -0.2f, -0.3f}, 2});
+    keyframes.push_back({{-1.0f, 7.5f, -10.0f}, {-1.0f, 7.5f, -10.0f}, {-0.7f, -0.2f, -0.3f}, {-1.0f, -0.2f, 0.0f}, 3.5});
+    keyframes.push_back({{-1.0f, 7.5f, -10.0f}, {-1.0f, 7.5f, -10.0f}, {-1.0f, -0.2f, 0.0f}, {0.0f, -1.0f, 1.0f}, 3.5});
+    keyframes.push_back({{-1.0f, 7.5f, -10.0f}, {-1.0f, 7.5f, -10.0f}, {0.0f, -1.0f, 1.0f}, {0.8f, -0.8f, -0.2f}, 2});
     // Continue towards volcano
-    keyframes.push_back({{1.5f, 7.5f, -10.0f}, {32.0f, 14.0f, -15.0f}, {-0.8f, 0.0f, -0.2f}, {-0.5f, 0.2f, 0.5f}, 15});
+    keyframes.push_back({{-1.0f, 7.5f, -10.0f}, {-1.0f, 7.5f, -10.0f}, {0.8f, -0.8f, -0.2f}, {-0.8f, 0.0f, -0.2f}, 2});
+    keyframes.push_back({{-1.0f, 7.5f, -10.0f}, {32.0f, 14.0f, -15.0f}, {-0.8f, 0.0f, -0.2f}, {-0.5f, 0.2f, 0.5f}, 15});
     // Watch volcano effects
-    keyframes.push_back({{32.0f, 14.0f, -15.0f}, {32.0f, 14.0f, -15.0f}, {-0.5f, 0.2f, 0.5f}, {-0.7f, 0.2f, 0.3f}, 8});
+    keyframes.push_back({{32.0f, 14.0f, -15.0f}, {32.0f, 14.0f, -15.0f}, {-0.5f, 0.2f, 0.5f}, {-0.5f, 0.2f, 0.5f}, 8});
     // Look towards ship
     keyframes.push_back({{32.0f, 14.0f, -15.0f}, {32.0f, 14.0f, -15.0f}, {-0.5f, 0.2f, 0.5f}, {-0.9f, 0.1f, -0.1f}, 3});
     keyframes.push_back({{32.0f, 14.0f, -15.0f}, {32.0f, 14.0f, -15.0f}, {-0.9f, 0.1f, -0.1f}, {-0.2f, 0.0f, -0.8f}, 3});

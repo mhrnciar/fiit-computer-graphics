@@ -11,31 +11,34 @@ Shark::Shark() {
     if (!mesh) mesh = std::make_unique<ppgso::Mesh>("animals/shark.obj");
     if (!shader) shader = std::make_unique<ppgso::Shader>(light_vert_glsl, light_frag_glsl);
 
-    keyframes.push_back({{0, 0, 0}, {0, 0, 0}, {0, 0, ppgso::PI/2}, {0, 0, ppgso::PI/2}, 59});
-    keyframes.push_back({{0, 0, 0}, {-15.0f, 7.0f, -6.0f}, {0, 0, ppgso::PI/2}, {0, 0, ppgso::PI/2}, 0.001f});
-    keyframes.push_back({{-15.0f, 6.5f, -6.0f}, {5.0f, 6.5f, -6.0f}, {0, 0, ppgso::PI/2}, {0, 0, ppgso::PI/2}, 5});
-    keyframes.push_back({{5.0f, 6.5f, -6.0f}, {5.0f, 6.5f, -6.0f}, {0, 0, ppgso::PI/2}, {0, 0, ppgso::PI/2}, 5});
-    keyframes.push_back({{5.0f, 6.5f, -6.0f}, {5.0f, 6.5f, -6.0f}, {0, 0, ppgso::PI/2}, {0, 0, ppgso::PI/2}, 5});
-    keyframes.push_back({{5.0f, 6.5f, -6.0f}, {5.0f, 6.5f, -6.0f}, {0, 0, ppgso::PI/2}, {0, 0, ppgso::PI/2}, 5});
+    keyframes.push_back({{0, 0, 0}, {0, 0, 0}, {0, 0, ppgso::PI/2}, {0, 0, ppgso::PI/2}, 64});
+    keyframes.push_back({{0, 0, 0}, {-25.0f, 7.0f, -6.0f}, {0, 0, ppgso::PI/2}, {0, 0, ppgso::PI/2}, 0.001f});
+    keyframes.push_back({{-9.0f, 7.0f, -6.0f}, {7.0f, 7.0f, -6.0f}, {0, 0, ppgso::PI/2}, {0, 0, ppgso::PI/2}, 4.5});
+    keyframes.push_back({{7.0f, 7.0f, -6.0f}, {20.0f, 15.0f, -6.0f}, {0, 0, ppgso::PI/2}, {-ppgso::PI/4, 0, ppgso::PI/2}, 2});
+    keyframes.push_back({{20.0f, 15.0f, -6.0f}, {20.0f, 18.0f, 0.0f}, {-ppgso::PI/4, 0, ppgso::PI/2}, {0, 0, 0}, 1});
+    keyframes.push_back({{20.0f, 18.0f, 0.0f}, {32.0f, 25.0f, 6.0f}, {0, 0, 0}, {-ppgso::PI/4, 0, ppgso::PI/2}, 1});
+    keyframes.push_back({{32.0f, 25.0f, 6.0f}, {38.0f, 28.0f, 0.0f}, {-ppgso::PI/4, 0, ppgso::PI/2}, {0, 0, ppgso::PI}, 1.5});
+    keyframes.push_back({{38.0f, 28.0f, 0.0f}, {38.0f, 28.0f, -12.0f}, {0, 0, ppgso::PI}, {0, 0, ppgso::PI}, 1});
+    keyframes.push_back({{38.0f, 28.0f, -12.0f}, {28.0f, 28.0f, -16.0f}, {0, 0, ppgso::PI}, {0, 0, -ppgso::PI/2}, 1.5});
+    keyframes.push_back({{28.0f, 28.0f, -16.0f}, {-20.0f, 28.0f, -16.0f}, {0, 0, -ppgso::PI/2}, {0, 0, -ppgso::PI/2}, 4});
+    keyframes.push_back({{-20.0f, 28.0f, -16.0f}, {-24.0f, 28.0f, -12.0f}, {0, 0, -ppgso::PI/2}, {0, 0, 0}, 1});
+    keyframes.push_back({{-24.0f, 28.0f, -12.0f}, {-24.0f, 28.0f, -5.0f}, {0, 0, 0}, {0, 0, 0}, 2});
 }
 
 bool Shark::update(Scene &scene, float dt) {
     static int count = 0;
     if (!keyframes.empty()) {
-        position = keyframes[count].interpolatePosition();
-        rotation = keyframes[count].interpolateRotation();
-        scale = keyframes[count].interpolateScale();
+        modelMatrix = keyframes[count].interpolateModelMatrix();
 
         keyframes[count].currTime += dt;
         if (keyframes[count].currTime > keyframes[count].maxTime) {
             keyframes[count].currTime = 0;
             count++;
             if (count >= keyframes.size())
-                count = 0;
+                return false;
         }
     }
 
-    generateModelMatrix();
     return true;
 }
 
