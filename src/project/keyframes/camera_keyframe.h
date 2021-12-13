@@ -20,7 +20,16 @@ public:
     glm::vec3 startFront{0, 0, 0};
     glm::vec3 endFront{0, 0, 0};
 
+    /*!
+     * Interpolate position using lerp
+     * @return  interpolated position
+     */
     glm::vec3 interpolatePosition() override;
+
+    /*!
+     * Interpolate looking direction using lerp
+     * @return  interpolated look direction
+     */
     glm::vec3 interpolateLookAt();
 };
 

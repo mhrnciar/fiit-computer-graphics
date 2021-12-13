@@ -47,6 +47,7 @@ StaticObject::StaticObject(const std::string &mesh_file, const std::string &tex_
 bool StaticObject::update(Scene &scene, float dt) {
     generateModelMatrix();
 
+    // Update children
     for (auto c : children) {
         c->update(scene, dt);
     }
@@ -60,11 +61,13 @@ void StaticObject::render(Scene &scene) {
     shader->setUniform("viewPos", scene.camera->cameraPosition);
     shader->setUniform("numLights", scene.lights.size());
 
+    // Directional light
     shader->setUniform("dirLight.direction", scene.lightDirection);
     shader->setUniform("dirLight.ambient", scene.lightAmbient);
     shader->setUniform("dirLight.diffuse", scene.lightDiffuse);
     shader->setUniform("dirLight.specular", scene.lightSpecular);
 
+    // Point lights
     for (unsigned long i = 0; i < scene.lights.size(); i++) {
         shader->setUniform(setLightProperty("position", i), scene.lights[i].position);
         shader->setUniform(setLightProperty("color", i), scene.lights[i].color);
@@ -93,6 +96,7 @@ void StaticObject::render(Scene &scene) {
     shader->setUniform("material.shininess", shininess);
     mesh->render();
 
+    // Render children
     for(auto & i : children) {
         i->render(scene);
     }

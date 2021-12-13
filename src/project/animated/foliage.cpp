@@ -6,6 +6,7 @@ Foliage::Foliage(float xMin, float xMax, float zMin, float zMax) {
     float posx, posz;
     int size = textures.size() - 1;
 
+    // Generate 400 bezier surfaces representing algae and pass random texture from list to them
     for (int i = 0; i < 400; i++) {
         do {
             posx = glm::linearRand(xMin, xMax);

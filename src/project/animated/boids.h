@@ -14,12 +14,12 @@ private:
 
 public:
     /*!
-     * Create a new static object
+     * Create a new Boid
      */
     Boids(glm::vec3 pos, glm::vec3 rot);
 
     /*!
-     * Update static object
+     * Update Boid
      * @param scene Scene to update
      * @param dt Time delta
      * @return true to delete the object
@@ -27,16 +27,18 @@ public:
     bool update(Scene &scene, float dt) override;
 
     /*!
-     * Render static object
+     * Render Boid
      * @param scene Scene to render in
      */
     void render(Scene &scene) override;
 
+    // Movement vector of Boid
     glm::vec3 vector{0,0,0};
     float speed = 0.01f;
     bool separated = false;
 
 private:
+    // List of fish in Boid
     std::list< std::unique_ptr<BoidsFish> > container;
 };
 

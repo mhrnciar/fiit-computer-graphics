@@ -13,12 +13,12 @@ private:
 
 public:
     /*!
-     * Create a new static object
+     * Create a new whale back
      */
     WhaleBack();
 
     /*!
-     * Update static object
+     * Update whale back
      * @param scene Scene to update
      * @param dt Time delta
      * @return true to delete the object
@@ -26,7 +26,7 @@ public:
     bool update(Scene &scene, float dt) override;
 
     /*!
-     * Render static object
+     * Render whale back
      * @param scene Scene to render in
      */
     void render(Scene &scene) override;

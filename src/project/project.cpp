@@ -1,10 +1,11 @@
-// Example gl_scene
-// - Introduces the concept of a dynamic scene of objects
-// - Uses abstract object interface for Update and Render steps
-// - Creates a simple game scene with Player, Asteroid and Space objects
-// - Contains a generator object that does not render but adds Asteroids to the scene
-// - Some objects use shared resources and all object deallocations are handled automatically
-// - Controls: LEFT, RIGHT, "R" to reset, SPACE to fire
+/*
+ * Project - Underwater World
+ * Matej Hrnciar, Leonard Puskac
+ *
+ * After start of program, camera is set to allow free movement. After pressing C, animation starts during which
+ * keyboard and mouse input is ignored. Animation can be interrupted by pressing C again or paused by pressing P.
+ * Scene cen be reset by pressing R
+ */
 
 #include <iostream>
 #include <map>
@@ -67,14 +68,19 @@ private:
 	    std::default_random_engine generator;
 	    std::normal_distribution<float> normal_dist;
 
-        bool kelp_forrest_enabled = true;
-	    if (kelp_forrest_enabled) {
+        bool kelp_forest_enabled = true;
+	    if (kelp_forest_enabled) {
 		    float kelp_x_offset, kelp_z_offset;
 		    int rand_kelp_height;
+
+		    // Staring location of kelp forest
 		    float kelp_forrest_x = 35.0f;
 		    float kelp_forrest_z = 35.0f;
 		    float kelp_forrest_height = -1.65f;
+
+		    // width
 		    for (int i = 0; i < 15; i++) {
+		        // length
 			    for (int u = 0; u < 7; u++) {
 				    kelp_x_offset = normal_dist(generator) * 0.3f;
 				    kelp_z_offset = normal_dist(generator) * 0.3f;
@@ -96,7 +102,7 @@ private:
 		    }
 	    }
 	    else {
-	    	printf("Kelp forrest disabled!\n");
+	    	printf("Kelp forest disabled!\n");
 	    }
 
 	    glm::vec3 unified_volcano_position = {50.0f, -2.3f, -30.0f};
@@ -297,6 +303,7 @@ private:
     }
 
 public:
+    // Postprocessing filters
     ppgso::Shader convQuadShader = {convolution_vert_glsl, convolution_frag_glsl};
     ppgso::Shader grayQuadShader = {grayscale_vert_glsl, grayscale_frag_glsl};
     ppgso::Mesh quadMesh = {"quad.obj"};
@@ -355,6 +362,9 @@ public:
         initScene();
     }
 
+    /*!
+     * Generate objects that are animated using keyframes so the timing with camera animation is right
+     */
     void initAnimation() {
         auto shark = std::make_unique<Shark>();
         scene.objects.push_back(move(shark));
@@ -485,6 +495,7 @@ public:
             // Animate rotation of the quad
             auto quadModelMatrix = glm::mat4{1.0f};
 
+            // If camera is above water, use grayscale filter
             if (scene.camera->cameraPosition.y > 88) {
                 // Set shader inputs
                 grayQuadShader.use();
@@ -493,6 +504,7 @@ public:
                 grayQuadShader.setUniform("ModelMatrix", quadModelMatrix);
                 grayQuadShader.setUniform("Texture", quadTexture);
             }
+            // Otherwise use convolution gaussian blur filter
             else {
                 // Set shader inputs
                 convQuadShader.use();

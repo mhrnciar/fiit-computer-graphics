@@ -14,6 +14,7 @@ Camera::Camera(float fov, float ratio, float near, float far) {
 
 void Camera::update(Scene &scene, float dt) {
     //printf("%lf %lf %lf\n", cameraPosition.x, cameraPosition.y, cameraPosition.z);
+    // If keyframes haven't been loaded, allow free movement
     if (keyframes.empty()) {
         float cameraSpeed = 10 * dt;
         if(scene.keyboard[GLFW_KEY_W]) {
@@ -27,8 +28,10 @@ void Camera::update(Scene &scene, float dt) {
         }
         viewMatrix = lookAt(cameraPosition, cameraPosition-cameraFront, cameraUp);
     }
+    // Follow keyframe animation
     else {
         static int count = 0;
+        // Interpolate position and look direction
         cameraPosition = keyframes[count].interpolatePosition();
         cameraFront = keyframes[count].interpolateLookAt();
         viewMatrix = lookAt(cameraPosition, cameraPosition-cameraFront, cameraUp);
@@ -37,6 +40,8 @@ void Camera::update(Scene &scene, float dt) {
         if (keyframes[count].currTime > keyframes[count].maxTime) {
             keyframes[count].currTime = 0;
             count++;
+
+            // Return to beginning
             if (count >= keyframes.size())
                 count = 0;
         }

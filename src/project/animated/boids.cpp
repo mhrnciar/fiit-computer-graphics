@@ -67,6 +67,7 @@ bool Boids::update(Scene &scene, float dt) {
 
     time += dt;
 
+    // Collision with camera
     if (distance(scene.camera->cameraPosition, position) < 10.0f && !separated) {
         separated = true;
 
@@ -84,11 +85,13 @@ bool Boids::update(Scene &scene, float dt) {
         }
         time = 0;
     }
+    // Erratic movement of every fish separate
     else if (time > 1 && separated) {
         for (auto &c : container) {
             c->rotation.x += glm::linearRand(-ppgso::PI/4, ppgso::PI/4);
             c->rotation.z += glm::linearRand(-ppgso::PI/4, ppgso::PI/4);
 
+            // Avoid seabed and water surface
             if (c->position.y < 10) {
                 c->rotation.x = -ppgso::PI/4;
             }
@@ -96,10 +99,12 @@ bool Boids::update(Scene &scene, float dt) {
                 c->rotation.x = ppgso::PI/4;
             }
 
+            // Avoid coral cave
             if(c->position.x > -13 && c->position.x < 0 && c->position.z > -15 && c->position.z < 10) {
                 c->rotation.z += ppgso::PI/2;
             }
 
+            // Prevent flipping over
             if (c->rotation.x > ppgso::PI/2) {
                 c->rotation.x -= ppgso::PI/4;
             }
@@ -107,6 +112,7 @@ bool Boids::update(Scene &scene, float dt) {
                 c->rotation.x += ppgso::PI/4;
             }
 
+            // Collision between two fish from Boid
             for (auto &d : container) {
                 if (c == d)
                     continue;
@@ -123,10 +129,13 @@ bool Boids::update(Scene &scene, float dt) {
         }
         time = 0;
     }
+    // Change movement of whole Boid every 3 seconds
     else if (time > 3 && !separated) {
+        // Calculate new rotation
         rotation.x += glm::linearRand(-ppgso::PI/4, ppgso::PI/4);
         rotation.z += glm::linearRand(-ppgso::PI/4, ppgso::PI/4);
 
+        // Perform corrections
         if (position.y < 10) {
             rotation.x = -ppgso::PI/4;
         }
@@ -141,6 +150,7 @@ bool Boids::update(Scene &scene, float dt) {
             rotation.x += ppgso::PI/4;
         }
 
+        // From rotations, calculate movement vector
         vector.x = sin(rotation.z);
         vector.y = -sin(rotation.x);
         vector.z = cos(rotation.z);
@@ -155,6 +165,7 @@ bool Boids::update(Scene &scene, float dt) {
 
         time = 0;
     }
+    // Update Boid
     else {
         position += vector * speed;
 

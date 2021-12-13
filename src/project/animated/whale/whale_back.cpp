@@ -21,6 +21,7 @@ WhaleBack::WhaleBack() {
 bool WhaleBack::update(Scene &scene, float dt) {
     auto time = (float) glfwGetTime();
 
+    // Opposite rotation from head
     rotation.x = -0.2f * sin(time);
     generateModelMatrix();
 

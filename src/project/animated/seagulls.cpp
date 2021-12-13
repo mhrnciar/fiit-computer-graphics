@@ -13,6 +13,7 @@ Seagulls::Seagulls() {
 }
 
 bool Seagulls::update(Scene &scene, float dt) {
+    // Animate only when camera is above water
     if (scene.camera->cameraPosition.y > 87) {
         rotation.z += dt;
     }

@@ -69,7 +69,6 @@ set(PPGSO_SHADER_SRC
         shader/texture_vert.glsl shader/texture_frag.glsl
         shader/light_vert.glsl shader/light_frag.glsl
         shader/water_surface_vert.glsl shader/water_surface_frag.glsl
-        shader/shadowmap_vert.glsl shader/shadowmap_frag.glsl
         shader/grayscale_vert.glsl shader/grayscale_frag.glsl
         )
 add_resources(shaders ${PPGSO_SHADER_SRC})
@@ -191,7 +190,6 @@ add_executable(project
         src/project/object.cpp
         src/project/scene.cpp
         src/project/camera.cpp
-        src/project/cube.cpp
         src/project/static_object.cpp
         src/project/animated/algae.cpp
         src/project/light.cpp

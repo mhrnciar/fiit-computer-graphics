@@ -13,12 +13,12 @@ private:
 
 public:
     /*!
-     * Create a new static object
+     * Generate algae in passed boundaries
      */
     Foliage(float xMin, float xMax, float zMin, float zMax);
 
     /*!
-     * Update static object
+     * Update foliage
      * @param scene Scene to update
      * @param dt Time delta
      * @return true to delete the object
@@ -26,13 +26,16 @@ public:
     bool update(Scene &scene, float dt) override;
 
     /*!
-     * Render static object
+     * Render foliage
      * @param scene Scene to render in
      */
     void render(Scene &scene) override;
 
 private:
+    // List of generated algae
     std::list< std::unique_ptr<Algae> > container;
+
+    // List of algae textures to choose from
     std::vector< std::string > textures = {"foliage/green_algae1.png", "foliage/green_algae2.png", "foliage/green_algae3.png",
                                            "foliage/green_algae4.png", "foliage/green_algae5.png", "foliage/green_algae6.png",
                                            "foliage/green_algae7.png", "foliage/green_algae8.png", "foliage/red_algae1.png",

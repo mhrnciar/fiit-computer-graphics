@@ -55,6 +55,12 @@ public:
      */
     virtual void addChild(Object *s) {};
 
+    /*!
+     * Create string to pass attributes of one point light to shader
+     * @param propertyName  name of the attribute in shader
+     * @param lightIndex    index of point light
+     * @return              string passing attribute to shader
+     */
     std::string setLightProperty(const char* propertyName, size_t lightIndex);
 
     // Object properties

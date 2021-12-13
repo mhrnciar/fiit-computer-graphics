@@ -31,11 +31,34 @@ public:
     glm::mat4 startScaleMatrix{1.0f};
     glm::mat4 endScaleMatrix{1.0f};
 
+    /*!
+     * Interpolate position using lerp
+     * @return  interpolated position
+     */
     glm::vec3 interpolatePosition() override;
+
+    /*!
+     * Interpolate position using smoothstep
+     * @return  interpolated position
+     */
     glm::vec3 interpolatePositionSmoothstep() override;
+
+    /*!
+     * Interpolate rotation using slerp
+     * @return  interpolated rotation
+     */
     glm::vec3 interpolateRotation();
+
+    /*!
+     * Interpolate scale using lerp
+     * @return  interpolated scale
+     */
     glm::vec3 interpolateScale();
 
+    /*!
+     * Interpolate model matrix using glm::interpolate
+     * @return  interpolated model matrix
+     */
     glm::mat4 interpolateModelMatrix();
 };
 

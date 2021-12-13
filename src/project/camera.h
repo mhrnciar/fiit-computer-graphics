@@ -44,6 +44,9 @@ public:
      */
     void updateDir(class Scene &scene);
 
+    /*!
+     * Add camera keyframes to initialize camera animation
+     */
     void initCameraAnimation();
 
     /*!

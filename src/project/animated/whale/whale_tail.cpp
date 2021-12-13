@@ -20,6 +20,7 @@ WhaleTail::WhaleTail() {
 bool WhaleTail::update(Scene &scene, float dt) {
     auto time = (float) glfwGetTime();
 
+    // Opposite rotation from back
     rotation.x = 0.2f * sin(time);
     generateModelMatrix();
 

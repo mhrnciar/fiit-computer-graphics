@@ -13,12 +13,12 @@ private:
 
 public:
     /*!
-     * Create a new static object
+     * Create a new shark object
      */
     Shark();
 
     /*!
-     * Update static object
+     * Update shark object
      * @param scene Scene to update
      * @param dt Time delta
      * @return true to delete the object
@@ -26,7 +26,7 @@ public:
     bool update(Scene &scene, float dt) override;
 
     /*!
-     * Render static object
+     * Render shark object
      * @param scene Scene to render in
      */
     void render(Scene &scene) override;
