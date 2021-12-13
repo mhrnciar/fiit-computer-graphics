@@ -22,9 +22,20 @@ public:
     glm::vec3 startScale;
     glm::vec3 endScale;
 
+    glm::mat4 startModelMatrix{1.0f};
+    glm::mat4 endModelMatrix{1.0f};
+    glm::mat4 startTranslationMatrix{1.0f};
+    glm::mat4 endTranslationMatrix{1.0f};
+    glm::mat4 startRotationMatrix{1.0f};
+    glm::mat4 endRotationMatrix{1.0f};
+    glm::mat4 startScaleMatrix{1.0f};
+    glm::mat4 endScaleMatrix{1.0f};
+
     glm::vec3 interpolatePosition() override;
     glm::vec3 interpolatePositionSmoothstep() override;
     glm::vec3 interpolateRotation();
     glm::vec3 interpolateScale();
+
+    glm::mat4 interpolateModelMatrix();
 };
 

@@ -13,24 +13,26 @@
 #include <ppgso/ppgso.h>
 #include <shaders/convolution_vert_glsl.h>
 #include <shaders/convolution_frag_glsl.h>
+#include <shaders/grayscale_vert_glsl.h>
+#include <shaders/grayscale_frag_glsl.h>
 #include <random>
 
 #include "scene.h"
 #include "camera.h"
 #include "background.h"
 #include "static_object.h"
-#include "cube.h"
 #include "animated/whale/whale.h"
 #include "animated/foliage.h"
-#include "src/project/animated/shark.h"
-#include "src/project/animated/fish_chased.h"
-#include "src/project/animated/boids.h"
+#include "animated/shark.h"
+#include "animated/fish_chased.h"
+#include "animated/boids.h"
+#include "animated/seagulls.h"
 #include "water_surface.h"
 #include "kelp.h"
 #include "particle.h"
 #include "particle_emitter.h"
 
-#define FILTER false
+#define FILTER true
 
 const unsigned int SIZEW = 1280;
 const unsigned int SIZEH = 720;
@@ -58,7 +60,7 @@ private:
         scene.objects.clear();
 
         // Create a camera
-        auto camera = std::make_unique<Camera>(60.0f, (float)SIZEW/(float)SIZEH, 0.1f, 400.0f);
+        auto camera = std::make_unique<Camera>(60.0f, 1.0f, 0.1f, 400.0f);
         scene.camera = move(camera);
 
         printf("\nGenerating kelp forest...\n");
@@ -72,21 +74,21 @@ private:
 		    float kelp_forrest_x = 35.0f;
 		    float kelp_forrest_z = 35.0f;
 		    float kelp_forrest_height = -1.65f;
-		    for (int i = 0; i < 20; i++) {
-			    for (int u = 0; u < 5; u++) {
+		    for (int i = 0; i < 15; i++) {
+			    for (int u = 0; u < 7; u++) {
 				    kelp_x_offset = normal_dist(generator) * 0.3f;
 				    kelp_z_offset = normal_dist(generator) * 0.3f;
 				    rand_kelp_height = rand() % 4 + 3;
-				
+
 				    float sf = randfloat(0.25, 0.75f);
-				    
+
 				    auto kelp = std::make_unique<Kelp>("seaweed_tex.png", rand_kelp_height, 4 * sf);
 				    kelp->position = {
 						    kelp_forrest_x + (i * 1.5f) + kelp_x_offset,
 						    kelp_forrest_height,
 						    kelp_forrest_z + (u * 1.5f) + kelp_z_offset
 				    };
-				    
+
 				    kelp->scale = {sf, sf, sf};
 				    kelp->create_children();
 				    scene.objects.push_back(move(kelp));
@@ -114,8 +116,6 @@ private:
 	    volcano_lava->rotation = unified_volcano_rotation;
 	    scene.objects.push_back(move(volcano_lava));
 
-
-
 	    glm::vec3 p_vel = {0.5f,5.5f,-0.5f};
 	    glm::vec3 p_scale = {7.0f,5.0f ,7.0f};
 	    auto p_emitter = std::make_unique<ParticleEmitter>(unified_volcano_position,
@@ -128,7 +128,6 @@ private:
 														10.0f,
 														1.0f);
 	    scene.objects.push_back(move(p_emitter));
-
 
 	    // Volcano lights
         scene.lights.push_back({{50.0f, 8.0f, -30.0f}, {1.0f, 0.0f, 0.0f}, 0.045, 0.0075});
@@ -161,19 +160,9 @@ private:
         seabed->scale = {1.5f, 1.0f, 1.5f};
         scene.objects.push_back(move(seabed));
 
-        auto axisX = std::make_unique<Cube>(glm::vec3{1, 0, 0});
-        auto axisY = std::make_unique<Cube>(glm::vec3{0, 1, 0});
-        auto axisZ = std::make_unique<Cube>(glm::vec3{0, 0, 1});
-
-        const float scaleMin = 0.1f;
-        const float scaleMax = 100.00f;
-
-        axisX->scale = {scaleMax, scaleMin, scaleMin};
-        axisY->scale = {scaleMin, scaleMax, scaleMin};
-        axisZ->scale = {scaleMin, scaleMin, scaleMax};
-        scene.objects.push_back(move(axisX));
-        scene.objects.push_back(move(axisY));
-        scene.objects.push_back(move(axisZ));
+        auto seagulls = std::make_unique<Seagulls>();
+        seagulls->position = {0, 100, 0};
+        scene.objects.push_back(move(seagulls));
 
         printf("Generating coral cave...\n");
         auto cave = std::make_unique<StaticObject>("objects/cave.obj", "objects/rock_bg.bmp", LIGHT_SHADER);
@@ -284,7 +273,6 @@ private:
         scene.lights.push_back({{-1.9f, 5.2f, -3.62f}, {0.0f, 1.0f, 0.0f}, 0.7, 1.8});
         scene.lights.push_back({{-6.88f, 8.86f, -5.66f}, {0.0f, 0.0f, 1.0f}, 0.7, 1.8});
         scene.lights.push_back({{-3.5f, 5.2f, -7.14f}, {0.6f, 0.0f, 1.0f}, 0.7, 1.8});
-        scene.lights.push_back({{0, 25, 0}, {1.0f, 1.0f, 1.0f}, 0.07, 0.017});
 
         printf("Generating whale, boids and foliage...\n");
         auto whale = std::make_unique<Whale>();
@@ -309,7 +297,8 @@ private:
     }
 
 public:
-    ppgso::Shader quadShader = {convolution_vert_glsl, convolution_frag_glsl};
+    ppgso::Shader convQuadShader = {convolution_vert_glsl, convolution_frag_glsl};
+    ppgso::Shader grayQuadShader = {grayscale_vert_glsl, grayscale_frag_glsl};
     ppgso::Mesh quadMesh = {"quad.obj"};
     ppgso::Texture quadTexture = {SIZEW, SIZEH};
 
@@ -491,17 +480,28 @@ public:
             auto quadProjectionMatrix = glm::perspective((ppgso::PI / 180.f) * 60.0f, 1.0f, 0.1f, 10.0f);
 
             // Create view matrix (translate camera backwards a bit, so we can see the geometry)
-            auto quadViewMatrix = glm::translate(glm::mat4{1.0f}, {0.0f, 0.0f, -3.0f});
+            auto quadViewMatrix = glm::translate(glm::mat4{1.0f}, {0.0f, 0.0f, -1.7f});
 
             // Animate rotation of the quad
             auto quadModelMatrix = glm::mat4{1.0f};
 
-            // Set shader inputs
-            quadShader.use();
-            quadShader.setUniform("ProjectionMatrix", quadProjectionMatrix);
-            quadShader.setUniform("ViewMatrix", quadViewMatrix);
-            quadShader.setUniform("ModelMatrix", quadModelMatrix);
-            quadShader.setUniform("Texture", quadTexture);
+            if (scene.camera->cameraPosition.y > 88) {
+                // Set shader inputs
+                grayQuadShader.use();
+                grayQuadShader.setUniform("ProjectionMatrix", quadProjectionMatrix);
+                grayQuadShader.setUniform("ViewMatrix", quadViewMatrix);
+                grayQuadShader.setUniform("ModelMatrix", quadModelMatrix);
+                grayQuadShader.setUniform("Texture", quadTexture);
+            }
+            else {
+                // Set shader inputs
+                convQuadShader.use();
+                convQuadShader.setUniform("ProjectionMatrix", quadProjectionMatrix);
+                convQuadShader.setUniform("ViewMatrix", quadViewMatrix);
+                convQuadShader.setUniform("ModelMatrix", quadModelMatrix);
+                convQuadShader.setUniform("Texture", quadTexture);
+            }
+
             quadMesh.render();
         }
     }
