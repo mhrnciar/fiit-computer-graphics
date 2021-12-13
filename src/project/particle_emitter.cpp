@@ -5,7 +5,7 @@
 #include <shaders/texture_vert_glsl.h>
 
 
-ParticleEmitter::ParticleEmitter(glm::vec3 pos, const std::string &tex_file, float time_delay, int particle_num, glm::vec3 vel,  glm::vec3 scale, float grav, float ttl) {
+ParticleEmitter::ParticleEmitter(glm::vec3 pos, const std::string &tex_file, float time_delay, int particle_num, glm::vec3 vel,  glm::vec3 scale, float grav, float ttl, float wce) {
 	
 	this->position = pos;
 	this->tex_file = tex_file;
@@ -15,6 +15,8 @@ ParticleEmitter::ParticleEmitter(glm::vec3 pos, const std::string &tex_file, flo
 	this->time_to_live = ttl;
 	this->velocity = vel;
 	this->scale = scale;
+	
+	this->water_current_effectiveness = wce;
 	
 }
 
@@ -30,7 +32,7 @@ bool ParticleEmitter::update(Scene &scene, float dt) {
 		
 		for (int i = 0; i < particles_to_produce; i++){
 			glm::vec3 p_vel = this->velocity;
-			auto new_particle = std::make_unique<Particle>(tex_file, time_to_live, gravity_effectiveness, p_vel);
+			auto new_particle = std::make_unique<Particle>(tex_file, time_to_live, gravity_effectiveness, p_vel, water_current_effectiveness);
 			new_particle->position = this->position;
 			new_particle->scale = this->scale;
 			particles.push_back(move(new_particle));

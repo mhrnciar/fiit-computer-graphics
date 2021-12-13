@@ -76,6 +76,7 @@ set(PPGSO_SHADER_SRC
         shader/diffuse_vert.glsl shader/diffuse_frag.glsl
         shader/texture_vert.glsl shader/texture_frag.glsl
         shader/light_vert.glsl shader/light_frag.glsl
+        shader/water_surface_vert.glsl shader/water_surface_frag.glsl
         shader/shadowmap_vert.glsl shader/shadowmap_frag.glsl
         )
 add_resources(shaders ${PPGSO_SHADER_SRC})
@@ -136,7 +137,7 @@ target_link_libraries(raw4_raster ppgso)
 install(TARGETS raw4_raster DESTINATION .)
 
 # gl1_gradient
-add_executable(gl1_gradient src/gl1_gradient/gl1_gradient.cpp)
+add_executable(gl1_gradient src/gl1_gradient/gl1_gradient.cpp cmake-build-debug/shaders/water_surface_frag_glsl.cpp cmake-build-debug/shaders/water_surface_frag_glsl.h cmake-build-debug/shaders/water_surface_vert_glsl.cpp cmake-build-debug/shaders/water_surface_vert_glsl.h)
 target_link_libraries(gl1_gradient ppgso shaders)
 install(TARGETS gl1_gradient DESTINATION .)
 

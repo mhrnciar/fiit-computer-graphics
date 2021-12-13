@@ -1,8 +1,32 @@
 #include "scene.h"
 #include "static_object.h"
 
+
+float randfrom(float min, float max)
+{
+	float range = (max - min);
+	float div = RAND_MAX / range;
+	return min + (rand() / div);
+}
+
+
 void Scene::update(float dt) {
     camera->update(*this, dt);
+    
+    
+    water_current_time_elapsed += dt;
+    if(water_current_time_elapsed >= 5.0f){
+    	water_current_changes++;
+    	if (water_current_changes % 2 == 0){
+		    water_current.x = 0.0f;
+		    water_current.z = 0.0f;
+    	}
+    	else {
+		    water_current.x = randfrom(-1.0f, 1.0f);
+		    water_current.z = randfrom(-1.0f, 1.0f);
+    	}
+    	water_current_time_elapsed = 0.0f;
+    }
 
     // Use iterator to update all objects so we can remove while iterating
     auto i = std::begin(objects);

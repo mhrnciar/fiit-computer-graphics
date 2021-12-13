@@ -20,9 +20,8 @@ private:
 	glm::vec3 move_vec;
 	
 	int child_num;
-	float child_y_offset;
 	float collisionDistance = 3.0f;
-	
+	float child_y_offset;
 	
 	void generateIndices();
 	void updateBuffers();
@@ -30,7 +29,8 @@ private:
 
 public:
 	
-	Kelp(const std::string &tex_file, int child_num);
+	
+	Kelp(const std::string &tex_file, int child_num, float child_offset);
 	
 	~Kelp();
 	

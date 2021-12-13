@@ -1,16 +1,21 @@
 #include "water_surface.h"
 #include "scene.h"
+
+#include "glm/gtx/normal.hpp"
 #include <ppgso/image_png.h>
 
 #include <shaders/texture_vert_glsl.h>
 #include <shaders/texture_frag_glsl.h>
 
-//#include <shaders/diffuse_vert_glsl.h>
-//#include <shaders/diffuse_frag_glsl.h>
+#include <shaders/light_vert_glsl.h>
+#include <shaders/light_frag_glsl.h>
+
+#include <shaders/water_surface_vert_glsl.h>
+#include <shaders/water_surface_frag_glsl.h>
 
 WaterSurface::WaterSurface(const std::string &tex_file, int len_x_in, int len_z_in) {
 	// Initialize static resources if needed
-	if (!shader) shader = std::make_unique<ppgso::Shader>(texture_vert_glsl, texture_frag_glsl);
+	if (!shader) shader = std::make_unique<ppgso::Shader>(water_surface_vert_glsl, water_surface_frag_glsl);
 	if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP(tex_file));
 	
 	len_x = len_x_in;
@@ -45,6 +50,7 @@ WaterSurface::WaterSurface(const std::string &tex_file, int len_x_in, int len_z_
 	}
 	
 	vertices.clear();
+	
 	texCoords.clear();
 	mesh.clear();
 	
@@ -126,6 +132,7 @@ void WaterSurface::bezierPatches(waterPlane plane_in) {
 			                  offset + (i * PATCH_SIZE + j),
 			                  offset + ((i - 1) * PATCH_SIZE + j)};
 			mesh.push_back(triangle2);
+			
 		}
 	}
 	
@@ -141,6 +148,7 @@ void WaterSurface::bezierPatches(waterPlane plane_in) {
 			                  offset + (i * PATCH_SIZE + j),
 			                  offset + (i * PATCH_SIZE + (j - 1))};
 			mesh.push_back(triangle2);
+			
 		}
 	}
 }
@@ -169,6 +177,17 @@ void WaterSurface::updateBuffers() {
 	auto texCoord_attrib = shader->getAttribLocation("TexCoord");
 	glEnableVertexAttribArray(texCoord_attrib);
 	glVertexAttribPointer(texCoord_attrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
+	
+	/*
+	glGenBuffers(1, &nbo);
+	glBindBuffer(GL_ARRAY_BUFFER, nbo);
+	glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(float), normals.data(),
+	             GL_STATIC_DRAW);
+	
+	auto normal_attrib = shader->getAttribLocation("Normal");
+	glEnableVertexAttribArray(normal_attrib);
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+	*/
 	
 	// Copy indices to gpu
 	glGenBuffers(1, &ibo);
@@ -225,6 +244,7 @@ bool WaterSurface::update(Scene &scene, float dt) {
 	for (int wp_idx = 0; wp_idx < water_planes.size(); wp_idx++){
 		bezierPatches(water_planes[wp_idx]);
 	}
+	
 	updateBuffers();
 	
 	generateModelMatrix();
@@ -240,12 +260,14 @@ void WaterSurface::render(Scene &scene) {
 	shader->setUniform("ModelMatrix", modelMatrix);
 	shader->setUniform("Texture", *texture);
 	
+	shader->setUniform("cameraPosition", scene.camera->cameraPosition);
+	
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glBindVertexArray(vao);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), vertices.data(), GL_STATIC_DRAW);
 	glDrawElements(GL_TRIANGLES, mesh.size() * sizeof(face), GL_UNSIGNED_INT, nullptr);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	for(auto & i : children) {
 		i->render(scene);
 	}

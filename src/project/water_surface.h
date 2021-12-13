@@ -10,6 +10,7 @@ private:
 	std::unique_ptr<ppgso::Texture> texture;
 	//std::unique_ptr<ppgso::TextureAlpha> texture;
 	std::vector<glm::vec3> vertices;
+	std::vector<glm::vec3> normals;
 	std::vector<glm::vec2> texCoords;
 	
 	glm::vec3 controlPoints[4][4]{
@@ -32,7 +33,7 @@ private:
 	
 	std::vector<waterPlane> water_planes;
 	std::vector<face> mesh;
-	GLuint vao, vbo, tbo, ibo;
+	GLuint vao, vbo, tbo, ibo, nbo;
 	
 	int len_x;
 	int len_z;
