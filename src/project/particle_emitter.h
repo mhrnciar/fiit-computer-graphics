@@ -17,9 +17,11 @@ private:
 	float gravity_effectiveness;
 	glm::vec3 velocity;
 	glm::vec3 scale;
+	
+	float water_current_effectiveness;
 
 public:
-	ParticleEmitter(glm::vec3 pos, const std::string &tex_file, float time_delay, int particle_num, glm::vec3 vel, glm::vec3 scale, float grav, float ttl);
+	ParticleEmitter(glm::vec3 pos, const std::string &tex_file, float time_delay, int particle_num, glm::vec3 vel, glm::vec3 scale, float grav, float ttl, float wce);
 	
 	~ParticleEmitter();
 	

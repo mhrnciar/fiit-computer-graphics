@@ -14,7 +14,7 @@
 //#include <shaders/diffuse_vert_glsl.h>
 //#include <shaders/diffuse_frag_glsl.h>
 
-Particle::Particle(const std::string &tex_file, float time_to_live, float gravity_effectiveness, glm::vec3 velocity) {
+Particle::Particle(const std::string &tex_file, float time_to_live, float gravity_effectiveness, glm::vec3 velocity, float wce) {
 	// Initialize static resources if needed
 	if (!shader) shader = std::make_unique<ppgso::Shader>(texture_vert_glsl, texture_frag_glsl);
 	//if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP(tex_file));
@@ -23,6 +23,7 @@ Particle::Particle(const std::string &tex_file, float time_to_live, float gravit
 	this->time_to_live = time_to_live;
 	this->velocity = velocity;
 	this->gravity_effectiveness = gravity_effectiveness;
+	this->water_current_effectiveness = wce;
 	
 	
 	vertices = {
@@ -98,7 +99,10 @@ bool Particle::update(Scene &scene, float dt) {
 		return false;
 	}
 	
-	position += velocity * dt;
+	glm::vec3 vel_vec = velocity;
+	vel_vec += (scene.water_current * water_current_effectiveness);
+	
+	position += vel_vec * dt;
 	
 	velocity.y -= 1 * gravity_effectiveness * dt;
 	

@@ -52,6 +52,11 @@ class Scene {
     glm::vec3 lightSpecular{0.2f, 0.2f, 0.2f};
 
     std::vector<Light> lights;
+    
+    
+    glm::vec3 water_current = {0.0f, 0.0f, 0.0f};
+    float water_current_time_elapsed = 0.0f;
+    int water_current_changes = 0;
 
 
     // Store cursor state

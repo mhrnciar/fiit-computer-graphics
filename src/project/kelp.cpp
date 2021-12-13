@@ -7,7 +7,7 @@
 #include <shaders/texture_vert_glsl.h>
 #include <shaders/texture_frag_glsl.h>
 
-Kelp::Kelp(const std::string &tex_file, int child_num) {
+Kelp::Kelp(const std::string &tex_file, int child_num, float child_offset) {
 	// Initialize static resources if needed
 	if (!shader) shader = std::make_unique<ppgso::Shader>(texture_vert_glsl, texture_frag_glsl);
 	if (!texture) texture = std::make_unique<ppgso::TextureAlpha>(ppgso::image::loadPNG(tex_file));
@@ -41,14 +41,14 @@ Kelp::Kelp(const std::string &tex_file, int child_num) {
 	generateIndices();
 	updateBuffers();
 	this->child_num = child_num;
-	child_y_offset = 2;
 	
+	this->child_y_offset = child_offset;
 	
 }
 
 void Kelp::create_children() {
 	if (child_num > 0) {
-		auto kelp = new Kelp("seaweed_tex.png", child_num - 1);
+		auto kelp = new Kelp("seaweed_tex.png", child_num - 1, child_y_offset);
 		kelp->position = {0, child_y_offset, 0};
 		this->addChild(kelp);
 		kelp->create_children();
@@ -117,6 +117,7 @@ void Kelp::updateBuffers() {
 
 bool Kelp::update(Scene &scene, float dt) {
 	auto time = (float) glfwGetTime();
+	auto root_parent = getRootParent();
 	
 	if (this->parent != NULL){
 		glm::vec3 real_pos = this->getRealPosition();
@@ -125,7 +126,7 @@ bool Kelp::update(Scene &scene, float dt) {
 			move_vec.x = difference_vector.x;
 			move_vec.z = difference_vector.z;
 			
-			if (glm::distance(position + move_vec * dt, {0,child_y_offset,0}) <= 0.5f){
+			if (glm::distance(position + move_vec * dt, {0,child_y_offset,0}) <= root_parent->scale.x){
 			
 			}
 			else {
@@ -138,10 +139,13 @@ bool Kelp::update(Scene &scene, float dt) {
 			move_vec.z = ideal_position.z - position.z * 0.5f;
 		}
 		
-		position += move_vec * dt;
+		glm::vec3 wcurr_vec = ((scene.water_current * root_parent->scale) / (4 * root_parent->scale.x)) * 1.5f;
+		if (glm::distance(position + (move_vec + wcurr_vec) * dt, {0,child_y_offset,0}) <= root_parent->scale.x){
+			move_vec += wcurr_vec;
+		}
 		
+		position += move_vec * dt;
 	}
-	
 	
 	for(auto & i : children) {
 		i->update(scene, dt);

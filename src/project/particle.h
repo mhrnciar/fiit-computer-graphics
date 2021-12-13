@@ -27,9 +27,11 @@ private:
 	
 	void updateBuffers();
 	
+	float water_current_effectiveness;
+	
 public:
 
-	Particle(const std::string &tex_file, float time_to_live, float gravity_effectiveness, glm::vec3 velocity);
+	Particle(const std::string &tex_file, float time_to_live, float gravity_effectiveness, glm::vec3 velocity, float wce);
 	
 	~Particle();
 	

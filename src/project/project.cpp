@@ -30,10 +30,17 @@
 #include "particle.h"
 #include "particle_emitter.h"
 
-#define FILTER true
+#define FILTER false
 
 const unsigned int SIZEW = 1280;
 const unsigned int SIZEH = 720;
+
+float randfloat(float min, float max)
+{
+	float range = (max - min);
+	float div = RAND_MAX / range;
+	return min + (rand() / div);
+}
 
 /*!
  * Custom windows for our simple game
@@ -51,7 +58,7 @@ private:
         scene.objects.clear();
 
         // Create a camera
-        auto camera = std::make_unique<Camera>(60.0f, 1.0f, 0.1f, 400.0f);
+        auto camera = std::make_unique<Camera>(60.0f, (float)SIZEW/(float)SIZEH, 0.1f, 400.0f);
         scene.camera = move(camera);
 
         printf("\nGenerating kelp forest...\n");
@@ -65,18 +72,22 @@ private:
 		    float kelp_forrest_x = 35.0f;
 		    float kelp_forrest_z = 35.0f;
 		    float kelp_forrest_height = -1.65f;
-		    for (int i = 0; i < 10; i++) {
-			    for (int u = 0; u < 10; u++) {
+		    for (int i = 0; i < 20; i++) {
+			    for (int u = 0; u < 5; u++) {
 				    kelp_x_offset = normal_dist(generator) * 0.3f;
 				    kelp_z_offset = normal_dist(generator) * 0.3f;
 				    rand_kelp_height = rand() % 4 + 3;
-				    auto kelp = std::make_unique<Kelp>("seaweed_tex.png", rand_kelp_height);
+				
+				    float sf = randfloat(0.25, 0.75f);
+				    
+				    auto kelp = std::make_unique<Kelp>("seaweed_tex.png", rand_kelp_height, 4 * sf);
 				    kelp->position = {
-						    kelp_forrest_x + (i * 1.2f) + kelp_x_offset,
+						    kelp_forrest_x + (i * 1.5f) + kelp_x_offset,
 						    kelp_forrest_height,
-						    kelp_forrest_z + (u * 1.2f) + kelp_z_offset
+						    kelp_forrest_z + (u * 1.5f) + kelp_z_offset
 				    };
-				    kelp->scale = {0.5f, 0.5f, 0.5f};
+				    
+				    kelp->scale = {sf, sf, sf};
 				    kelp->create_children();
 				    scene.objects.push_back(move(kelp));
 			    }
@@ -107,7 +118,15 @@ private:
 
 	    glm::vec3 p_vel = {0.5f,5.5f,-0.5f};
 	    glm::vec3 p_scale = {7.0f,5.0f ,7.0f};
-	    auto p_emitter = std::make_unique<ParticleEmitter>(unified_volcano_position, "smoke_tex.png", 3.0f, 1, p_vel, p_scale, 0.4f, 10.0f);
+	    auto p_emitter = std::make_unique<ParticleEmitter>(unified_volcano_position,
+														"smoke_tex.png",
+														3.0f,
+														1,
+														p_vel,
+														p_scale,
+														0.4f,
+														10.0f,
+														1.0f);
 	    scene.objects.push_back(move(p_emitter));
 
 
