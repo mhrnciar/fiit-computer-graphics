@@ -11,8 +11,9 @@ Shark::Shark() {
     if (!mesh) mesh = std::make_unique<ppgso::Mesh>("animals/shark.obj");
     if (!shader) shader = std::make_unique<ppgso::Shader>(light_vert_glsl, light_frag_glsl);
 
-    keyframes.push_back({{0, 0, 0}, {0, 0, 0}, {0, 0, ppgso::PI/2}, {0, 0, ppgso::PI/2}, 64});
+    keyframes.push_back({{0, 0, 0}, {0, 0, 0}, {0, 0, ppgso::PI/2}, {0, 0, ppgso::PI/2}, 66.5});
     keyframes.push_back({{0, 0, 0}, {-25.0f, 7.0f, -6.0f}, {0, 0, ppgso::PI/2}, {0, 0, ppgso::PI/2}, 0.001f});
+    keyframes.push_back({{-9.0f, 7.0f, -6.0f}, {-9.0f, 7.0f, -6.0f}, {0, 0, ppgso::PI/2}, {0, 0, ppgso::PI/2}, 0.5});
     keyframes.push_back({{-9.0f, 7.0f, -6.0f}, {7.0f, 7.0f, -6.0f}, {0, 0, ppgso::PI/2}, {0, 0, ppgso::PI/2}, 4.5});
     keyframes.push_back({{7.0f, 7.0f, -6.0f}, {20.0f, 15.0f, -6.0f}, {0, 0, ppgso::PI/2}, {-ppgso::PI/4, 0, ppgso::PI/2}, 2});
     keyframes.push_back({{20.0f, 15.0f, -6.0f}, {20.0f, 18.0f, 0.0f}, {-ppgso::PI/4, 0, ppgso::PI/2}, {0, 0, 0}, 1});

@@ -11,7 +11,7 @@ ChasedFish::ChasedFish() {
     if (!mesh) mesh = std::make_unique<ppgso::Mesh>("animals/crucian_carp.obj");
     if (!shader) shader = std::make_unique<ppgso::Shader>(light_vert_glsl, light_frag_glsl);
 
-    keyframes.push_back({{0, 0, 0}, {0, 0, 0}, {0, 0, ppgso::PI/2}, {0, 0, ppgso::PI/2}, 59});
+    keyframes.push_back({{0, 0, 0}, {0, 0, 0}, {0, 0, ppgso::PI/2}, {0, 0, ppgso::PI/2}, 62});
     keyframes.push_back({{0, 0, 0}, {-9.0f, 7.0f, -6.0f}, {0, 0, ppgso::PI/2}, {0, 0, ppgso::PI/2}, 0.001f});
     keyframes.push_back({{-9.0f, 7.0f, -6.0f}, {7.0f, 7.0f, -6.0f}, {0, 0, ppgso::PI/2}, {0, 0, ppgso::PI/2}, 4});
     keyframes.push_back({{7.0f, 7.0f, -6.0f}, {20.0f, 15.0f, -6.0f}, {0, 0, ppgso::PI/2}, {-ppgso::PI/4, 0, ppgso::PI/2}, 3});

@@ -211,7 +211,7 @@ add_executable(project
         src/project/water_surface.cpp
         src/project/kelp.cpp src/project/particle.cpp
         src/project/particle_emitter.cpp
-        )
+        src/project/animated/seagulls.cpp)
 target_link_libraries(project ppgso shaders)
 install(TARGETS project DESTINATION .)
 add_custom_command(TARGET project POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/data/ ${CMAKE_CURRENT_BINARY_DIR})

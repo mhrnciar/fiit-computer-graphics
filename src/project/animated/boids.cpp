@@ -74,7 +74,7 @@ bool Boids::update(Scene &scene, float dt) {
             c->speed = glm::linearRand(0.1f, 0.2f);
 
             c->rotation.x = glm::radians(scene.camera->cameraPitch) + glm::linearRand(-ppgso::PI/4, ppgso::PI/4);
-            c->rotation.z = glm::radians(scene.camera->cameraYaw) + ppgso::PI + glm::linearRand(-ppgso::PI/4, ppgso::PI/4);
+            c->rotation.z = glm::radians(scene.camera->cameraYaw) + glm::linearRand(-ppgso::PI/4, ppgso::PI/4);
 
             c->movement_vector.x = sin(c->rotation.z);
             c->movement_vector.y = -sin(c->rotation.x);

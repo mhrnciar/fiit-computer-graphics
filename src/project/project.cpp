@@ -23,9 +23,10 @@
 #include "static_object.h"
 #include "animated/whale/whale.h"
 #include "animated/foliage.h"
-#include "src/project/animated/shark.h"
-#include "src/project/animated/fish_chased.h"
-#include "src/project/animated/boids.h"
+#include "animated/shark.h"
+#include "animated/fish_chased.h"
+#include "animated/boids.h"
+#include "animated/seagulls.h"
 #include "water_surface.h"
 #include "kelp.h"
 #include "particle.h"
@@ -139,6 +140,10 @@ private:
         auto seabed = std::make_unique<StaticObject>("objects/seabed.obj", "objects/sand.bmp", LIGHT_SHADER);
         seabed->scale = {1.5f, 1.0f, 1.5f};
         scene.objects.push_back(move(seabed));
+
+        auto seagulls = std::make_unique<Seagulls>();
+        seagulls->position = {0, 100, 0};
+        scene.objects.push_back(move(seagulls));
 
         printf("Generating coral cave...\n");
         auto cave = std::make_unique<StaticObject>("objects/cave.obj", "objects/rock_bg.bmp", LIGHT_SHADER);
