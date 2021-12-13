@@ -130,7 +130,7 @@ target_link_libraries(raw4_raster ppgso)
 install(TARGETS raw4_raster DESTINATION .)
 
 # gl1_gradient
-add_executable(gl1_gradient src/gl1_gradient/gl1_gradient.cpp cmake-build-debug/shaders/water_surface_frag_glsl.cpp cmake-build-debug/shaders/water_surface_frag_glsl.h cmake-build-debug/shaders/water_surface_vert_glsl.cpp cmake-build-debug/shaders/water_surface_vert_glsl.h)
+add_executable(gl1_gradient src/gl1_gradient/gl1_gradient.cpp)
 target_link_libraries(gl1_gradient ppgso shaders)
 install(TARGETS gl1_gradient DESTINATION .)
 
